@@ -14,9 +14,8 @@ const Canvas = props => {
   const bodies = []
 
   const Sketch = p5 => {
-    let width = window.innerWidth
+    let width = window.innerWidth / 2
     let height = window.innerHeight
-    // const {setup, draw, createCanvas} = p5
 
     const settings = {p5, engine, world}
     const viewScreen = {width, height}
@@ -33,12 +32,6 @@ const Canvas = props => {
           bodies[i].show()
         }
       }
-      // p5.push()
-      // p5.rectMode(p5.CENTER)
-      // p5.strokeWeight(1)
-      // p5.stroke(255)
-      // p5.rect(200, 200, 200, 200)
-      // p5.pop()
     }
   }
 

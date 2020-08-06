@@ -1,19 +1,20 @@
 import Matter from 'matter-js'
 // import p5 from 'p5'
-const {Bodies, World} = Matter
+const {Bodies, World, Constraint} = Matter
 
 const textBoxConstructor = settings => {
   const {p5, world} = settings
-  // const {push, translate, rotate, rectMode, textAlign, text, CENTER, fill, pop} = p5
-  return function TextBox(x, y, w, h, inputText) {
+  const {CENTER} = p5
+  return function TextBox(x, y, w, h, inputs) {
+    const {inputText, isStatic} = inputs
     const options = {
       friction: 0.4,
       restitution: 0.8,
+      isStatic
     }
     this.body = Bodies.rectangle(x, y, w, h, options)
     this.w = w
     this.h = h
-    // this.id = this.body.id
 
     this.show = () => {
       this.pos = this.body.position
@@ -22,8 +23,8 @@ const textBoxConstructor = settings => {
       p5.translate(this.pos.x, this.pos.y)
       p5.rotate(this.angle)
 
-      p5.rectMode(p5.CENTER)
-      p5.textAlign(p5.CENTER, p5.CENTER)
+      p5.ellipseMode(CENTER)
+      p5.textAlign(CENTER, CENTER)
       p5.fill(255)
       p5.textSize(64)
       p5.text(inputText, 0, 0)
@@ -52,22 +53,45 @@ const boundaryConstructor = settings => {
   }
 }
 
+const chainConstructor = settings => {
+  const {p5, world} = settings
+  return function Chain(bodyA, bodyB, length, stiffness) {
+    const options = {
+      bodyA,
+      bodyB,
+      length,
+      stiffness
+    }
+    this.body = Constraint.create(options)
+  }
+}
+
 export const setupWorld = (settings, viewScreen, bodies) => {
   const {p5, world} = settings
   const {width, height} = viewScreen
   const TextBox = textBoxConstructor(settings)
   const Boundary = boundaryConstructor(settings)
-  // const bodies = bodies
+  const Chain = chainConstructor(settings)
 
   let ground = new Boundary(width / 2, height + 25, width, 50)
-  let titleText = 'hello world'
-  // const letters = []
-  for (let i = 0; i < titleText.length; i++) {
-    let letter = new TextBox(width / 2, height / 5, 50, 50, titleText[i])
-    World.add(world, letter.body)
-    bodies.push(letter)
+  let titleText = 'hello world, i wish you were here'
+  const words = titleText.split(' ')
+  let previousWord = null
+  for (let i = 0; i < words.length; i++) {
+    let inputs = {
+      inputText: words[i],
+      isStatic: false
+    }
+    if (!previousWord) inputs.isStatic = true
+    let word = new TextBox(width / 2 + (i * 20), 50 + (i * 20), 35, 35, inputs)
+    World.add(world, word.body)
+    bodies.push(word)
+
+    if (i > 0) {
+      let constraint = new Chain(word.body, previousWord.body, 100, 0.7)
+      World.add(world, constraint.body)
+    }
+    previousWord = word
   }
-  // let title = new TextBox(width / 2, height / 5, 50, 50, 'hello world')
   World.add(world, ground.body)
-  // bodies.push(title)
 }
