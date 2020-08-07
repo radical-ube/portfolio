@@ -9,17 +9,19 @@ function App() {
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <Canvas />
-        <p>
+        <Canvas />
+        <Canvas />
+        {/* <p>
           Edit <code>src/App.js</code> and save to see a change.
-        </p>
-        <a
+        </p> */}
+        {/* <a
           className="App-link"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
           Learn React
-        </a>
+        </a> */}
       </header>
     </div>
   );

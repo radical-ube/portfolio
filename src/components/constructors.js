@@ -1,5 +1,4 @@
 import Matter from 'matter-js'
-// import p5 from 'p5'
 const {Bodies, World, Constraint} = Matter
 
 const textBoxConstructor = settings => {
@@ -66,15 +65,18 @@ const chainConstructor = settings => {
   }
 }
 
-export const setupWorld = (settings, viewScreen, bodies) => {
-  const {p5, world} = settings
-  const {width, height} = viewScreen
+export const setupWorld = (settings, bodies) => {
+  const {p5, world, width, height} = settings
+  // const {width, height} = viewScreen
   const TextBox = textBoxConstructor(settings)
   const Boundary = boundaryConstructor(settings)
   const Chain = chainConstructor(settings)
 
-  let ground = new Boundary(width / 2, height + 25, width, 50)
-  let titleText = 'hello world, i wish you were here'
+  let ground = new Boundary(width / 2, height + 100, width * 2, 190)
+  let ceiling = new Boundary(width / 2, -100, width * 2, 190)
+  World.add(world, [ground.body, ceiling.body])
+
+  let titleText = '- hello world, i am radical ube -'
   const words = titleText.split(' ')
   let previousWord = null
   for (let i = 0; i < words.length; i++) {
@@ -82,16 +84,22 @@ export const setupWorld = (settings, viewScreen, bodies) => {
       inputText: words[i],
       isStatic: false
     }
-    if (!previousWord) inputs.isStatic = true
-    let word = new TextBox(width / 2 + (i * 20), 50 + (i * 20), 35, 35, inputs)
+    if (!previousWord || i === words.length - 1) inputs.isStatic = true
+    let x = -10 + (i * 20), 
+    y = height * 0.5
+    if (i === words.length - 1) {
+      x = width + 10
+      // y = height + 10
+    }
+    let word = new TextBox(x, y, 100, 50, inputs)
     World.add(world, word.body)
     bodies.push(word)
 
     if (i > 0) {
-      let constraint = new Chain(word.body, previousWord.body, 100, 0.7)
+      let constraint = new Chain(word.body, previousWord.body, width * 0.1, 1)
       World.add(world, constraint.body)
     }
     previousWord = word
   }
-  World.add(world, ground.body)
+  
 }
