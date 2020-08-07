@@ -1,19 +1,26 @@
 import Matter from 'matter-js'
-const {Bodies, World, Constraint} = Matter
+const { Bodies, World, Constraint } = Matter
 
 const textBoxConstructor = environment => {
-  const {p5, world} = environment
-  const {CENTER, HSL} = p5
+  const { p5, world } = environment
+  const { CENTER, HSL } = p5
   return function TextBox(x, y, w, h, settings) {
-    const {inputText, isStatic} = settings
+    const { inputText, isStatic } = settings
     const options = {
       friction: 0.4,
       restitution: 0.8,
       isStatic
     }
-    this.body = Bodies.rectangle(x, y, w, h, options)
-    this.w = w
-    this.h = h
+
+    this.w = 0
+    this.h = 0
+    this.createBody = () => {
+      p5.textSize(64)
+      this.w = p5.textWidth(inputText)
+      this.h = p5.textAscent(inputText)
+      return Bodies.rectangle(x, y, this.w, this.h, options)
+    }
+    this.body = this.createBody()
 
     this.show = () => {
       this.pos = this.body.position
@@ -22,13 +29,15 @@ const textBoxConstructor = environment => {
       p5.translate(this.pos.x, this.pos.y)
       p5.rotate(this.angle)
 
-      p5.ellipseMode(CENTER)
+      p5.rectMode(CENTER)
       p5.textAlign(CENTER, CENTER)
       p5.colorMode(HSL)
       p5.fill(0, 0, 100, 0.2)
       p5.stroke(0, 100, 100, 0.8)
       p5.textSize(64)
       p5.text(inputText, 0, 0)
+      p5.fill(0, 0, 0, 0.2)
+      p5.rect(0, 0, this.w, this.h)
       p5.pop()
     }
   }
@@ -49,7 +58,7 @@ const boundaryConstructor = environment => {
 }
 
 const chainConstructor = environment => {
-  const {p5, world} = environment
+  const { p5, world } = environment
   return function Chain(bodyA, bodyB, length, stiffness) {
     const options = {
       bodyA,
@@ -62,7 +71,7 @@ const chainConstructor = environment => {
 }
 
 export const setupWorld = (environment, bodies) => {
-  const {p5, world, width, height} = environment
+  const { p5, world, width, height } = environment
   const TextBox = textBoxConstructor(environment)
   const Boundary = boundaryConstructor(environment)
   const Chain = chainConstructor(environment)
@@ -80,10 +89,10 @@ export const setupWorld = (environment, bodies) => {
       isStatic: false
     }
     if (!previousWord || i === words.length - 1) settings.isStatic = true
-    let x = -10 + (i * 20), 
-    y = height * 0.5
+    let x = -15 + (i * 20),
+      y = height * 0.5
     if (i === words.length - 1) {
-      x = width + 10
+      x = width + 15
       // y = height + 10
     }
     let word = new TextBox(x, y, 100, 50, settings)
@@ -96,5 +105,5 @@ export const setupWorld = (environment, bodies) => {
     }
     previousWord = word
   }
-  
+
 }
