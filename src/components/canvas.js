@@ -17,21 +17,21 @@ const Canvas = props => {
     let width = window.innerWidth
     let height = window.innerHeight * 0.3
 
-    const settings = { p5, engine, world, width, height }
+    const environment = { p5, engine, world, width, height }
 
-    // const canvas = p5.createCanvas(width, height)
-    // const mouse = Mouse.create(canvas.elt)
-    // mouse.pixelRatio = p5.pixelDensity()
-    // const mouseOptions = {
-    //   mouse
-    // }
-    // const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
-    // World.add(world, mouseConstraint)
+    const canvas = p5.createCanvas(width, height)
+    const mouse = Mouse.create(canvas.elt)
+    mouse.pixelRatio = p5.pixelDensity()
+    const mouseOptions = {
+      mouse
+    }
+    const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
+    World.add(world, mouseConstraint)
 
     p5.setup = () => {
       p5.createCanvas(width,height)
-      setupWorld(settings, bodies)
-
+      setupWorld(environment, bodies)
+      // Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(50, 50, 50)
@@ -42,14 +42,6 @@ const Canvas = props => {
         }
       }
 
-      // if (mouseConstraint.body) {
-      //   let pos = mouseConstraint.body.position
-      //   let offset = mouseConstraint.constraint.pointB
-      //   // p5.fill(255, 255, 255, 30)
-      //   // p5.stroke(255, 255, 255, 50)
-      //   // p5.rectMode(p5.CENTER)
-      //   // p5.rect(pos.x + offset.x, pos.y + offset.y, 70, 35)
-      // }
     }
   }
 

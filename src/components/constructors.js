@@ -1,11 +1,11 @@
 import Matter from 'matter-js'
 const {Bodies, World, Constraint} = Matter
 
-const textBoxConstructor = settings => {
-  const {p5, world} = settings
-  const {CENTER} = p5
-  return function TextBox(x, y, w, h, inputs) {
-    const {inputText, isStatic} = inputs
+const textBoxConstructor = environment => {
+  const {p5, world} = environment
+  const {CENTER, HSL} = p5
+  return function TextBox(x, y, w, h, settings) {
+    const {inputText, isStatic} = settings
     const options = {
       friction: 0.4,
       restitution: 0.8,
@@ -24,21 +24,17 @@ const textBoxConstructor = settings => {
 
       p5.ellipseMode(CENTER)
       p5.textAlign(CENTER, CENTER)
-      p5.fill(255)
+      p5.colorMode(HSL)
+      p5.fill(0, 0, 100, 0.2)
+      p5.stroke(0, 100, 100, 0.8)
       p5.textSize(64)
       p5.text(inputText, 0, 0)
-      // p5.colorMode(p5.HSL)
-      // p5.fill(0, 50, 100, 0.2)
-      // // p5.fill(this.hue, this.saturation, this.lightness, this.alpha)
-      // p5.strokeWeight(1)
-      // p5.stroke(150, 100, 65, 50)
-      // p5.rect(0, 0, this.w, this.h)
       p5.pop()
     }
   }
 }
 
-const boundaryConstructor = settings => {
+const boundaryConstructor = environment => {
   return function Boundary(x, y, w, h, label = 'boundary') {
     const options = {
       friction: 0.3,
@@ -52,8 +48,8 @@ const boundaryConstructor = settings => {
   }
 }
 
-const chainConstructor = settings => {
-  const {p5, world} = settings
+const chainConstructor = environment => {
+  const {p5, world} = environment
   return function Chain(bodyA, bodyB, length, stiffness) {
     const options = {
       bodyA,
@@ -65,12 +61,11 @@ const chainConstructor = settings => {
   }
 }
 
-export const setupWorld = (settings, bodies) => {
-  const {p5, world, width, height} = settings
-  // const {width, height} = viewScreen
-  const TextBox = textBoxConstructor(settings)
-  const Boundary = boundaryConstructor(settings)
-  const Chain = chainConstructor(settings)
+export const setupWorld = (environment, bodies) => {
+  const {p5, world, width, height} = environment
+  const TextBox = textBoxConstructor(environment)
+  const Boundary = boundaryConstructor(environment)
+  const Chain = chainConstructor(environment)
 
   let ground = new Boundary(width / 2, height + 100, width * 2, 190)
   let ceiling = new Boundary(width / 2, -100, width * 2, 190)
@@ -80,18 +75,18 @@ export const setupWorld = (settings, bodies) => {
   const words = titleText.split(' ')
   let previousWord = null
   for (let i = 0; i < words.length; i++) {
-    let inputs = {
+    let settings = {
       inputText: words[i],
       isStatic: false
     }
-    if (!previousWord || i === words.length - 1) inputs.isStatic = true
+    if (!previousWord || i === words.length - 1) settings.isStatic = true
     let x = -10 + (i * 20), 
     y = height * 0.5
     if (i === words.length - 1) {
       x = width + 10
       // y = height + 10
     }
-    let word = new TextBox(x, y, 100, 50, inputs)
+    let word = new TextBox(x, y, 100, 50, settings)
     World.add(world, word.body)
     bodies.push(word)
 

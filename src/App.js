@@ -1,16 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 import Canvas from './components/canvas'
+import Routes from './components/routes'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <Canvas />
-        <Canvas />
-        <Canvas />
+        {/* <Canvas /> */}
+        <Routes />
         {/* <p>
           Edit <code>src/App.js</code> and save to see a change.
         </p> */}
