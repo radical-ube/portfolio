@@ -1,14 +1,15 @@
 import React from 'react';
 
 import './App.css';
-import Canvas from './components/canvas'
+import Canvas from './components/utilities/canvas'
 import Routes from './components/routes'
+import Navbar from './components/pages/navbar'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Canvas />
+        <Navbar />
         {/* <Canvas /> */}
         <Routes />
         {/* <p>

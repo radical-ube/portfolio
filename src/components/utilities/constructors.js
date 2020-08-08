@@ -4,7 +4,7 @@ const { Bodies, World, Constraint } = Matter
 const textBoxConstructor = environment => {
   const { p5, world } = environment
   const { CENTER, HSL } = p5
-  return function TextBox(x, y, w, h, settings) {
+  return function TextBox(x, y, settings) {
     const { inputText, isStatic } = settings
     const options = {
       friction: 0.4,
@@ -12,15 +12,10 @@ const textBoxConstructor = environment => {
       isStatic
     }
 
-    this.w = 0
-    this.h = 0
-    this.createBody = () => {
-      p5.textSize(64)
-      this.w = p5.textWidth(inputText)
-      this.h = p5.textAscent(inputText)
-      return Bodies.rectangle(x, y, this.w, this.h, options)
-    }
-    this.body = this.createBody()
+    p5.textSize(64)
+    this.w = p5.textWidth(inputText)
+    this.h = p5.textAscent(inputText)
+    this.body = Bodies.rectangle(x, y, this.w, this.h, options)
 
     this.show = () => {
       this.pos = this.body.position
@@ -28,7 +23,6 @@ const textBoxConstructor = environment => {
       p5.push()
       p5.translate(this.pos.x, this.pos.y)
       p5.rotate(this.angle)
-
       p5.rectMode(CENTER)
       p5.textAlign(CENTER, CENTER)
       p5.colorMode(HSL)
@@ -36,8 +30,8 @@ const textBoxConstructor = environment => {
       p5.stroke(0, 100, 100, 0.8)
       p5.textSize(64)
       p5.text(inputText, 0, 0)
-      p5.fill(0, 0, 0, 0.2)
-      p5.rect(0, 0, this.w, this.h)
+      // p5.fill(0, 0, 0, 0.2)
+      // p5.rect(0, 0, this.w, this.h)
       p5.pop()
     }
   }
@@ -57,28 +51,35 @@ const boundaryConstructor = environment => {
   }
 }
 
-const chainConstructor = environment => {
+const constraintConstructor = environment => {
   const { p5, world } = environment
-  return function Chain(bodyA, bodyB, length, stiffness) {
-    const options = {
+  return function Spring(bodyA, bodyB, length, stiffness) {
+    this.body = Constraint.create({
       bodyA,
       bodyB,
       length,
       stiffness
-    }
-    this.body = Constraint.create(options)
+    })
   }
 }
+
+export const setupFrame = environment => {
+  const { p5, world, width, height } = environment
+  const Boundary = boundaryConstructor(environment)
+
+  const ground = new Boundary(width / 2, height + 100, width * 2, 200)
+  const ceiling = new Boundary(width / 2, -100, width * 2, 200)
+  const leftWall = new Boundary(-50, height / 2, 50, height)
+  const rightWall = new Boundary(50, height / 2, 50, height)
+
+  World.add(world, [ground.body, ceiling.body, leftWall.body, rightWall.body])
+}
+
 
 export const setupWorld = (environment, bodies) => {
   const { p5, world, width, height } = environment
   const TextBox = textBoxConstructor(environment)
-  const Boundary = boundaryConstructor(environment)
-  const Chain = chainConstructor(environment)
-
-  let ground = new Boundary(width / 2, height + 100, width * 2, 190)
-  let ceiling = new Boundary(width / 2, -100, width * 2, 190)
-  World.add(world, [ground.body, ceiling.body])
+  const Spring = constraintConstructor(environment)
 
   let titleText = '- hello world, i am radical ube -'
   const words = titleText.split(' ')
@@ -95,12 +96,12 @@ export const setupWorld = (environment, bodies) => {
       x = width + 15
       // y = height + 10
     }
-    let word = new TextBox(x, y, 100, 50, settings)
+    let word = new TextBox(x, y, settings)
     World.add(world, word.body)
     bodies.push(word)
 
     if (i > 0) {
-      let constraint = new Chain(word.body, previousWord.body, width * 0.1, 1)
+      let constraint = new Spring(word.body, previousWord.body, width * 0.135, 0.65)
       World.add(world, constraint.body)
     }
     previousWord = word

@@ -1,8 +1,8 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
-import Canvas from './canvas'
-import {About, Contact, Projects, Resume} from './pages'
+import Canvas from './utilities/canvas'
+import {About, Contact, Projects, Resume, Home} from './pages'
 
 const Routes = props => {
   return (
@@ -11,7 +11,7 @@ const Routes = props => {
       <Route exact path="/contact" component={Contact} />
       <Route exact path="/projects" component={Projects} />
       <Route exact path="/resume" component={Resume} />
-      <Route component={Canvas} />
+      <Route component={Home} />
     </Switch>
   )
 }
