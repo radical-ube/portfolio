@@ -2,7 +2,7 @@ import Matter from 'matter-js'
 const { Bodies, World, Constraint } = Matter
 
 const textBoxConstructor = environment => {
-  const { p5, world } = environment
+  const { p5 } = environment
   const { CENTER, HSL } = p5
   return function TextBox(x, y, settings) {
     const { inputText, isStatic } = settings
@@ -52,7 +52,7 @@ const boundaryConstructor = environment => {
 }
 
 const constraintConstructor = environment => {
-  const { p5, world } = environment
+  // const { p5, world } = environment
   return function Spring(bodyA, bodyB, length, stiffness) {
     this.body = Constraint.create({
       bodyA,
@@ -64,7 +64,7 @@ const constraintConstructor = environment => {
 }
 
 export const setupFrame = environment => {
-  const { p5, world, width, height } = environment
+  const { world, width, height } = environment
   const Boundary = boundaryConstructor(environment)
 
   const ground = new Boundary(width / 2, height + 100, width * 2, 200)
@@ -77,7 +77,7 @@ export const setupFrame = environment => {
 
 
 export const setupWorld = (environment, bodies) => {
-  const { p5, world, width, height } = environment
+  const { world, width, height } = environment
   const TextBox = textBoxConstructor(environment)
   const Spring = constraintConstructor(environment)
 

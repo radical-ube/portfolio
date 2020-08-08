@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
 import { setupFrame, setupWorld } from '../utilities/constructors'
 
-const { Engine, Mouse, MouseConstraint, Events, World } = Matter
+const { Engine, World } = Matter
 
 const Navbar = props => {
   const ref = React.createRef()
@@ -18,15 +18,6 @@ const Navbar = props => {
     let height = window.innerHeight * 0.15
 
     const environment = { p5, engine, world, width, height }
-
-    const canvas = p5.createCanvas(width, height)
-    const mouse = Mouse.create(canvas.elt)
-    mouse.pixelRatio = p5.pixelDensity()
-    const mouseOptions = {
-      mouse
-    }
-    const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
-    World.add(world, mouseConstraint)
 
     p5.setup = () => {
       p5.createCanvas(width,height)
@@ -47,7 +38,7 @@ const Navbar = props => {
   }
 
   useEffect(() => {
-    const myP5 = new p5(Sketch, ref.current)
+    new p5(Sketch, ref.current)
   }, [])
 
   return <div ref={ref} />

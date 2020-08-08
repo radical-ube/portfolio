@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
 import { setupWorld } from './constructors'
 
-const { Engine, Mouse, MouseConstraint, Events, World } = Matter
+const { Engine, Mouse, MouseConstraint, World } = Matter
 
 const Canvas = props => {
   const ref = React.createRef()
@@ -46,7 +46,7 @@ const Canvas = props => {
   }
 
   useEffect(() => {
-    const myP5 = new p5(Sketch, ref.current)
+    new p5(Sketch, ref.current)
   }, [])
 
   return <div ref={ref} />

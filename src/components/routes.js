@@ -1,7 +1,6 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
-import Canvas from './utilities/canvas'
 import {About, Contact, Projects, Resume, Home} from './pages'
 
 const Routes = props => {
