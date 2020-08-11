@@ -6,7 +6,7 @@ const { Bodies, World, Constraint } = Matter
 
 const textBoxConstructor = environment => {
   const { p5 } = environment
-  const { CENTER, HSL } = p5
+  const { CENTER, HSL, mouseX, mouseY } = p5
   return function TextBox(settings) {
     const { x, y, inputText, isStatic, textSize, color } = settings
     p5.textSize(textSize)
@@ -26,15 +26,15 @@ const textBoxConstructor = environment => {
       lightness: 100,
       alpha: 0.2
     }
-
+    
 
     this.show = () => {
       const { hue, saturation, lightness, alpha } = this.color
-
-      this.pos = this.body.position
+      this.position = this.body.position
       this.angle = this.body.angle
+
       p5.push()
-      p5.translate(this.pos.x, this.pos.y)
+      p5.translate(this.position.x, this.position.y)
       p5.rotate(this.angle)
       p5.rectMode(CENTER)
       p5.textAlign(CENTER, CENTER)
@@ -45,25 +45,62 @@ const textBoxConstructor = environment => {
       p5.fill(0, 0, 0, 0)
       p5.stroke(0, 0, 100)
       p5.rect(0, 0, this.w, this.h)
-      
+
       p5.pop()
     }
 
-    // export const withinBoxBounds = (environment, box) => {
-    //   const position = box.body.position
-    //   const boxWidth = box.w
-    //   const boxHeight = box.h
-    //   const {mouseX, mouseY} = environment.p5
+    this.mouseInBounds = () => {
+      // const distanceFromCorners = (position, vertices) => {
+      //   const sumDist = vertices.map(vertex => {
+      //     const distance = p5.dist(position.x, position.y, vertex.x, vertex.y)
+      //     // console.log('distance', distance)
+      //     return distance
+      //   })
+      //     .reduce((sum, curVal) => {
+      //       // console.log('sum: ', sum)
+      //       // console.log('curVal: ', curVal)
+      //       return sum + curVal
+      //     }, 0)
+        
+      //     return (sumDist / vertices.length)
+      // }
+      
+      // const mousePosition = {
+      //   x: p5.mouseX,
+      //   y: p5.mouseY
+      // }
+      // const vertices = this.body.vertices
 
-    //   const leftBounds = position.x - (boxWidth / 2)
-    //   const rightBounds = position.x + (boxWidth / 2)
-    //   const upperBounds = position.y - (boxHeight / 2)
-    //   const lowerBounds = position.y + (boxHeight / 2)
+      // const findMidPoints = (vertices) => {
+      //   return vertices.map((vertex, index) => {
+      //     let pointOne = vertex
+      //     let pointTwo = vertices[index + 1]
+      //     if (index === vertices.length - 1) {
+      //       pointTwo = vertices[0]
+      //     }
+  
+      //     const midPoint = {}  
+      //     midPoint.x = (pointOne.x + pointTwo.x) / 2
+      //     midPoint.y = (pointOne.y + pointTwo.y) / 2
+      //     return midPoint
+      //   })
+      // }
+      // const midPoints = findMidPoints(vertices)
 
-    //   return (mouseX > leftBounds && mouseX < rightBounds && mouseY > upperBounds && mouseY < lowerBounds)
-    // }
+      console.log('---click---')
+
+      // console.log('dist from center to vertices: ', distanceFromCorners(this.position, vertices))
+      // console.log('dist from center to midpoints: ', distanceFromCorners(this.position, midPoints))
+      // console.log('dist from mouse to vertices: ', distanceFromCorners(mousePosition, vertices))
+      // console.log('dist from mouse to midpoints: ', distanceFromCorners(mousePosition, midPoints))
+      
+    }
+
+    
   }
 }
+
+
 
 const boundaryConstructor = environment => {
   return function Boundary(x, y, w, h, label = 'boundary') {
@@ -168,7 +205,8 @@ export const setupWorld = (environment, bodies) => {
     let word = new TextBox(settings)
     World.add(world, word.body)
     bodies.push(word)
-
+    // console.log('word at', i, ': ', word)
+    // console.log('vertices: ', word.body.vertices)
     // if (i > 0) {
     //   let constraint = new Spring(word.body, previousWord.body, width * 0.135, 0.65)
     //   World.add(world, constraint.body)

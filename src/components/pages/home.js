@@ -42,7 +42,12 @@ const Home = props => {
           bodies[i].show()
         }
       }
+    }
 
+    // let clickCount = 0
+    p5.mouseReleased = () => {
+      console.log('bodies: ', bodies)
+      bodies[0].mouseInBounds()
     }
   }
 
