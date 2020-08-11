@@ -26,7 +26,7 @@ const textBoxConstructor = environment => {
       lightness: 100,
       alpha: 0.2
     }
-    
+
 
     this.show = () => {
       const { hue, saturation, lightness, alpha } = this.color
@@ -49,27 +49,13 @@ const textBoxConstructor = environment => {
       p5.pop()
     }
 
-    this.mouseInBounds = () => {
-      // const distanceFromCorners = (position, vertices) => {
-      //   const sumDist = vertices.map(vertex => {
-      //     const distance = p5.dist(position.x, position.y, vertex.x, vertex.y)
-      //     // console.log('distance', distance)
-      //     return distance
-      //   })
-      //     .reduce((sum, curVal) => {
-      //       // console.log('sum: ', sum)
-      //       // console.log('curVal: ', curVal)
-      //       return sum + curVal
-      //     }, 0)
-        
-      //     return (sumDist / vertices.length)
-      // }
-      
+    this.mouseInBounds = (mousePosition) => {
       // const mousePosition = {
-      //   x: p5.mouseX,
-      //   y: p5.mouseY
+      //   x: mouseX,
+      //   y: mouseY
       // }
-      // const vertices = this.body.vertices
+      // const mousePosition = mousePosition
+      const vertices = this.body.vertices
 
       // const findMidPoints = (vertices) => {
       //   return vertices.map((vertex, index) => {
@@ -78,8 +64,8 @@ const textBoxConstructor = environment => {
       //     if (index === vertices.length - 1) {
       //       pointTwo = vertices[0]
       //     }
-  
-      //     const midPoint = {}  
+
+      //     const midPoint = {}
       //     midPoint.x = (pointOne.x + pointTwo.x) / 2
       //     midPoint.y = (pointOne.y + pointTwo.y) / 2
       //     return midPoint
@@ -87,16 +73,62 @@ const textBoxConstructor = environment => {
       // }
       // const midPoints = findMidPoints(vertices)
 
+      const areaFromPoints = (position, vertices) => {
+        const area = vertices.map((vertex, index, array) => {
+          let nextPointIdx = index + 1
+          if (index === array.length - 1) nextPointIdx = 0
+          // console.log('vertex: ', vertex)
+          // console.log('array: ', array)
+          // console.log('array[index + 1]', array[nextPointIdx])
+          let edgeOne = p5.dist(position.x, position.y, vertex.x, vertex.y)
+          let edgeTwo = p5.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
+          let edgeThree = p5.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
+          // if (index === array.length - 1) {
+          //   edgeTwo = p5.dist(position.x, position.y, array[0].x, array[0].y)
+          //   edgeThree = p5.dist(vertex.x, vertex.y, array[0].x, array[0].y)
+          // }
+          
+          return {
+            edgeOne,
+            edgeTwo,
+            edgeThree
+          }
+        })
+          // find areas of triangles
+          .map((edges, index, array) => {
+            // console.log('edges', edges)
+            const { edgeOne, edgeTwo, edgeThree } = edges
+            let semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
+            // console.log('semiP', semiPerimeter)
+            return p5.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
+          })
+          .reduce((sum, curVal) => {
+            return sum + curVal
+          }, 0)
+        return area
+
+      }
+
       console.log('---click---')
 
-      // console.log('dist from center to vertices: ', distanceFromCorners(this.position, vertices))
-      // console.log('dist from center to midpoints: ', distanceFromCorners(this.position, midPoints))
-      // console.log('dist from mouse to vertices: ', distanceFromCorners(mousePosition, vertices))
-      // console.log('dist from mouse to midpoints: ', distanceFromCorners(mousePosition, midPoints))
-      
+      // console.log('area of 4 triangles: ', areaFromPoints(this.position, vertices))
+      // console.log('area of 4 quadrants: ', areaFromPoints(this.position, midPoints))
+      // console.log('this.body', this.body.position)
+      // console.log('area of mouse triangles: ', areaFromPoints(mousePosition, vertices))
+      // console.log('mouse position', mousePosition)
+      // console.log('area of mouse quadrants: ', areaFromPoints(mousePosition, midPoints))
+
+      console.log('this.body', this.body)
+
+      const mouseArea = areaFromPoints(mousePosition, vertices)
+
+      const bool = (mouseArea < this.body.area + 1)
+      console.log('in area?', bool)
+
+      return bool
     }
 
-    
+
   }
 }
 

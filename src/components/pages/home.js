@@ -46,8 +46,12 @@ const Home = props => {
 
     // let clickCount = 0
     p5.mouseReleased = () => {
-      console.log('bodies: ', bodies)
-      bodies[0].mouseInBounds()
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
+      }
+      // console.log('bodies: ', bodies)
+      bodies[0].mouseInBounds(mousePosition)
     }
   }
 
