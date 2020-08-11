@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
-import { setupFrame, setupWorld } from '../utilities/constructors'
+import { setupFrame, setupNav, setupWorld } from '../utilities/constructors'
 
 const { Engine, World } = Matter
 
@@ -12,6 +12,7 @@ const Navbar = props => {
   const world = engine.world
 
   const bodies = []
+  const tabs = ['', 'home', 'about', 'projects', 'resume', 'contact', '']
 
   const Sketch = p5 => {
     let width = window.innerWidth
@@ -22,7 +23,8 @@ const Navbar = props => {
     p5.setup = () => {
       p5.createCanvas(width,height)
       setupFrame(environment)
-      setupWorld(environment, bodies)
+      setupNav(environment, bodies, tabs)
+      // setupWorld(environment, bodies)
       // Engine.run(engine)
     }
     p5.draw = () => {
