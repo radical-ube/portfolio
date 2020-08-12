@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
+import {connect} from 'react-redux'
 
 import { setupFrame, setupNav, setupWorld } from '../utilities/constructors'
+import {setCurrentPage} from '../../store/page'
 
 const { Engine, World } = Matter
 
 const Navbar = props => {
+  const {setCurrentPage} = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
-
   const bodies = []
   const tabs = ['', 'home', 'about', 'projects', 'resume', 'contact', '']
 
@@ -30,13 +32,14 @@ const Navbar = props => {
           console.log(body.text)
           // console.log('event', event)
           let url = body.text
+          setCurrentPage(url)
           // const link = p5.createA(`/${url}`, `${url}`)
           // console.log('link', link)
           // return body.text
-          const history = window.history
-          console.log('history', history)
-          const location = window.location
-          console.log('location', location)
+          // const history = window.history
+          // console.log('history', history)
+          // const location = window.location
+          // console.log('location', location)
           // location.replace()
 
           // push onto history
@@ -90,4 +93,10 @@ const Navbar = props => {
   return <div ref={ref} />
 }
 
-export default Navbar
+const mapDispatch = dispatch => {
+  return {
+    setCurrentPage: (page) => dispatch(setCurrentPage(page))
+  }
+}
+
+export default connect(null, mapDispatch)(Navbar)
