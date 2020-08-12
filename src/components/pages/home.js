@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
-import { setupFrame, setupHome } from '../utilities/constructors'
+import { setupFrame, setupHome } from '../utilities'
 
 const { Engine, Mouse, MouseConstraint, World } = Matter
 
@@ -32,11 +32,10 @@ const Home = props => {
       p5.createCanvas(width,height)
       setupFrame(environment)
       setupHome(environment, bodies)
-      // Engine.run(engine)
+      Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(50, 50, 50)
-      Engine.update(engine)
       if (bodies.length) {
         bodies.forEach(body => {
           body.show()
@@ -45,16 +44,7 @@ const Home = props => {
     }
 
     p5.mouseReleased = () => {
-      const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
-      }
-      bodies.forEach(body => {
-        if (body.mouseInBounds(mousePosition)) {
-          console.log(body.text)
-          return body.text
-        }
-      })
+    
     }
   }
 

@@ -3,10 +3,10 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import {connect} from 'react-redux'
 
-import { setupFrame, setupNav, setupWorld } from '../utilities/constructors'
+import { setupFrame, setupNav } from '../utilities'
 import {setCurrentPage} from '../../store/page'
 
-const { Engine, World } = Matter
+const { Engine } = Matter
 
 const Navbar = props => {
   const {setCurrentPage} = props
@@ -29,22 +29,7 @@ const Navbar = props => {
       }
       bodies.forEach(body => {
         if (body.mouseInBounds(mousePosition)) {
-          console.log(body.text)
-          // console.log('event', event)
-          let url = body.text
-          setCurrentPage(url)
-          // const link = p5.createA(`/${url}`, `${url}`)
-          // console.log('link', link)
-          // return body.text
-          // const history = window.history
-          // console.log('history', history)
-          // const location = window.location
-          // console.log('location', location)
-          // location.replace()
-
-          // push onto history
-          // or turn into a regular a navbar + CSS animations
-
+          setCurrentPage(body.text)
         }
       })
     }
@@ -53,37 +38,16 @@ const Navbar = props => {
       canvas.mouseClicked(goToLink)
       setupFrame(environment)
       setupNav(environment, bodies, tabs)
-      // Engine.run(engine)
+      Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(50, 50, 50)
-      Engine.update(engine)
       if (bodies.length) {
         bodies.forEach(body => {
           body.show()
         })
       }
     }
-
-    // p5.mouseReleased = (event) => {
-    //   const mousePosition = {
-    //     x: p5.mouseX,
-    //     y: p5.mouseY
-    //   }
-    //   bodies.forEach(body => {
-    //     if (body.mouseInBounds(mousePosition)) {
-    //       console.log(body.text)
-    //       console.log('event', event)
-    //       let url = body.text
-    //       // const link = p5.createA(`/${url}`, `${url}`)
-    //       // console.log('link', link)
-
-    //       // return body.text
-    //     }
-    //   })
-
-    //   return false
-    // }
   }
 
   useEffect(() => {
