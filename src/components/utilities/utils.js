@@ -75,3 +75,34 @@ export const getRandomColor = () => {
       return getPurpleColor
   }
 }
+
+export const areaFromPoints = (position, vertices, p5) => {
+  // find and sum the triangles created from position and vertices
+  return vertices
+    // find edges of triangles
+    .map((vertex, index, array) => {
+      let nextPointIdx = index + 1
+      if (index === array.length - 1) nextPointIdx = 0
+
+      const edgeOne = p5.dist(position.x, position.y, vertex.x, vertex.y)
+      const edgeTwo = p5.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
+      const edgeThree = p5.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
+
+      return {
+        edgeOne,
+        edgeTwo,
+        edgeThree
+      }
+    })
+    // find areas of triangles
+    .map((edges, index, array) => {
+      const { edgeOne, edgeTwo, edgeThree } = edges
+      const semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
+
+      return p5.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
+    })
+    // sum all the triangles
+    .reduce((sum, curVal) => {
+      return sum + curVal
+    }, 0)
+}

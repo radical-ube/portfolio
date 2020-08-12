@@ -1,6 +1,8 @@
 import Matter from 'matter-js'
-const { Bodies, Constraint } = Matter
+import {areaFromPoints} from './utils'
 
+
+const { Bodies, Constraint } = Matter
 
 export const textBoxConstructor = environment => {
   const { p5 } = environment
@@ -9,6 +11,7 @@ export const textBoxConstructor = environment => {
     const { x, y, inputText, isStatic, textSize, color } = settings
     p5.textSize(textSize)
 
+    // class properties
     this.text = inputText
     this.w = p5.textWidth(this.text)
     this.h = p5.textAscent(this.text)
@@ -25,7 +28,7 @@ export const textBoxConstructor = environment => {
       alpha: 0.2
     }
 
-
+    // class methods
     this.show = () => {
       const { hue, saturation, lightness, alpha } = this.color
       this.position = this.body.position
@@ -44,43 +47,9 @@ export const textBoxConstructor = environment => {
 
     this.mouseInBounds = (mousePosition) => {
       const vertices = this.body.vertices
-
-      // find and sum the triangles created from position and vertices
-      const areaFromPoints = (position, vertices) => {
-        return vertices
-          // find edges of triangles
-          .map((vertex, index, array) => {
-            let nextPointIdx = index + 1
-            if (index === array.length - 1) nextPointIdx = 0
-
-            const edgeOne = p5.dist(position.x, position.y, vertex.x, vertex.y)
-            const edgeTwo = p5.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
-            const edgeThree = p5.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
-
-            return {
-              edgeOne,
-              edgeTwo,
-              edgeThree
-            }
-          })
-          // find areas of triangles
-          .map((edges, index, array) => {
-            const { edgeOne, edgeTwo, edgeThree } = edges
-            const semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
-
-            return p5.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
-          })
-          // sum all the triangles
-          .reduce((sum, curVal) => {
-            return sum + curVal
-          }, 0)
-      }
-
-      const mouseArea = areaFromPoints(mousePosition, vertices)
-
+      const mouseArea = areaFromPoints(mousePosition, vertices, p5)
       return (mouseArea < this.body.area + 1)
     }
-
   }
 }
 
@@ -107,6 +76,45 @@ export const constraintConstructor = environment => {
       length,
       stiffness
     })
+  }
+}
+
+export const imageBoxConstructor = environment => {
+  const { p5 } = environment
+  const { CENTER } = p5
+  return function ImageBox(settings) {
+    const { x, y, image, width, height, isStatic } = settings
+
+    // class properties
+    this.image = image
+    this.w = width
+    this.h = height
+    this.options = {
+      friction: 0.4,
+      restitution: 0.8,
+      isStatic
+    }
+    this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
+
+    // class methods
+    this.show = () => {
+      this.position = this.body.position
+      this.angle = this.body.angle
+
+      p5.push()
+      p5.translate(this.position.x, this.position.y)
+      p5.rotate(this.angle)
+      p5.rectMode(CENTER)
+      p5.imageMode(CENTER)
+      p5.image(this.image, 0, 0, this.w, this.h)
+      p5.pop()
+    }
+
+    this.mouseInBounds = (mousePosition) => {
+      const vertices = this.body.vertices
+      const mouseArea = areaFromPoints(mousePosition, vertices, p5)
+      return (mouseArea < this.body.area + 1)
+    }
   }
 }
 

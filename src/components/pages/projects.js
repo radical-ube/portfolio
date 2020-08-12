@@ -28,10 +28,16 @@ const Projects = props => {
     const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
     World.add(world, mouseConstraint)
 
+    const images = {}
+
+    p5.preload = () => {
+      images.rainbow = p5.loadImage('images/rainbowonme.png')
+      images.ekopique = p5.loadImage('images/ekopique.png')
+    }
     p5.setup = () => {
       p5.createCanvas(width,height)
       setupFrame(environment)
-      setupProjects(environment, bodies)
+      setupProjects(environment, bodies, images)
       Engine.run(engine)
     }
     p5.draw = () => {

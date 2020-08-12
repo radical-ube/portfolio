@@ -1,6 +1,6 @@
 import Matter from 'matter-js'
-import { textBoxConstructor, boundaryConstructor, constraintConstructor, getRandomColor } from './'
-
+import { textBoxConstructor, boundaryConstructor, constraintConstructor, imageBoxConstructor} from './'
+import {getRandomColor} from './utils'
 
 const {World} = Matter
 
@@ -102,30 +102,52 @@ export const setupAbout = (environment, bodies) => {
   }
 }
 
-export const setupProjects = (environment, bodies) => {
+export const setupProjects = (environment, bodies, images) => {
   const { world, width, height } = environment
+  const {rainbow, ekopique} = images
   const TextBox = textBoxConstructor(environment)
+  const ImageBox = imageBoxConstructor(environment)
 
-  let titleText = 'hello world projects page'
-  const words = titleText.split(' ')
-  for (let i = 0; i < words.length; i++) {
-    const randomColor = getRandomColor()
-    let settings = {
-      x: 0,
-      y: 0,
-      inputText: words[i],
-      isStatic: false,
-      textSize: height / 6,
-      color: randomColor()
-    }
+  // let titleText = 'projects page'
+  // const words = titleText.split(' ')
+  // for (let i = 0; i < words.length; i++) {
+  //   const randomColor = getRandomColor()
+  //   let settings = {
+  //     x: 0,
+  //     y: 0,
+  //     inputText: words[i],
+  //     isStatic: false,
+  //     textSize: height / 10,
+  //     color: randomColor()
+  //   }
 
-    settings.x = width / 2
-    settings.y = height * 0.2 + (i * 100)
+  //   settings.x = width / 2
+  //   settings.y = height * 0.2 + (i * 100)
    
-    let word = new TextBox(settings)
-    World.add(world, word.body)
-    bodies.push(word)
-  }
+  //   let word = new TextBox(settings)
+  //   World.add(world, word.body)
+  //   bodies.push(word)
+  // }
+  
+  const rainbowImage = new ImageBox({
+    x: width * 0.25,
+    y: height * 0.1,
+    image: rainbow,
+    width: 480,
+    height: 270,
+    isStatic: false
+  })
+  const ekopiqueImage = new ImageBox({
+    x: width * 0.75,
+    y: height * 0.1,
+    image: ekopique,
+    width: 480,
+    height: 270,
+    isStatic: false
+  })
+
+  World.add(world, [rainbowImage.body, ekopiqueImage.body])
+  bodies.push(rainbowImage, ekopiqueImage)
 }
 
 export const setupResume = (environment, bodies) => {
