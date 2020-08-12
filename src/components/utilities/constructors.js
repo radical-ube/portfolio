@@ -1,25 +1,20 @@
 import Matter from 'matter-js'
 import {areaFromPoints} from './utils'
 
-
 const { Bodies, Constraint } = Matter
 
 export const textBoxConstructor = environment => {
   const { p5 } = environment
   const { CENTER, HSL } = p5
   return function TextBox(settings) {
-    const { x, y, inputText, isStatic, textSize, color } = settings
+    const { x, y, options, inputText, textSize, color } = settings
     p5.textSize(textSize)
 
     // class properties
     this.text = inputText
     this.w = p5.textWidth(this.text)
     this.h = p5.textAscent(this.text)
-    this.options = {
-      friction: 0.4,
-      restitution: 0.8,
-      isStatic
-    }
+    this.options = options
     this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
     this.color = color || {
       hue: 0,
@@ -54,12 +49,11 @@ export const textBoxConstructor = environment => {
 }
 
 export const boundaryConstructor = environment => {
-  return function Boundary(x, y, w, h, label = 'boundary') {
+  return function Boundary(x, y, w, h) {
     const options = {
       friction: 0.3,
       restitution: 1,
-      isStatic: true,
-      label
+      isStatic: true
     }
     this.body = Bodies.rectangle(x, y, w, h, options)
     this.w = w
@@ -83,17 +77,13 @@ export const imageBoxConstructor = environment => {
   const { p5 } = environment
   const { CENTER } = p5
   return function ImageBox(settings) {
-    const { x, y, image, width, height, isStatic } = settings
+    const { x, y, image, width, height, options } = settings
 
     // class properties
     this.image = image
     this.w = width
     this.h = height
-    this.options = {
-      friction: 0.4,
-      restitution: 0.8,
-      isStatic
-    }
+    this.options = options
     this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
 
     // class methods

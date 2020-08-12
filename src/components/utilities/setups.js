@@ -1,8 +1,8 @@
 import Matter from 'matter-js'
-import { textBoxConstructor, boundaryConstructor, constraintConstructor, imageBoxConstructor} from './'
-import {getRandomColor} from './utils'
+import { textBoxConstructor, boundaryConstructor, constraintConstructor, imageBoxConstructor } from './'
+import { getRandomColor } from './utils'
 
-const {World} = Matter
+const { World } = Matter
 
 export const setupFrame = environment => {
   const { world, width, height } = environment
@@ -28,11 +28,15 @@ export const setupNav = (environment, bodies, tabs) => {
       x: 0,
       y: 0,
       inputText: tabs[i],
-      isStatic: false,
+      options: {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      },
       textSize: height / 3,
       color: randomColor()
     }
-    if (!previousWord || i === tabs.length - 1) settings.isStatic = true
+    if (!previousWord || i === tabs.length - 1) settings.options.isStatic = true
     settings.x = -15 + (i * 20)
     settings.y = height * 0.5
     if (i === tabs.length - 1) {
@@ -60,14 +64,18 @@ export const setupHome = (environment, bodies) => {
     const randomColor = getRandomColor()
     const settings = {
       inputText: word,
-      isStatic: false,
+      options: {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      },
       textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
     settings.y = height * 0.2 + (index * settings.textSize)
-   
+
     let textBox = new TextBox(settings)
     World.add(world, textBox.body)
     bodies.push(textBox)
@@ -84,14 +92,18 @@ export const setupAbout = (environment, bodies) => {
     const randomColor = getRandomColor()
     const settings = {
       inputText: word,
-      isStatic: false,
+      options: {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      },
       textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
     settings.y = height * 0.2 + (index * (settings.textSize / 2))
-   
+
     let textBox = new TextBox(settings)
     World.add(world, textBox.body)
     bodies.push(textBox)
@@ -100,7 +112,7 @@ export const setupAbout = (environment, bodies) => {
 
 export const setupProjects = (environment, bodies, images) => {
   const { world, width, height } = environment
-  const {rainbow, ekopique} = images
+  const { rainbow, ekopique } = images
   const TextBox = textBoxConstructor(environment)
   const ImageBox = imageBoxConstructor(environment)
 
@@ -119,7 +131,7 @@ export const setupProjects = (environment, bodies, images) => {
 
   //   settings.x = width / 2
   //   settings.y = height * 0.2 + (i * 100)
-   
+
   //   let word = new TextBox(settings)
   //   World.add(world, word.body)
   //   bodies.push(word)
@@ -132,7 +144,11 @@ export const setupProjects = (environment, bodies, images) => {
     image: rainbow,
     width: imageWidth,
     height: imageHeight,
-    isStatic: false
+    options: {
+      friction: 0.4,
+      restitution: 0.7,
+      isStatic: false
+    }
   })
   const ekopiqueImage = new ImageBox({
     x: width * 0.75,
@@ -140,7 +156,11 @@ export const setupProjects = (environment, bodies, images) => {
     image: ekopique,
     width: imageWidth,
     height: imageHeight,
-    isStatic: false
+    options: {
+      friction: 0.4,
+      restitution: 0.7,
+      isStatic: false
+    }
   })
 
   World.add(world, [rainbowImage.body, ekopiqueImage.body])
@@ -157,14 +177,18 @@ export const setupResume = (environment, bodies) => {
     const randomColor = getRandomColor()
     const settings = {
       inputText: word,
-      isStatic: false,
+      options: {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      },
       textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
     settings.y = height * 0.2 + (index * 100)
-   
+
     let textBox = new TextBox(settings)
     World.add(world, textBox.body)
     bodies.push(textBox)
@@ -181,14 +205,18 @@ export const setupContact = (environment, bodies) => {
     const randomColor = getRandomColor()
     const settings = {
       inputText: word,
-      isStatic: false,
+      options: {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      },
       textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
     settings.y = height * 0.2 + (index * 100)
-   
+
     let textBox = new TextBox(settings)
     World.add(world, textBox.body)
     bodies.push(textBox)
