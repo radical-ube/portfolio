@@ -6,7 +6,7 @@ const { Bodies, World, Constraint } = Matter
 
 const textBoxConstructor = environment => {
   const { p5 } = environment
-  const { CENTER, HSL, mouseX, mouseY } = p5
+  const { CENTER, HSL } = p5
   return function TextBox(settings) {
     const { x, y, inputText, isStatic, textSize, color } = settings
     p5.textSize(textSize)
@@ -41,93 +41,47 @@ const textBoxConstructor = environment => {
       p5.colorMode(HSL)
       p5.fill(hue, saturation, lightness, alpha)
       p5.text(this.text, 0, 0)
-
-      p5.fill(0, 0, 0, 0)
-      p5.stroke(0, 0, 100)
-      p5.rect(0, 0, this.w, this.h)
-
       p5.pop()
     }
 
     this.mouseInBounds = (mousePosition) => {
-      // const mousePosition = {
-      //   x: mouseX,
-      //   y: mouseY
-      // }
-      // const mousePosition = mousePosition
       const vertices = this.body.vertices
 
-      // const findMidPoints = (vertices) => {
-      //   return vertices.map((vertex, index) => {
-      //     let pointOne = vertex
-      //     let pointTwo = vertices[index + 1]
-      //     if (index === vertices.length - 1) {
-      //       pointTwo = vertices[0]
-      //     }
-
-      //     const midPoint = {}
-      //     midPoint.x = (pointOne.x + pointTwo.x) / 2
-      //     midPoint.y = (pointOne.y + pointTwo.y) / 2
-      //     return midPoint
-      //   })
-      // }
-      // const midPoints = findMidPoints(vertices)
-
+      // find and sum the triangles created from position and vertices
       const areaFromPoints = (position, vertices) => {
-        const area = vertices.map((vertex, index, array) => {
-          let nextPointIdx = index + 1
-          if (index === array.length - 1) nextPointIdx = 0
-          // console.log('vertex: ', vertex)
-          // console.log('array: ', array)
-          // console.log('array[index + 1]', array[nextPointIdx])
-          let edgeOne = p5.dist(position.x, position.y, vertex.x, vertex.y)
-          let edgeTwo = p5.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
-          let edgeThree = p5.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
-          // if (index === array.length - 1) {
-          //   edgeTwo = p5.dist(position.x, position.y, array[0].x, array[0].y)
-          //   edgeThree = p5.dist(vertex.x, vertex.y, array[0].x, array[0].y)
-          // }
-          
-          return {
-            edgeOne,
-            edgeTwo,
-            edgeThree
-          }
-        })
+        return vertices
+          // find edges of triangles
+          .map((vertex, index, array) => {
+            let nextPointIdx = index + 1
+            if (index === array.length - 1) nextPointIdx = 0
+
+            const edgeOne = p5.dist(position.x, position.y, vertex.x, vertex.y)
+            const edgeTwo = p5.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
+            const edgeThree = p5.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
+
+            return {
+              edgeOne,
+              edgeTwo,
+              edgeThree
+            }
+          })
           // find areas of triangles
           .map((edges, index, array) => {
-            // console.log('edges', edges)
             const { edgeOne, edgeTwo, edgeThree } = edges
-            let semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
-            // console.log('semiP', semiPerimeter)
+            const semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
+
             return p5.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
           })
+          // sum all the triangles
           .reduce((sum, curVal) => {
             return sum + curVal
           }, 0)
-        return area
-
       }
-
-      console.log('---click---')
-
-      // console.log('area of 4 triangles: ', areaFromPoints(this.position, vertices))
-      // console.log('area of 4 quadrants: ', areaFromPoints(this.position, midPoints))
-      // console.log('this.body', this.body.position)
-      // console.log('area of mouse triangles: ', areaFromPoints(mousePosition, vertices))
-      // console.log('mouse position', mousePosition)
-      // console.log('area of mouse quadrants: ', areaFromPoints(mousePosition, midPoints))
-
-      console.log('this.body', this.body)
 
       const mouseArea = areaFromPoints(mousePosition, vertices)
 
-      const bool = (mouseArea < this.body.area + 1)
-      console.log('in area?', bool)
-
-      return bool
+      return (mouseArea < this.body.area + 1)
     }
-
 
   }
 }
@@ -164,10 +118,10 @@ export const setupFrame = environment => {
   const { world, width, height } = environment
   const Boundary = boundaryConstructor(environment)
 
-  const ground = new Boundary(width / 2, height + 100, width * 2, 200)
-  const ceiling = new Boundary(width / 2, -100, width * 2, 200)
-  const leftWall = new Boundary(-50, height / 2, 100, height)
-  const rightWall = new Boundary(width + 50, height / 2, 100, height)
+  const ground = new Boundary(width / 2, height * 2, width * 2, height * 2)
+  const ceiling = new Boundary(width / 2, height * -1, width * 2, height * 2)
+  const leftWall = new Boundary(width * -1, height / 2, width * 2, height)
+  const rightWall = new Boundary(width * 2, height / 2, width * 2, height)
 
   World.add(world, [ground.body, ceiling.body, leftWall.body, rightWall.body])
 }
@@ -209,14 +163,12 @@ export const setupNav = (environment, bodies, tabs) => {
 
 
 
-export const setupWorld = (environment, bodies) => {
+export const setupHome = (environment, bodies) => {
   const { world, width, height } = environment
   const TextBox = textBoxConstructor(environment)
-  // const Spring = constraintConstructor(environment)
 
   let titleText = 'hello world, my name is ube'
   const words = titleText.split(' ')
-  // let previousWord = null
   for (let i = 0; i < words.length; i++) {
     const randomColor = getRandomColor()
     let settings = {
@@ -224,26 +176,17 @@ export const setupWorld = (environment, bodies) => {
       y: 0,
       inputText: words[i],
       isStatic: false,
-      textSize: 96,
+      textSize: height / 6,
       color: randomColor()
     }
-    // if (!previousWord || i === words.length - 1) settings.isStatic = true
+
     settings.x = width / 2
     settings.y = height * 0.2 + (i * 100)
-    // if (i === words.length - 1) {
-    //   settings.x = width + 15
-    //   // y = height + 10
-    // }
+   
     let word = new TextBox(settings)
     World.add(world, word.body)
     bodies.push(word)
-    // console.log('word at', i, ': ', word)
-    // console.log('vertices: ', word.body.vertices)
-    // if (i > 0) {
-    //   let constraint = new Spring(word.body, previousWord.body, width * 0.135, 0.65)
-    //   World.add(world, constraint.body)
-    // }
-    // previousWord = word
+   
   }
 
 }

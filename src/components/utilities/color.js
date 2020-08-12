@@ -6,18 +6,18 @@ function getRandomInt(min, max) {
 
 export const getRedColor = () => {
   return {
-    hue: getRandomInt(346, 360),
+    hue: getRandomInt(346, 357),
     saturation: getRandomInt(85, 100),
-    lightness: getRandomInt(43, 49),
+    lightness: getRandomInt(48, 55),
     alpha: getRandomInt(85, 100)
   }
 }
 
 export const getOrangeColor = () => {
   return {
-    hue: getRandomInt(12, 27),
-    saturation: getRandomInt(86, 100),
-    lightness: getRandomInt(52, 60),
+    hue: getRandomInt(10, 24),
+    saturation: getRandomInt(88, 100),
+    lightness: getRandomInt(58, 61),
     alpha: getRandomInt(85, 100)
   }
 }
@@ -26,7 +26,7 @@ export const getYellowColor = () => {
   return {
     hue: getRandomInt(47, 58),
     saturation: getRandomInt(85, 100),
-    lightness: getRandomInt(52, 62),
+    lightness: getRandomInt(58, 66),
     alpha: getRandomInt(85, 100)
   }
 }
@@ -35,7 +35,7 @@ export const getGreenColor = () => {
   return {
     hue: getRandomInt(82, 120),
     saturation: getRandomInt(70, 85),
-    lightness: getRandomInt(35, 45),
+    lightness: getRandomInt(42, 50),
     alpha: getRandomInt(85, 100)
   }
 }
@@ -44,7 +44,7 @@ export const getBlueColor = () => {
   return {
     hue: getRandomInt(215, 240),
     saturation: getRandomInt(75, 95),
-    lightness: getRandomInt(48, 58),
+    lightness: getRandomInt(56, 58),
     alpha: getRandomInt(85, 100)
   }
 }
@@ -53,7 +53,7 @@ export const getPurpleColor = () => {
   return {
     hue: getRandomInt(268, 288),
     saturation: getRandomInt(80, 95),
-    lightness: getRandomInt(42, 53),
+    lightness: getRandomInt(47, 55),
     alpha: getRandomInt(85, 100)
   }
 }

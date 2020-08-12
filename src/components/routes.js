@@ -1,5 +1,6 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import {About, Contact, Projects, Resume, Home} from './pages'
 
@@ -15,4 +16,10 @@ const Routes = props => {
   )
 }
 
-export default Routes
+const mapState = state => {
+  return {
+    currentPage: state.currentPage
+  }
+}
+
+export default connect(mapState)(Routes)

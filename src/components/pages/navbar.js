@@ -20,23 +20,67 @@ const Navbar = props => {
 
     const environment = { p5, engine, world, width, height }
 
+    const goToLink = () => {
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
+      }
+      bodies.forEach(body => {
+        if (body.mouseInBounds(mousePosition)) {
+          console.log(body.text)
+          // console.log('event', event)
+          let url = body.text
+          // const link = p5.createA(`/${url}`, `${url}`)
+          // console.log('link', link)
+          // return body.text
+          const history = window.history
+          console.log('history', history)
+          const location = window.location
+          console.log('location', location)
+          // location.replace()
+
+          // push onto history
+          // or turn into a regular a navbar + CSS animations
+
+        }
+      })
+    }
     p5.setup = () => {
-      p5.createCanvas(width,height)
+      const canvas = p5.createCanvas(width,height)
+      canvas.mouseClicked(goToLink)
       setupFrame(environment)
       setupNav(environment, bodies, tabs)
-      // setupWorld(environment, bodies)
       // Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(50, 50, 50)
       Engine.update(engine)
       if (bodies.length) {
-        for (let i = 0; i < bodies.length; i++) {
-          bodies[i].show()
-        }
+        bodies.forEach(body => {
+          body.show()
+        })
       }
-
     }
+
+    // p5.mouseReleased = (event) => {
+    //   const mousePosition = {
+    //     x: p5.mouseX,
+    //     y: p5.mouseY
+    //   }
+    //   bodies.forEach(body => {
+    //     if (body.mouseInBounds(mousePosition)) {
+    //       console.log(body.text)
+    //       console.log('event', event)
+    //       let url = body.text
+    //       // const link = p5.createA(`/${url}`, `${url}`)
+    //       // console.log('link', link)
+
+    //       // return body.text
+    //     }
+    //   })
+
+    //   return false
+    // }
   }
 
   useEffect(() => {
