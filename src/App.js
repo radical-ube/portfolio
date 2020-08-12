@@ -3,7 +3,7 @@ import React from 'react';
 import './App.css';
 
 import Routes from './components/routes'
-import Navbar from './components/pages/navbar'
+import Navbar from './components/navbar'
 
 function App() {
   return (

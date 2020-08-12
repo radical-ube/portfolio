@@ -3,10 +3,10 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import {connect} from 'react-redux'
 
-import { setupFrame, setupNav } from '../utilities'
-import {setCurrentPage} from '../../store/page'
+import { setupFrame, setupNav } from './utilities'
+import {setCurrentPage} from '../store/page'
 
-const { Engine } = Matter
+const { Engine, World, Mouse, MouseConstraint } = Matter
 
 const Navbar = props => {
   const {setCurrentPage} = props
@@ -21,6 +21,15 @@ const Navbar = props => {
     let height = window.innerHeight * 0.15
 
     const environment = { p5, engine, world, width, height }
+
+    const canvas = p5.createCanvas(width, height)
+    const mouse = Mouse.create(canvas.elt)
+    mouse.pixelRatio = p5.pixelDensity()
+    const mouseOptions = {
+      mouse
+    }
+    const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
+    World.add(world, mouseConstraint)
 
     const goToLink = () => {
       const mousePosition = {
