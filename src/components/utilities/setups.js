@@ -56,50 +56,46 @@ export const setupHome = (environment, bodies) => {
 
   let titleText = 'hello world, my name is ube'
   const words = titleText.split(' ')
-  for (let i = 0; i < words.length; i++) {
+  words.forEach((word, index, array) => {
     const randomColor = getRandomColor()
-    let settings = {
-      x: 0,
-      y: 0,
-      inputText: words[i],
+    const settings = {
+      inputText: word,
       isStatic: false,
-      textSize: height / 6,
+      textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
-    settings.y = height * 0.2 + (i * 100)
+    settings.y = height * 0.2 + (index * settings.textSize)
    
-    let word = new TextBox(settings)
-    World.add(world, word.body)
-    bodies.push(word)
-  }
+    let textBox = new TextBox(settings)
+    World.add(world, textBox.body)
+    bodies.push(textBox)
+  })
 }
 
 export const setupAbout = (environment, bodies) => {
   const { world, width, height } = environment
   const TextBox = textBoxConstructor(environment)
 
-  let titleText = 'this is the about page'
+  let titleText = 'this is the about page and it will have an insanely long number of words to parse through. have fun trying to figure out how to organize this mess!'
   const words = titleText.split(' ')
-  for (let i = 0; i < words.length; i++) {
+  words.forEach((word, index, array) => {
     const randomColor = getRandomColor()
-    let settings = {
-      x: 0,
-      y: 0,
-      inputText: words[i],
+    const settings = {
+      inputText: word,
       isStatic: false,
-      textSize: height / 6,
+      textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
-    settings.y = height * 0.2 + (i * 100)
+    settings.y = height * 0.2 + (index * (settings.textSize / 2))
    
-    let word = new TextBox(settings)
-    World.add(world, word.body)
-    bodies.push(word)
-  }
+    let textBox = new TextBox(settings)
+    World.add(world, textBox.body)
+    bodies.push(textBox)
+  })
 }
 
 export const setupProjects = (environment, bodies, images) => {
@@ -128,21 +124,22 @@ export const setupProjects = (environment, bodies, images) => {
   //   World.add(world, word.body)
   //   bodies.push(word)
   // }
-  
+  const imageWidth = width * 0.4
+  const imageHeight = imageWidth * (9 / 16)
   const rainbowImage = new ImageBox({
     x: width * 0.25,
     y: height * 0.1,
     image: rainbow,
-    width: 480,
-    height: 270,
+    width: imageWidth,
+    height: imageHeight,
     isStatic: false
   })
   const ekopiqueImage = new ImageBox({
     x: width * 0.75,
     y: height * 0.1,
     image: ekopique,
-    width: 480,
-    height: 270,
+    width: imageWidth,
+    height: imageHeight,
     isStatic: false
   })
 
@@ -154,26 +151,24 @@ export const setupResume = (environment, bodies) => {
   const { world, width, height } = environment
   const TextBox = textBoxConstructor(environment)
 
-  let titleText = 'read my resume here if'
+  let titleText = 'resume will be a PDF cloth-like object'
   const words = titleText.split(' ')
-  for (let i = 0; i < words.length; i++) {
+  words.forEach((word, index, array) => {
     const randomColor = getRandomColor()
-    let settings = {
-      x: 0,
-      y: 0,
-      inputText: words[i],
+    const settings = {
+      inputText: word,
       isStatic: false,
-      textSize: height / 6,
+      textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
-    settings.y = height * 0.2 + (i * 100)
+    settings.y = height * 0.2 + (index * 100)
    
-    let word = new TextBox(settings)
-    World.add(world, word.body)
-    bodies.push(word)
-  }
+    let textBox = new TextBox(settings)
+    World.add(world, textBox.body)
+    bodies.push(textBox)
+  })
 }
 
 export const setupContact = (environment, bodies) => {
@@ -182,22 +177,20 @@ export const setupContact = (environment, bodies) => {
 
   let titleText = 'contact me you awesomes'
   const words = titleText.split(' ')
-  for (let i = 0; i < words.length; i++) {
+  words.forEach((word, index, array) => {
     const randomColor = getRandomColor()
-    let settings = {
-      x: 0,
-      y: 0,
-      inputText: words[i],
+    const settings = {
+      inputText: word,
       isStatic: false,
-      textSize: height / 6,
+      textSize: height / array.length,
       color: randomColor()
     }
 
     settings.x = width / 2
-    settings.y = height * 0.2 + (i * 100)
+    settings.y = height * 0.2 + (index * 100)
    
-    let word = new TextBox(settings)
-    World.add(world, word.body)
-    bodies.push(word)
-  }
+    let textBox = new TextBox(settings)
+    World.add(world, textBox.body)
+    bodies.push(textBox)
+  })
 }
