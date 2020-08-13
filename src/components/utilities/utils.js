@@ -122,8 +122,25 @@ export const createMouseConstraint = (canvas, engine, world, p5) => {
   World.add(world, mouseConstraint)
 }
 
-// export const repositionBoundaries = (boundaries) => {
-//   boundaries.forEach(boundary => {
-
-//   })
+// export const repositionBoundaries = (boundary, newWidth, newHeight) => {
+//   // boundaries.forEach(boundary => {
+//     if (boundary.label === 'ground') {
+//       boundary.position.x = newWidth / 2
+//       boundary.position.y = newHeight * 2
+//     }
+//     else if (boundary.label === 'ceiling') {
+//       boundary.position.x = newWidth / 2
+//       boundary.position.y = newHeight * -1
+//     }
+//     else if (boundary.label === 'leftwall') {
+//       boundary.position.x = newWidth * -1
+//       boundary.position.y = newHeight / 2
+//     }
+//     else if (boundary.label === 'rightwall') {
+//       boundary.position.x = newWidth * 2
+//       boundary.position.y = newHeight / 2
+//     }
+//     boundary.velocity.x = 0
+//     boundary.velocity.y = 0
+//   // })
 // }

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
-import { setupFrame, setupHome, createMouseConstraint } from '../utilities'
+import { setupFrame, setupHome, createMouseConstraint, repositionBoundaries } from '../utilities'
 
 const { Engine } = Matter
 
@@ -38,7 +38,17 @@ const Home = props => {
       width = window.innerWidth
       height = window.innerHeight * 0.85
       p5.resizeCanvas(width, height)
-      console.log('world', world)
+      // world.bodies.filter(element => {
+      //   return element.label === 'ground' || element.label === 'ceiling' || element.label === 'leftwall' || element.label === 'rightwall'
+      // })
+      //   .forEach(boundary => {
+      //     console.log('boundary', boundary)
+      //     repositionBoundaries(boundary, width, height)
+      //   })
+      // // repositionBoundaries(boundaries, width, height)
+      // console.log('window resized')
+      // // console.log('boundaries', boundaries)
+      // console.log('world', world)
     }
   }
 

@@ -6,22 +6,22 @@ const { World, Bodies } = Matter
 
 export const setupFrame = environment => {
   const { world, width, height } = environment
-  function Boundary (x, y, w, h) {
+  function Boundary (x, y, w, h, label) {
     const options = {
       friction: 0.3,
       restitution: 1,
       isStatic: true,
-      label: 'boundary'
+      label: label || 'boundary'
     }
     this.body = Bodies.rectangle(x, y, w, h, options)
     this.w = w
     this.h = h
   }
 
-  const ground = new Boundary(width / 2, height * 2, width * 2, height * 2)
-  const ceiling = new Boundary(width / 2, height * -1, width * 2, height * 2)
-  const leftWall = new Boundary(width * -1, height / 2, width * 2, height)
-  const rightWall = new Boundary(width * 2, height / 2, width * 2, height)
+  const ground = new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground')
+  const ceiling = new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling')
+  const leftWall = new Boundary(width * -1, height / 2, width * 2, height, 'leftwall')
+  const rightWall = new Boundary(width * 2, height / 2, width * 2, height, 'rightwall')
 
   World.add(world, [ground.body, ceiling.body, leftWall.body, rightWall.body])
 }
