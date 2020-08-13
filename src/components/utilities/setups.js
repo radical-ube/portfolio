@@ -1,12 +1,22 @@
 import Matter from 'matter-js'
-import { textBoxConstructor, boundaryConstructor, constraintConstructor, imageBoxConstructor } from './'
-import { getRandomColor } from './utils'
+import { textBoxConstructor, constraintConstructor, imageBoxConstructor } from './'
+import { randomColor } from './utils'
 
-const { World } = Matter
+const { World, Bodies } = Matter
 
 export const setupFrame = environment => {
   const { world, width, height } = environment
-  const Boundary = boundaryConstructor(environment)
+  function Boundary (x, y, w, h) {
+    const options = {
+      friction: 0.3,
+      restitution: 1,
+      isStatic: true,
+      label: 'boundary'
+    }
+    this.body = Bodies.rectangle(x, y, w, h, options)
+    this.w = w
+    this.h = h
+  }
 
   const ground = new Boundary(width / 2, height * 2, width * 2, height * 2)
   const ceiling = new Boundary(width / 2, height * -1, width * 2, height * 2)
@@ -23,7 +33,6 @@ export const setupNav = (environment, bodies, tabs) => {
 
   let previousWord = null
   for (let i = 0; i < tabs.length; i++) {
-    const randomColor = getRandomColor()
     let settings = {
       x: 0,
       y: 0,
@@ -61,7 +70,6 @@ export const setupHome = (environment, bodies) => {
   let titleText = 'hello world, my name is ube'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
-    const randomColor = getRandomColor()
     const settings = {
       inputText: word,
       options: {
@@ -89,7 +97,6 @@ export const setupAbout = (environment, bodies) => {
   let titleText = 'this is the about page and it will have an insanely long number of words to parse through. have fun trying to figure out how to organize this mess!'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
-    const randomColor = getRandomColor()
     const settings = {
       inputText: word,
       options: {
@@ -174,7 +181,7 @@ export const setupResume = (environment, bodies) => {
   let titleText = 'resume will be a PDF cloth-like object'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
-    const randomColor = getRandomColor()
+
     const settings = {
       inputText: word,
       options: {
@@ -202,7 +209,6 @@ export const setupContact = (environment, bodies) => {
   let titleText = 'contact me you awesomes'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
-    const randomColor = getRandomColor()
     const settings = {
       inputText: word,
       options: {

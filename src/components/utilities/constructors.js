@@ -48,18 +48,18 @@ export const textBoxConstructor = environment => {
   }
 }
 
-export const boundaryConstructor = environment => {
-  return function Boundary(x, y, w, h) {
-    const options = {
-      friction: 0.3,
-      restitution: 1,
-      isStatic: true
-    }
-    this.body = Bodies.rectangle(x, y, w, h, options)
-    this.w = w
-    this.h = h
-  }
-}
+// export const boundaryConstructor = () => {
+//   return function Boundary(x, y, w, h) {
+//     const options = {
+//       friction: 0.3,
+//       restitution: 1,
+//       isStatic: true
+//     }
+//     this.body = Bodies.rectangle(x, y, w, h, options)
+//     this.w = w
+//     this.h = h
+//   }
+// }
 
 export const constraintConstructor = environment => {
   // const { p5, world } = environment
