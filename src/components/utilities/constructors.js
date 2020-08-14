@@ -77,7 +77,7 @@ export const imageBoxConstructor = environment => {
   const { p5 } = environment
   const { CENTER } = p5
   return function ImageBox(settings) {
-    const { x, y, image, width, height, options } = settings
+    const { x, y, image, width, height, options, address } = settings
 
     // class properties
     this.image = image
@@ -85,6 +85,7 @@ export const imageBoxConstructor = environment => {
     this.h = height
     this.options = options
     this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
+    this.address = address
 
     // class methods
     this.show = () => {

@@ -155,7 +155,8 @@ export const setupProjects = (environment, bodies, images) => {
       friction: 0.4,
       restitution: 0.7,
       isStatic: false
-    }
+    },
+    address: 'https://rainbow-on-me.herokuapp.com'
   })
   const ekopiqueImage = new ImageBox({
     x: width * 0.75,
@@ -167,7 +168,8 @@ export const setupProjects = (environment, bodies, images) => {
       friction: 0.4,
       restitution: 0.7,
       isStatic: false
-    }
+    },
+    address: 'https://ekopique.herokuapp.com'
   })
 
   World.add(world, [rainbowImage.body, ekopiqueImage.body])

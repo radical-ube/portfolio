@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
-import { setupFrame, setupProjects, createMouseConstraint } from '../utilities'
+import { setupFrame, setupProjects } from '../utilities'
 
 const { Engine, Mouse, MouseConstraint, World } = Matter
 
@@ -19,16 +19,20 @@ const Projects = props => {
 
     const environment = { p5, engine, world, width, height }
 
-    // const canvas = p5.createCanvas(width, height)
-    // const mouse = Mouse.create(canvas.elt)
-    // mouse.pixelRatio = p5.pixelDensity()
-    // const mouseOptions = {
-    //   mouse
-    // }
-    // const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
-    // World.add(world, mouseConstraint)
-
     const images = {}
+
+    const handleAddressChange = () => {
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
+      }
+      bodies.forEach(body => {
+        if (body.mouseInBounds(mousePosition)) {
+          document.location.assign(body.address)
+        }
+      })
+    }
+
 
     p5.preload = () => {
       images.rainbow = p5.loadImage('images/rainbowonme.png')
@@ -36,7 +40,7 @@ const Projects = props => {
     }
     p5.setup = () => {
       const canvas = p5.createCanvas(width,height)
-      createMouseConstraint(canvas, engine, world, p5)
+      canvas.mouseClicked(handleAddressChange)
       setupFrame(environment)
       setupProjects(environment, bodies, images)
       Engine.run(engine)
