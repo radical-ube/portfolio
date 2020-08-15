@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
-import { setupFrame, setupContact } from '../utilities'
+import { setupFrame, setupContact, createMouseConstraint } from '../utilities'
 
 const { Engine, Mouse, MouseConstraint, World } = Matter
 
@@ -19,17 +19,18 @@ const Contact = props => {
 
     const environment = { p5, engine, world, width, height }
 
-    const canvas = p5.createCanvas(width, height)
-    const mouse = Mouse.create(canvas.elt)
-    mouse.pixelRatio = p5.pixelDensity()
-    const mouseOptions = {
-      mouse
-    }
-    const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
-    World.add(world, mouseConstraint)
+    // const canvas = p5.createCanvas(width, height)
+    // const mouse = Mouse.create(canvas.elt)
+    // mouse.pixelRatio = p5.pixelDensity()
+    // const mouseOptions = {
+    //   mouse
+    // }
+    // const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
+    // World.add(world, mouseConstraint)
 
     p5.setup = () => {
-      p5.createCanvas(width,height)
+      const canvas = p5.createCanvas(width,height)
+      createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupContact(environment, bodies)
       Engine.run(engine)

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
-import { setupFrame, setupHome } from '../utilities'
+import { setupFrame, setupHome, createMouseConstraint } from '../utilities'
 
-const { Engine, Mouse, MouseConstraint, World } = Matter
+const { Engine } = Matter
 
 const Home = props => {
   const ref = React.createRef()
@@ -19,17 +19,9 @@ const Home = props => {
 
     const environment = { p5, engine, world, width, height }
 
-    const canvas = p5.createCanvas(width, height)
-    const mouse = Mouse.create(canvas.elt)
-    mouse.pixelRatio = p5.pixelDensity()
-    const mouseOptions = {
-      mouse
-    }
-    const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
-    World.add(world, mouseConstraint)
-
     p5.setup = () => {
-      p5.createCanvas(width,height)
+      const canvas = p5.createCanvas(width, height)
+      createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupHome(environment, bodies)
       Engine.run(engine)
@@ -42,9 +34,10 @@ const Home = props => {
         })
       }
     }
-
-    p5.mouseReleased = () => {
-    
+    p5.windowResized = () => {
+      width = window.innerWidth
+      height = window.innerHeight * 0.85
+      p5.resizeCanvas(width, height)
     }
   }
 

@@ -3,8 +3,8 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import {connect} from 'react-redux'
 
-import { setupFrame, setupNav } from '../utilities'
-import {setCurrentPage} from '../../store/page'
+import { setupFrame, setupNav } from './utilities'
+import {setCurrentPage} from '../store/page'
 
 const { Engine } = Matter
 
@@ -22,7 +22,7 @@ const Navbar = props => {
 
     const environment = { p5, engine, world, width, height }
 
-    const goToLink = () => {
+    const handlePageChange = () => {
       const mousePosition = {
         x: p5.mouseX,
         y: p5.mouseY
@@ -33,9 +33,10 @@ const Navbar = props => {
         }
       })
     }
+
     p5.setup = () => {
-      const canvas = p5.createCanvas(width,height)
-      canvas.mouseClicked(goToLink)
+      const canvas = p5.createCanvas(width, height)
+      canvas.mouseClicked(handlePageChange)
       setupFrame(environment)
       setupNav(environment, bodies, tabs)
       Engine.run(engine)
@@ -47,6 +48,11 @@ const Navbar = props => {
           body.show()
         })
       }
+    }
+    p5.windowResized = () => {
+      width = window.innerWidth
+      height = window.innerHeight * 0.15
+      p5.resizeCanvas(width, height)
     }
   }
 
