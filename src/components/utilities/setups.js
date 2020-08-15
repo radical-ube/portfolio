@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { Boundary, TextBox, ImageBox, Spring } from './'
+import { Boundary, TextBox, ImageBox, Spring } from './constructors'
 import { randomColor } from './utils'
 
 const { World } = Matter
@@ -135,8 +135,11 @@ export const setupProjects = (environment, bodies, images) => {
     address: 'https://ekopique.herokuapp.com'
   })
 
+  // const testMesh = new Mesh(environment)
+  
   World.add(world, [rainbowImage.body, ekopiqueImage.body])
   bodies.push(rainbowImage, ekopiqueImage)
+  // console.log('testMesh', testMesh)
 }
 
 export const setupResume = (environment, bodies) => {

@@ -1,9 +1,9 @@
 import Matter from 'matter-js'
 import { areaFromPoints } from './utils'
 
-const { Bodies, Composites, Constraint } = Matter
+const { Body, Bodies, Composites, Constraint } = Matter
 
-export function Boundary (x, y, w, h, label) {
+export function Boundary(x, y, w, h, label) {
   const options = {
     friction: 0.3,
     restitution: 1,
@@ -58,8 +58,6 @@ export function TextBox(environment, settings) {
   }
 }
 
-
-
 export function ImageBox(environment, settings) {
   const { p5 } = environment
   const { CENTER } = p5
@@ -94,7 +92,7 @@ export function ImageBox(environment, settings) {
   }
 }
 
-export function Spring (bodyA, bodyB, length, stiffness) {
+export function Spring(bodyA, bodyB, length, stiffness) {
   this.body = Constraint.create({
     bodyA,
     bodyB,
@@ -102,4 +100,29 @@ export function Spring (bodyA, bodyB, length, stiffness) {
     stiffness
   })
 }
+
+// export function Mesh(environment, settings) {
+//   const {p5} = environment
+
+//   const group = Body.nextGroup(true)
+//   const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: false } }
+//   const constraintOptions = { stiffness: 0.06 }
+  
+//   this.cloth = Composites.softBody(200, 200, 20, 12, 5, 5, false, 8, particleOptions, constraintOptions);
+  
+//   for (var i = 0; i < 20; i++) {
+//     this.cloth.bodies[i].isStatic = true;
+//   }
+
+//   this.show = () => {
+//     this.bodies = this.cloth.bodies
+//     this.bodies.forEach(body => {
+//       this.position = body.position
+//       p5.push()
+//       p5.stroke('white')
+//       p5.point(this.position.x, this.position.y)
+//       p5.pop()
+//     })
+//   }
+// }
 
