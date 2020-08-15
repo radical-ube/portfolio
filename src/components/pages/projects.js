@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
 
-import { setupFrame, setupProjects } from '../utilities'
+import { setupFrame, setupProjects, createMouseConstraint } from '../utilities'
 
-const { Engine, Mouse, MouseConstraint, World } = Matter
+const { Engine } = Matter
 
 const Projects = props => {
   const ref = React.createRef()
@@ -27,7 +27,7 @@ const Projects = props => {
         y: p5.mouseY
       }
       bodies.forEach(body => {
-        if (body.mouseInBounds(mousePosition)) {
+        if (body.mouseInBounds(mousePosition) && body.address) {
           document.location.assign(body.address)
         }
       })
@@ -41,6 +41,7 @@ const Projects = props => {
     p5.setup = () => {
       const canvas = p5.createCanvas(width,height)
       canvas.mouseClicked(handleAddressChange)
+      // createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupProjects(environment, bodies, images)
       Engine.run(engine)

@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { Boundary, TextBox, ImageBox, Spring } from './constructors'
+import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Chain } from './constructors'
 import { randomColor } from './utils'
 
 const { World } = Matter
@@ -43,7 +43,13 @@ export const setupNav = (environment, bodies, tabs) => {
     bodies.push(word)
 
     if (i > 0) {
-      let constraint = new Spring(word.body, previousWord.body, width * 0.135, 0.65)
+      let constraintSettings = {
+        bodyA: word.body,
+        bodyB: previousWord.body,
+        length: width * 0.135,
+        stiffness: 0.65
+      }
+      let constraint = new Spring(environment, constraintSettings)
       World.add(world, constraint.body)
     }
     previousWord = word
@@ -56,19 +62,24 @@ export const setupHome = (environment, bodies) => {
   let titleText = 'hello world, my name is ube'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
+    const textSize = height / array.length
+    let x = width / 2
+    if (index === 0) {
+      x = (width / 2) - (width * 0.075)
+    }
+  
     const settings = {
+      textSize: textSize,
+      x,
+      y: height * 0.2 + (index * textSize),
       inputText: word,
       options: {
         friction: 0.4,
         restitution: 0.8,
         isStatic: false
       },
-      textSize: height / array.length,
       color: randomColor()
-    }
-
-    settings.x = width / 2
-    settings.y = height * 0.2 + (index * settings.textSize)
+    } 
 
     let textBox = new TextBox(environment, settings)
     World.add(world, textBox.body)
@@ -108,38 +119,70 @@ export const setupProjects = (environment, bodies, images) => {
 
   const imageWidth = width * 0.4
   const imageHeight = imageWidth * (9 / 16)
+
   const rainbowImage = new ImageBox(environment, {
     x: width * 0.25,
-    y: height * 0.1,
+    y: (height * 0.35),
     image: rainbow,
     width: imageWidth,
     height: imageHeight,
     options: {
       friction: 0.4,
       restitution: 0.7,
-      isStatic: false
+      isStatic: true
     },
     address: 'https://rainbow-on-me.herokuapp.com'
   })
+
+  let rainbowText = 'Rainbow On Me was a 2-day Hack-a-thon project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.'
+
+  const rainbowDescription = new ParagraphBox(environment, {
+    x: width * 0.25,
+    y: (height * 0.35) + imageHeight,
+    options: {
+      friction: 0.4,
+      restitution: 0.7,
+      isStatic: true
+    },
+    inputText: rainbowText,
+    textSize: 24,
+    boxWidth: imageWidth,
+    boxHeight: imageHeight / 2,
+  })
+
   const ekopiqueImage = new ImageBox(environment, {
     x: width * 0.75,
-    y: height * 0.1,
+    y: height * 0.35,
     image: ekopique,
     width: imageWidth,
     height: imageHeight,
     options: {
       friction: 0.4,
       restitution: 0.7,
-      isStatic: false
+      isStatic: true
     },
     address: 'https://ekopique.herokuapp.com'
   })
 
-  // const testMesh = new Mesh(environment)
-  
-  World.add(world, [rainbowImage.body, ekopiqueImage.body])
-  bodies.push(rainbowImage, ekopiqueImage)
-  // console.log('testMesh', testMesh)
+  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data. Find out how \"danceable\" your favorite songs are!'
+
+  const ekopiqueDescription = new ParagraphBox(environment, {
+    x: width * 0.75,
+    y: (height * 0.35) + imageHeight,
+    options: {
+      friction: 0.4,
+      restitution: 0.7,
+      isStatic: true
+    },
+    inputText: ekopiqueText,
+    textSize: 24,
+    boxWidth: imageWidth,
+    boxHeight: imageHeight / 2,
+  })
+
+  World.add(world, [rainbowImage.body, rainbowDescription.body, ekopiqueImage.body, ekopiqueDescription.body])
+  bodies.push(rainbowImage, rainbowDescription, ekopiqueImage, ekopiqueDescription)
+  // console.log('chain', rainbowChain)
 }
 
 export const setupResume = (environment, bodies) => {
