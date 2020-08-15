@@ -59,32 +59,62 @@ export const setupNav = (environment, bodies, tabs) => {
 export const setupHome = (environment, bodies) => {
   const { world, width, height } = environment
 
-  let titleText = 'hello world, my name is ube'
-  const words = titleText.split(' ')
-  words.forEach((word, index, array) => {
-    const textSize = height / array.length
-    let x = width / 2
-    if (index === 0) {
-      x = (width / 2) - (width * 0.075)
-    }
-  
-    const settings = {
-      textSize: textSize,
-      x,
-      y: height * 0.2 + (index * textSize),
-      inputText: word,
-      options: {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      },
-      color: randomColor()
-    } 
+  let homeText1 = 'hello world, my name is ube'
+  homeText1.split(' ')
+    .forEach((word, index, array) => {
+      const textSize = height / array.length
+      let x = width * 0.35
+      let y = height * 0.2 + (index * textSize)
 
-    let textBox = new TextBox(environment, settings)
-    World.add(world, textBox.body)
-    bodies.push(textBox)
-  })
+      if (index === 1) {
+        x = width * 0.41
+      }
+
+      const settings = {
+        textSize,
+        x,
+        y,
+        inputText: word,
+        options: {
+          friction: 0.4,
+          restitution: 0.8,
+          isStatic: false
+        },
+        color: randomColor()
+      }
+
+      let textBox = new TextBox(environment, settings)
+      World.add(world, textBox.body)
+      bodies.push(textBox)
+    })
+
+  let homeText2 = 'i am a work in progress'
+  homeText2.split(' ')
+    .forEach((word, index, array) => {
+      const textSize = height / array.length
+      let x = width * 0.65
+      let y = height * 0.2 + (index * textSize)
+
+      // if (index === 1) {
+      //   x = width * 0.58
+      // }
+      const settings = {
+        textSize,
+        x,
+        y,
+        inputText: word,
+        options: {
+          friction: 0.4,
+          restitution: 0.8,
+          isStatic: false
+        },
+        color: randomColor()
+      }
+
+      let textBox = new TextBox(environment, settings)
+      World.add(world, textBox.body)
+      bodies.push(textBox)
+    })
 }
 
 export const setupAbout = (environment, bodies) => {

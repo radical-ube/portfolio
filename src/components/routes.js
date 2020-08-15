@@ -4,21 +4,21 @@ import { connect } from 'react-redux'
 import { About, Contact, Projects, Resume, Home } from './pages'
 
 const Routes = props => {
-  const { currentPage } = props
+  const { currentPage, bgColor } = props
   return (
     <div>
       {currentPage === 'home' ? (
-        <Home />
+        <Home bgColor={bgColor} />
       ) : currentPage === 'about' ? (
-        <About />
+        <About bgColor={bgColor} />
       ) : currentPage === 'projects' ? (
-        <Projects />
+        <Projects bgColor={bgColor} />
       ) : currentPage === 'resume' ? (
-        <Resume />
+        <Resume bgColor={bgColor} />
       ) : currentPage === 'contact' ? (
-        <Contact />
+        <Contact bgColor={bgColor} />
       ) : (
-        <Home />
+        <Home bgColor={bgColor} />
       )}
     </div>
   )

@@ -17,7 +17,7 @@ export function Boundary(x, y, w, h, label) {
 
 export function TextBox(environment, settings) {
   const { p5 } = environment
-  const { CENTER, HSL } = p5
+  const { LEFT, CENTER, HSL } = p5
   const { x, y, options, inputText, textSize, color } = settings
   p5.textSize(textSize || 18)
 

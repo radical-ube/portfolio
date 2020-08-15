@@ -9,7 +9,7 @@ import {setCurrentPage} from '../store/page'
 const { Engine } = Matter
 
 const Navbar = props => {
-  const {setCurrentPage} = props
+  const {setCurrentPage, bgColor} = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
@@ -42,7 +42,7 @@ const Navbar = props => {
       Engine.run(engine)
     }
     p5.draw = () => {
-      p5.background(50, 50, 50)
+      p5.background(bgColor)
       if (bodies.length) {
         bodies.forEach(body => {
           body.show()

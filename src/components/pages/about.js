@@ -7,6 +7,7 @@ import { setupFrame, setupAbout, createMouseConstraint } from '../utilities'
 const { Engine, Mouse, MouseConstraint, World } = Matter
 
 const About = props => {
+  const {bgColor} = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
@@ -36,7 +37,7 @@ const About = props => {
       Engine.run(engine)
     }
     p5.draw = () => {
-      p5.background(50, 50, 50)
+      p5.background(bgColor)
       if (bodies.length) {
         bodies.forEach(body => {
           body.show()
