@@ -1,23 +1,19 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
+import {connect} from 'react-redux'
 
 import { setupFrame, setupResume, createMouseConstraint } from '../utilities'
 
-const { Engine, Mouse, MouseConstraint, World } = Matter
+const { Engine, World } = Matter
 
 const Resume = props => {
-  const {bgColor} = props
+  const { currentPage, bgColor } = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
 
-  // const bodies = []
-
   const Sketch = p5 => {
-    // let width = window.innerWidth
-    // let height = window.innerHeight * 0.85
-
     const environment = { 
       p5, 
       engine, 
@@ -27,24 +23,17 @@ const Resume = props => {
       bodies: [] 
     }
 
-    // const canvas = p5.createCanvas(width, height)
-    // const mouse = Mouse.create(canvas.elt)
-    // mouse.pixelRatio = p5.pixelDensity()
-    // const mouseOptions = {
-    //   mouse
-    // }
-    // const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
-    // World.add(world, mouseConstraint)
-
     p5.setup = () => {
+      World.clear(world, false)
+      Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
       createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupResume(environment)
-      Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(bgColor)
+      Engine.update(engine)
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()
@@ -55,10 +44,19 @@ const Resume = props => {
   }
 
   useEffect(() => {
-    new p5(Sketch, ref.current)
-  }, [])
+    const p5canvas = new p5(Sketch, ref.current)
+    return function cleanup() {
+      p5canvas.remove()
+    }
+  }, [currentPage])
 
   return <div ref={ref} />
 }
 
-export default Resume
+const mapState = state => {
+  return {
+    currentPage: state.currentPage
+  }
+}
+
+export default connect(mapState)(Resume)

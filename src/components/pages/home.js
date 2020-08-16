@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
+import {connect} from 'react-redux'
 
 import { setupFrame, setupHome, createMouseConstraint } from '../utilities'
 
-const { Engine } = Matter
+const { Engine, World } = Matter
 
 const Home = props => {
-  const {bgColor} = props
+  const { currentPage, bgColor } = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
@@ -23,11 +24,12 @@ const Home = props => {
     }
 
     p5.setup = () => {
+      World.clear(world, false)
+      Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
       createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupHome(environment)
-      // Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(bgColor)
@@ -46,10 +48,19 @@ const Home = props => {
   }
 
   useEffect(() => {
-    new p5(Sketch, ref.current)
-  }, [])
+    const p5canvas = new p5(Sketch, ref.current)
+    return function cleanup() {
+      p5canvas.remove()
+    }
+  }, [currentPage])
 
   return <div ref={ref} />
 }
 
-export default Home
+const mapState = state => {
+  return {
+    currentPage: state.currentPage
+  }
+}
+
+export default connect(mapState)(Home)
