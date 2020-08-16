@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 import { setupFrame, setupNav } from './utilities'
 import {setCurrentPage} from '../store/page'
 
-const { Engine } = Matter
+const { Engine, World } = Matter
 
 const Navbar = props => {
   const {setCurrentPage, bgColor} = props
@@ -23,7 +23,7 @@ const Navbar = props => {
       width: window.innerWidth, 
       height: window.innerHeight * 0.15, 
       bodies: [],
-      tabs: ['', 'home', 'about', 'projects', 'resume', 'contact', '']
+      tabs: ['', 'home', 'about', 'projects', 'contact', '']
     }
 
     const handlePageChange = () => {
@@ -39,14 +39,16 @@ const Navbar = props => {
     }
 
     p5.setup = () => {
+      Engine.clear(engine)
+      World.clear(world, false)
       const canvas = p5.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handlePageChange)
       setupFrame(environment)
       setupNav(environment)
-      Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(bgColor)
+      Engine.update(engine)
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()
@@ -61,7 +63,10 @@ const Navbar = props => {
   }
 
   useEffect(() => {
-    new p5(Sketch, ref.current)
+    const p5canvas = new p5(Sketch, ref.current)
+    return function cleanup() {
+      p5canvas.remove()
+    }
   }, [])
 
   return <div ref={ref} />

@@ -1,4 +1,4 @@
-import { Boundary, TextBox, ParagraphBox, TextPlatform, ImageBox, Spring, Chain } from './constructors'
+import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button } from './constructors'
 import { randomColor } from './utils'
 
 
@@ -34,7 +34,7 @@ export const setupNav = (environment) => {
     if (i === tabs.length - 1) {
       settings.x = width + 15
     }
-    let word = new TextBox(environment, settings)
+    let word = new Button(environment, settings)
     bodies.push(word)
 
     if (i > 0) {
@@ -151,67 +151,102 @@ export const setupProjects = (environment) => {
   const { width, height, images } = environment
   const { rainbow, ekopique } = images
 
-  const imageWidth = width * 0.4
+  const imageWidth = width * 0.375
   const imageHeight = imageWidth * (9 / 16)
+  const textSize = width * 0.015
 
   const rainbowImage = new ImageBox(environment, {
-    x: width * 0.25,
-    y: (height * 0.35),
+    x: width * 0.3,
+    y: (height * 0.25),
     image: rainbow,
     width: imageWidth,
     height: imageHeight,
     options: {
-      friction: 0.4,
-      restitution: 0.7,
       isStatic: true
-    },
-    address: 'https://rainbow-on-me.herokuapp.com'
+    }
   })
 
   let rainbowText = 'Rainbow On Me was a 2-day Hack-a-thon project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.'
 
   const rainbowDescription = new ParagraphBox(environment, {
-    x: width * 0.25,
-    y: (height * 0.35) + imageHeight,
+    x: width * 0.7,
+    y: (height * 0.2),
     options: {
-      friction: 0.4,
-      restitution: 0.7,
       isStatic: true
     },
     inputText: rainbowText,
-    textSize: 24,
+    textSize,
     boxWidth: imageWidth,
     boxHeight: imageHeight / 2,
   })
 
+  const rainbowWebButton = new Button(environment, {
+    x: (width * 0.65),
+    y: (height * 0.35),
+    options: {
+      isStatic: true
+    },
+    inputText: 'website',
+    address: 'https://rainbow-on-me.herokuapp.com/rainbow',
+    textSize
+  })
+
+  const rainbowGithubButton = new Button(environment, {
+    x: (width * 0.75),
+    y: (height * 0.35),
+    options: {
+      isStatic: true
+    },
+    inputText: 'github',
+    address: 'https://github.com/radical-ube/stackathon',
+    textSize
+  })
+
   const ekopiqueImage = new ImageBox(environment, {
-    x: width * 0.75,
-    y: height * 0.35,
+    x: width * 0.3,
+    y: (height * 0.25) + (imageHeight * 1.05),
     image: ekopique,
     width: imageWidth,
     height: imageHeight,
     options: {
-      friction: 0.4,
-      restitution: 0.7,
       isStatic: true
-    },
-    address: 'https://ekopique.herokuapp.com'
+    }
   })
 
   let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data. Find out how \"danceable\" your favorite songs are!'
 
   const ekopiqueDescription = new ParagraphBox(environment, {
-    x: width * 0.75,
-    y: (height * 0.35) + imageHeight,
+    x: width * 0.7,
+    y: (height * 0.2) + (imageHeight * 1.05),
     options: {
-      friction: 0.4,
-      restitution: 0.7,
       isStatic: true
     },
     inputText: ekopiqueText,
-    textSize: 24,
+    textSize,
     boxWidth: imageWidth,
     boxHeight: imageHeight / 2,
+  })
+
+  const ekopiqueWebButton = new Button(environment, {
+    x: (width * 0.65),
+    y: (height * 0.35) + (imageHeight * 1.05),
+    options: {
+      isStatic: true
+    },
+    inputText: 'website',
+    address: 'https://ekopique.herokuapp.com',
+    textSize
+  })
+
+  const ekopiqueGithubButton = new Button(environment, {
+    x: (width * 0.75),
+    y: (height * 0.35) + (imageHeight * 1.05),
+    options: {
+      isStatic: true
+    },
+    inputText: 'github',
+    address: 'https://github.com/2004-wdf-capstone-d/capstone-spotify',
+    textSize
   })
 }
 

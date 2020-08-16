@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
+import {connect} from 'react-redux'
 
-import { setupFrame, setupProjects, createMouseConstraint } from '../utilities'
+import { setupFrame, setupProjects } from '../utilities'
 
-const { Engine } = Matter
+const { Engine, World } = Matter
 
 const Projects = props => {
-  const {bgColor} = props
+  const { currentPage, bgColor } = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
@@ -40,29 +41,38 @@ const Projects = props => {
       environment.images.ekopique = p5.loadImage('images/ekopique.png')
     }
     p5.setup = () => {
+      World.clear(world, false)
+      Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleAddressChange)
-      // createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupProjects(environment)
-      Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(bgColor)
+      Engine.update(engine)
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()
         })
       }
     }
-
   }
 
   useEffect(() => {
-    new p5(Sketch, ref.current)
-  }, [])
+    const p5canvas = new p5(Sketch, ref.current)
+    return function cleanup() {
+      p5canvas.remove()
+    }
+  }, [currentPage])
 
   return <div ref={ref} />
 }
 
-export default Projects
+const mapState = state => {
+  return {
+    currentPage: state.currentPage
+  }
+}
+
+export default connect(mapState)(Projects)

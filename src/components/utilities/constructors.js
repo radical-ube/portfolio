@@ -32,7 +32,7 @@ export function TextBox(environment, settings) {
   this.color = color || {
     hue: 0,
     saturation: 0,
-    lightness: 100,
+    lightness: 94,
   }
   World.add(world, this.body)
   bodies.push(this)
@@ -176,7 +176,7 @@ export function ColorBall(environment, settings) {
     lightness: 100
   }
   this.body = Bodies.circle(x, y, this.r, this.options)
-  if (particles.length < 100) {
+  if (particles.length < 150) {
     World.add(world, this.body)
     particles.push(this)
   }
@@ -197,13 +197,58 @@ export function ColorBall(environment, settings) {
   }
 
   this.isBelowLine = () => {
-    // this.position = this.body.position
-    return (this.position.y > (height * 0.8))
+    return (this.position.y > (height * 0.95))
   }
   this.remove = () => {
     World.remove(world, this.body)
   }
 }
 
+export function Button(environment, settings) {
+  const { p5, world, bodies } = environment
+  const { CENTER, HSL } = p5
+  const { x, y, options, inputText, address, textSize, color } = settings
+  p5.textSize(textSize || 18)
 
+  // class properties
+  this.text = inputText || ''
+  this.address = address
+  this.w = p5.textWidth(this.text)
+  this.h = p5.textAscent(this.text)
+  this.options = options
+  this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
+  this.color = color || {
+    hue: 0,
+    saturation: 0,
+    lightness: 94,
+  }
+  World.add(world, this.body)
+  bodies.push(this)
+
+  // class methods
+  this.show = () => {
+    const { hue, saturation, lightness } = this.color
+    this.position = this.body.position
+    this.angle = this.body.angle
+
+    p5.push()
+    p5.translate(this.position.x, this.position.y)
+    p5.rotate(this.angle)
+    p5.rectMode(CENTER)
+    p5.textAlign(CENTER, CENTER)
+    p5.colorMode(HSL)
+    p5.fill(hue, saturation, lightness)
+    p5.text(this.text, 0, 0)
+    p5.noFill()
+    p5.stroke(hue, saturation, lightness)
+    p5.rect(0, 0, this.w + 10, this.h + 10)
+    p5.pop()
+  }
+
+  this.mouseInBounds = (mousePosition) => {
+    const vertices = this.body.vertices
+    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
+    return (mouseArea < this.body.area + 1)
+  }
+}
 
