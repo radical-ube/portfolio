@@ -33,14 +33,13 @@ export function TextBox(environment, settings) {
     hue: 0,
     saturation: 0,
     lightness: 100,
-    alpha: 0.2
   }
   World.add(world, this.body)
   bodies.push(this)
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness, alpha } = this.color
+    const { hue, saturation, lightness } = this.color
     this.position = this.body.position
     this.angle = this.body.angle
 
@@ -50,7 +49,7 @@ export function TextBox(environment, settings) {
     p5.rectMode(CENTER)
     p5.textAlign(CENTER, CENTER)
     p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness, alpha)
+    p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0)
     p5.pop()
   }
@@ -84,7 +83,7 @@ export function ParagraphBox(environment, settings) {
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness, alpha } = this.color
+    const { hue, saturation, lightness } = this.color
     this.position = this.body.position
     this.angle = this.body.angle
 
@@ -94,7 +93,7 @@ export function ParagraphBox(environment, settings) {
     p5.rectMode(CENTER)
     p5.textAlign(LEFT, TOP)
     p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness, alpha)
+    p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0, boxWidth, boxHeight)
     p5.pop()
   }
@@ -164,9 +163,46 @@ export function Spring(environment, settings) {
   }
 }
 
-export function colorBall(environment, settings) {
-  const {p5, world} = environment
+export function ColorBall(environment, settings) {
+  const {p5, world, particles, height} = environment
+  const {HSL} = p5
   const {x, y, r, options, color} = settings
+
+  this.r = r
+  this.options = options
+  this.color = color || {
+    hue: 0,
+    saturation: 0,
+    lightness: 100
+  }
+  this.body = Bodies.circle(x, y, this.r, this.options)
+  if (particles.length < 100) {
+    World.add(world, this.body)
+    particles.push(this)
+  }
+
+  this.show = () => {
+    const { hue, saturation, lightness } = this.color
+    this.position = this.body.position
+    this.angle = this.body.angle
+
+    p5.push()
+    p5.translate(this.position.x, this.position.y)
+    p5.rotate(this.angle)
+    p5.noStroke()
+    p5.colorMode(HSL)
+    p5.fill(hue, saturation, lightness)
+    p5.ellipse(0, 0, this.r * 2)
+    p5.pop()
+  }
+
+  this.isBelowLine = () => {
+    // this.position = this.body.position
+    return (this.position.y > (height * 0.8))
+  }
+  this.remove = () => {
+    World.remove(world, this.body)
+  }
 }
 
 

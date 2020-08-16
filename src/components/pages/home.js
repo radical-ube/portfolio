@@ -27,10 +27,11 @@ const Home = props => {
       createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupHome(environment)
-      Engine.run(engine)
+      // Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(bgColor)
+      Engine.update(engine)
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()

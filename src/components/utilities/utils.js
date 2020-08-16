@@ -1,4 +1,5 @@
 import Matter from 'matter-js'
+import {ColorBall} from './constructors'
 
 const {World, Mouse, MouseConstraint} = Matter
 
@@ -11,19 +12,17 @@ const getRandomInt = (min, max) => {
 
 export const getRedColor = () => {
   return {
-    hue: getRandomInt(346, 357),
+    hue: getRandomInt(344, 352),
     saturation: getRandomInt(85, 101),
     lightness: getRandomInt(48, 55),
-    alpha: getRandomInt(85, 101)
   }
 }
 
 export const getOrangeColor = () => {
   return {
-    hue: getRandomInt(10, 24),
-    saturation: getRandomInt(88, 101),
-    lightness: getRandomInt(58, 61),
-    alpha: getRandomInt(85, 101)
+    hue: getRandomInt(20, 28),
+    saturation: getRandomInt(90, 101),
+    lightness: getRandomInt(45, 52),
   }
 }
 
@@ -31,26 +30,23 @@ export const getYellowColor = () => {
   return {
     hue: getRandomInt(47, 58),
     saturation: getRandomInt(85, 101),
-    lightness: getRandomInt(58, 66),
-    alpha: getRandomInt(85, 101)
+    lightness: getRandomInt(52, 60),
   }
 }
 
 export const getGreenColor = () => {
   return {
-    hue: getRandomInt(82, 115),
-    saturation: getRandomInt(70, 85),
-    lightness: getRandomInt(42, 50),
-    alpha: getRandomInt(85, 101)
+    hue: getRandomInt(112, 128),
+    saturation: getRandomInt(47, 55),
+    lightness: getRandomInt(38, 42),
   }
 }
 
 export const getBlueColor = () => {
   return {
-    hue: getRandomInt(215, 240),
+    hue: getRandomInt(223, 240),
     saturation: getRandomInt(75, 90),
     lightness: getRandomInt(56, 58),
-    alpha: getRandomInt(85, 101)
   }
 }
 
@@ -59,7 +55,6 @@ export const getPurpleColor = () => {
     hue: getRandomInt(268, 288),
     saturation: getRandomInt(80, 95),
     lightness: getRandomInt(52, 58),
-    alpha: getRandomInt(85, 101)
   }
 }
 
@@ -122,3 +117,19 @@ export const createMouseConstraint = (canvas, engine, world, p5) => {
   World.add(world, mouseConstraint)
 }
 
+export const createColorParticles = (environment) => {
+  const {width} = environment
+  const particleSettings = {
+    x: width * 0.3,
+    y: 10,
+    r: getRandomInt(4, 9),
+    options: {
+      friction: 0,
+      restitution: 0.4,
+      isStatic: false
+    },
+    color: randomColor()
+  }
+
+  new ColorBall(environment, particleSettings)
+}

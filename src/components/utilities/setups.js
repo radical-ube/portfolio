@@ -117,15 +117,15 @@ export const setupAbout = (environment) => {
   ]
 
   texts.forEach((text, index) => {
-    let textSize = 24
-    let x = width * 0.3
-    let y = (height * 0.15) + (index * 100)
-    let angle = 0.08
+    let textSize = width * 0.015
+    let x = width * 0.35
+    let y = (height * 0.15) + (index * 110)
+    let angle = 0.1
     let boxWidth = width * 0.45
-    let boxHeight = height * 0.1
+    let boxHeight = height * 0.08
 
     if (index % 2 === 1) {
-      x = width * 0.7
+      x = width * 0.65
       angle *= -1
     }
 
@@ -133,7 +133,7 @@ export const setupAbout = (environment) => {
       x,
       y,
       options: {
-        friction: 0.4,
+        friction: 0,
         restitution: 0.7,
         isStatic: true,
         angle
