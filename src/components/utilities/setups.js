@@ -213,7 +213,7 @@ export const setupProjects = (environment) => {
     }
   })
 
-  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data. Find out how \"danceable\" your favorite songs are!'
+  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with Lyle Aigbedion and Ousainu Jabbi. We used d3.js for data calculation and React for rendering. Find out how \"danceable\" your favorite songs are!'
 
   const ekopiqueDescription = new ParagraphBox(environment, {
     x: width * 0.7,
