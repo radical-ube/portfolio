@@ -1,22 +1,18 @@
-import Matter from 'matter-js'
-import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Chain } from './constructors'
+import { Boundary, TextBox, ParagraphBox, TextPlatform, ImageBox, Spring, Chain } from './constructors'
 import { randomColor } from './utils'
 
-const { World } = Matter
 
 export const setupFrame = environment => {
   const { world, width, height } = environment
 
-  const ground = new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground')
-  const ceiling = new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling')
-  const leftWall = new Boundary(width * -1, height / 2, width * 2, height, 'leftwall')
-  const rightWall = new Boundary(width * 2, height / 2, width * 2, height, 'rightwall')
-
-  World.add(world, [ground.body, ceiling.body, leftWall.body, rightWall.body])
+  new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground', world)
+  new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling', world)
+  new Boundary(width * -1, height / 2, width * 2, height, 'leftwall', world)
+  new Boundary(width * 2, height / 2, width * 2, height, 'rightwall', world)
 }
 
-export const setupNav = (environment, bodies, tabs) => {
-  const { world, width, height } = environment
+export const setupNav = (environment) => {
+  const { width, height, bodies, tabs } = environment
 
   let previousWord = null
   for (let i = 0; i < tabs.length; i++) {
@@ -39,7 +35,6 @@ export const setupNav = (environment, bodies, tabs) => {
       settings.x = width + 15
     }
     let word = new TextBox(environment, settings)
-    World.add(world, word.body)
     bodies.push(word)
 
     if (i > 0) {
@@ -49,72 +44,111 @@ export const setupNav = (environment, bodies, tabs) => {
         length: width * 0.135,
         stiffness: 0.65
       }
-      let constraint = new Spring(environment, constraintSettings)
-      World.add(world, constraint.body)
+      new Spring(environment, constraintSettings)
+
     }
     previousWord = word
   }
 }
 
-export const setupHome = (environment, bodies) => {
-  const { world, width, height } = environment
+export const setupHome = (environment) => {
+  const { width, height } = environment
 
-  let titleText = 'hello world, my name is ube'
-  const words = titleText.split(' ')
-  words.forEach((word, index, array) => {
-    const textSize = height / array.length
-    let x = width / 2
-    if (index === 0) {
-      x = (width / 2) - (width * 0.075)
+  let homeText1 = 'hello world, my name is ube'
+  homeText1.split(' ')
+    .forEach((word, index, array) => {
+      const textSize = height / array.length
+      let x = width * 0.35
+      let y = height * 0.2 + (index * textSize)
+
+      if (index === 1) {
+        x = width * 0.41
+      }
+
+      const settings = {
+        textSize,
+        x,
+        y,
+        inputText: word,
+        options: {
+          friction: 0.4,
+          restitution: 0.8,
+          isStatic: false
+        },
+        color: randomColor()
+      }
+
+      new TextBox(environment, settings)
+    })
+
+  let homeText2 = 'i am a work in progress'
+  homeText2.split(' ')
+    .forEach((word, index, array) => {
+      const textSize = height / array.length
+      let x = width * 0.65
+      let y = height * 0.2 + (index * textSize)
+
+      const settings = {
+        textSize,
+        x,
+        y,
+        inputText: word,
+        options: {
+          friction: 0.4,
+          restitution: 0.8,
+          isStatic: false
+        },
+        color: randomColor()
+      }
+
+      new TextBox(environment, settings)
+    })
+}
+
+export const setupAbout = (environment) => {
+  const { width, height } = environment
+
+  const texts = [
+    'i am a colorful, non-binary, queer performing artist turned software engineer. i dance, i write, i do drag, and i code.',
+    'i think about illusion and reality and how to confuse the two. i believe in making fantasy come to life.',
+    'as an engineer, coding feels like magic and i want to always remember the joy that technology can bring.',
+    'as an artist, i think stories can be told with stillness as much as movement, and with color as much as grayscale.',
+    'have you tried moving around the words on the home page?'
+  ]
+
+  texts.forEach((text, index) => {
+    let textSize = width * 0.015
+    let x = width * 0.35
+    let y = (height * 0.15) + (index * 110)
+    let angle = 0.1
+    let boxWidth = width * 0.45
+    let boxHeight = height * 0.08
+
+    if (index % 2 === 1) {
+      x = width * 0.65
+      angle *= -1
     }
-  
-    const settings = {
-      textSize: textSize,
+
+    new ParagraphBox(environment, {
       x,
-      y: height * 0.2 + (index * textSize),
-      inputText: word,
+      y,
       options: {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
+        friction: 0,
+        restitution: 0.7,
+        isStatic: true,
+        angle
       },
-      color: randomColor()
-    } 
-
-    let textBox = new TextBox(environment, settings)
-    World.add(world, textBox.body)
-    bodies.push(textBox)
+      inputText: text,
+      textSize,
+      boxWidth,
+      boxHeight
+    })
   })
+
 }
 
-export const setupAbout = (environment, bodies) => {
-  const { world, width, height } = environment
-
-  let titleText = 'this is the about page and it will have an insanely long number of words to parse through. have fun trying to figure out how to organize this mess!'
-  const words = titleText.split(' ')
-  words.forEach((word, index, array) => {
-    const settings = {
-      inputText: word,
-      options: {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      },
-      textSize: height / array.length,
-      color: randomColor()
-    }
-
-    settings.x = width / 2
-    settings.y = height * 0.2 + (index * (settings.textSize / 2))
-
-    let textBox = new TextBox(environment, settings)
-    World.add(world, textBox.body)
-    bodies.push(textBox)
-  })
-}
-
-export const setupProjects = (environment, bodies, images) => {
-  const { world, width, height } = environment
+export const setupProjects = (environment) => {
+  const { width, height, images } = environment
   const { rainbow, ekopique } = images
 
   const imageWidth = width * 0.4
@@ -179,20 +213,18 @@ export const setupProjects = (environment, bodies, images) => {
     boxWidth: imageWidth,
     boxHeight: imageHeight / 2,
   })
-
-  World.add(world, [rainbowImage.body, rainbowDescription.body, ekopiqueImage.body, ekopiqueDescription.body])
-  bodies.push(rainbowImage, rainbowDescription, ekopiqueImage, ekopiqueDescription)
-  // console.log('chain', rainbowChain)
 }
 
-export const setupResume = (environment, bodies) => {
-  const { world, width, height } = environment
+export const setupResume = (environment) => {
+  const { width, height } = environment
 
   let titleText = 'resume will be a PDF cloth-like object'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
 
     const settings = {
+      x: width / 2,
+      y: height * 0.2 + (index * 100),
       inputText: word,
       options: {
         friction: 0.4,
@@ -203,22 +235,19 @@ export const setupResume = (environment, bodies) => {
       color: randomColor()
     }
 
-    settings.x = width / 2
-    settings.y = height * 0.2 + (index * 100)
-
-    let textBox = new TextBox(environment, settings)
-    World.add(world, textBox.body)
-    bodies.push(textBox)
+    new TextBox(environment, settings)
   })
 }
 
-export const setupContact = (environment, bodies) => {
-  const { world, width, height } = environment
+export const setupContact = (environment) => {
+  const { width, height } = environment
 
   let titleText = 'contact me you awesomes'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
     const settings = {
+      x: width / 2,
+      y: height * 0.2 + (index * 100),
       inputText: word,
       options: {
         friction: 0.4,
@@ -229,11 +258,6 @@ export const setupContact = (environment, bodies) => {
       color: randomColor()
     }
 
-    settings.x = width / 2
-    settings.y = height * 0.2 + (index * 100)
-
-    let textBox = new TextBox(environment, settings)
-    World.add(world, textBox.body)
-    bodies.push(textBox)
+    new TextBox(environment, settings)
   })
 }

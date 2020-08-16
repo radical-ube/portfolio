@@ -1,9 +1,9 @@
 import Matter from 'matter-js'
 import { areaFromPoints } from './utils'
 
-const { Body, Bodies, Composite, Composites, Constraint } = Matter
+const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
-export function Boundary(x, y, w, h, label) {
+export function Boundary(x, y, w, h, label, world) {
   const options = {
     friction: 0.3,
     restitution: 1,
@@ -13,11 +13,13 @@ export function Boundary(x, y, w, h, label) {
   this.body = Bodies.rectangle(x, y, w, h, options)
   this.w = w
   this.h = h
+
+  World.add(world, this.body)
 }
 
 export function TextBox(environment, settings) {
-  const { p5 } = environment
-  const { CENTER, HSL } = p5
+  const { p5, world, bodies } = environment
+  const { LEFT, CENTER, HSL } = p5
   const { x, y, options, inputText, textSize, color } = settings
   p5.textSize(textSize || 18)
 
@@ -31,12 +33,13 @@ export function TextBox(environment, settings) {
     hue: 0,
     saturation: 0,
     lightness: 100,
-    alpha: 0.2
   }
+  World.add(world, this.body)
+  bodies.push(this)
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness, alpha } = this.color
+    const { hue, saturation, lightness } = this.color
     this.position = this.body.position
     this.angle = this.body.angle
 
@@ -46,7 +49,7 @@ export function TextBox(environment, settings) {
     p5.rectMode(CENTER)
     p5.textAlign(CENTER, CENTER)
     p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness, alpha)
+    p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0)
     p5.pop()
   }
@@ -59,13 +62,13 @@ export function TextBox(environment, settings) {
 }
 
 export function ParagraphBox(environment, settings) {
-  const { p5 } = environment
+  const { p5, world, bodies } = environment
   const { CENTER, LEFT, TOP, HSL } = p5
   const { x, y, options, inputText, textSize, boxWidth, boxHeight, color } = settings
   p5.textSize(textSize)
 
   // class properties
-  this.text = inputText
+  this.text = inputText || ''
   this.w = boxWidth
   this.h = boxHeight
   this.options = options
@@ -73,12 +76,14 @@ export function ParagraphBox(environment, settings) {
   this.color = color || {
     hue: 0,
     saturation: 0,
-    lightness: 100
+    lightness: 94
   }
+  World.add(world, this.body)
+  bodies.push(this)
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness, alpha } = this.color
+    const { hue, saturation, lightness } = this.color
     this.position = this.body.position
     this.angle = this.body.angle
 
@@ -88,7 +93,7 @@ export function ParagraphBox(environment, settings) {
     p5.rectMode(CENTER)
     p5.textAlign(LEFT, TOP)
     p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness, alpha)
+    p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0, boxWidth, boxHeight)
     p5.pop()
   }
@@ -101,7 +106,7 @@ export function ParagraphBox(environment, settings) {
 }
 
 export function ImageBox(environment, settings) {
-  const { p5 } = environment
+  const { p5, world, bodies } = environment
   const { CENTER } = p5
   const { x, y, image, width, height, options, address } = settings
 
@@ -112,6 +117,8 @@ export function ImageBox(environment, settings) {
   this.options = options
   this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
   this.address = address
+  World.add(world, this.body)
+  bodies.push(this)
 
   // class methods
   this.show = () => {
@@ -135,7 +142,7 @@ export function ImageBox(environment, settings) {
 }
 
 export function Spring(environment, settings) {
-  const {p5} = environment
+  const {p5, world} = environment
   const {bodyA, bodyB, length, stiffness} = settings
   
   this.body = Constraint.create({
@@ -144,6 +151,7 @@ export function Spring(environment, settings) {
     length,
     stiffness
   })
+  World.add(world, this.body)
 
   this.show = () => {
     let a = this.body.bodyA.position
@@ -152,6 +160,48 @@ export function Spring(environment, settings) {
     p5.stroke('white')
     p5.line(a.x, a.y, b.x, b.y)
     p5.pop()
+  }
+}
+
+export function ColorBall(environment, settings) {
+  const {p5, world, particles, height} = environment
+  const {HSL} = p5
+  const {x, y, r, options, color} = settings
+
+  this.r = r
+  this.options = options
+  this.color = color || {
+    hue: 0,
+    saturation: 0,
+    lightness: 100
+  }
+  this.body = Bodies.circle(x, y, this.r, this.options)
+  if (particles.length < 100) {
+    World.add(world, this.body)
+    particles.push(this)
+  }
+
+  this.show = () => {
+    const { hue, saturation, lightness } = this.color
+    this.position = this.body.position
+    this.angle = this.body.angle
+
+    p5.push()
+    p5.translate(this.position.x, this.position.y)
+    p5.rotate(this.angle)
+    p5.noStroke()
+    p5.colorMode(HSL)
+    p5.fill(hue, saturation, lightness)
+    p5.ellipse(0, 0, this.r * 2)
+    p5.pop()
+  }
+
+  this.isBelowLine = () => {
+    // this.position = this.body.position
+    return (this.position.y > (height * 0.8))
+  }
+  this.remove = () => {
+    World.remove(world, this.body)
   }
 }
 

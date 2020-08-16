@@ -9,25 +9,29 @@ import {setCurrentPage} from '../store/page'
 const { Engine } = Matter
 
 const Navbar = props => {
-  const {setCurrentPage} = props
+  const {setCurrentPage, bgColor} = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
-  const bodies = []
-  const tabs = ['', 'home', 'about', 'projects', 'resume', 'contact', '']
 
   const Sketch = p5 => {
-    let width = window.innerWidth
-    let height = window.innerHeight * 0.15
 
-    const environment = { p5, engine, world, width, height }
+    const environment = { 
+      p5, 
+      engine, 
+      world, 
+      width: window.innerWidth, 
+      height: window.innerHeight * 0.15, 
+      bodies: [],
+      tabs: ['', 'home', 'about', 'projects', 'resume', 'contact', '']
+    }
 
     const handlePageChange = () => {
       const mousePosition = {
         x: p5.mouseX,
         y: p5.mouseY
       }
-      bodies.forEach(body => {
+      environment.bodies.forEach(body => {
         if (body.mouseInBounds(mousePosition)) {
           setCurrentPage(body.text)
         }
@@ -35,24 +39,24 @@ const Navbar = props => {
     }
 
     p5.setup = () => {
-      const canvas = p5.createCanvas(width, height)
+      const canvas = p5.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handlePageChange)
       setupFrame(environment)
-      setupNav(environment, bodies, tabs)
+      setupNav(environment)
       Engine.run(engine)
     }
     p5.draw = () => {
-      p5.background(50, 50, 50)
-      if (bodies.length) {
-        bodies.forEach(body => {
+      p5.background(bgColor)
+      if (environment.bodies.length) {
+        environment.bodies.forEach(body => {
           body.show()
         })
       }
     }
     p5.windowResized = () => {
-      width = window.innerWidth
-      height = window.innerHeight * 0.15
-      p5.resizeCanvas(width, height)
+      environment.width = window.innerWidth
+      environment.height = window.innerHeight * 0.15
+      p5.resizeCanvas(environment.width, environment.height)
     }
   }
 
