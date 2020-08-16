@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import {ColorBall} from './constructors'
+import {ImageBox, ParagraphBox, Button, ColorBall} from './constructors'
 
 const {World, Mouse, MouseConstraint} = Matter
 
@@ -132,4 +132,13 @@ export const createColorParticles = (environment) => {
   }
 
   new ColorBall(environment, particleSettings)
+}
+
+export const createProjectDescription = (environment, assets) => {
+  const { width, height } = environment
+  const {imageWidth, imageHeight, image, text, address} = assets
+  const imageSettings = {
+    
+  }
+  new ImageBox(environment)
 }
