@@ -18,7 +18,7 @@ const About = props => {
     let width = window.innerWidth
     let height = window.innerHeight * 0.85
 
-    const environment = { p5, engine, world, width, height }
+    const environment = { p5, engine, world, width, height, bodies }
 
     // const canvas = p5.createCanvas(width, height)
     // const mouse = Mouse.create(canvas.elt)

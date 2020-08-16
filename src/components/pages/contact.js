@@ -12,13 +12,20 @@ const Contact = props => {
   const engine = Engine.create()
   const world = engine.world
 
-  const bodies = []
+  // const bodies = []
 
   const Sketch = p5 => {
-    let width = window.innerWidth
-    let height = window.innerHeight * 0.85
+    // let width = window.innerWidth
+    // let height = window.innerHeight * 0.85
 
-    const environment = { p5, engine, world, width, height }
+    const environment = { 
+      p5, 
+      engine, 
+      world, 
+      width: window.innerWidth, 
+      height: window.innerHeight * 0.85, 
+      bodies: [] 
+    }
 
     // const canvas = p5.createCanvas(width, height)
     // const mouse = Mouse.create(canvas.elt)
@@ -30,16 +37,16 @@ const Contact = props => {
     // World.add(world, mouseConstraint)
 
     p5.setup = () => {
-      const canvas = p5.createCanvas(width,height)
+      const canvas = p5.createCanvas(environment.width, environment.height)
       createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
-      setupContact(environment, bodies)
+      setupContact(environment)
       Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(bgColor)
-      if (bodies.length) {
-        bodies.forEach(body => {
+      if (environment.bodies.length) {
+        environment.bodies.forEach(body => {
           body.show()
         })
       }

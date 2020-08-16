@@ -1,9 +1,9 @@
 import Matter from 'matter-js'
 import { areaFromPoints } from './utils'
 
-const { Body, Bodies, Composite, Composites, Constraint } = Matter
+const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
-export function Boundary(x, y, w, h, label) {
+export function Boundary(x, y, w, h, label, world) {
   const options = {
     friction: 0.3,
     restitution: 1,
@@ -13,10 +13,12 @@ export function Boundary(x, y, w, h, label) {
   this.body = Bodies.rectangle(x, y, w, h, options)
   this.w = w
   this.h = h
+
+  World.add(world, this.body)
 }
 
 export function TextBox(environment, settings) {
-  const { p5 } = environment
+  const { p5, world, bodies } = environment
   const { LEFT, CENTER, HSL } = p5
   const { x, y, options, inputText, textSize, color } = settings
   p5.textSize(textSize || 18)
@@ -56,10 +58,13 @@ export function TextBox(environment, settings) {
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
     return (mouseArea < this.body.area + 1)
   }
+
+  World.add(world, this.body)
+  bodies.push(this)
 }
 
 export function ParagraphBox(environment, settings) {
-  const { p5 } = environment
+  const { p5, world, bodies } = environment
   const { CENTER, LEFT, TOP, HSL } = p5
   const { x, y, options, inputText, textSize, boxWidth, boxHeight, color } = settings
   p5.textSize(textSize)
@@ -98,10 +103,13 @@ export function ParagraphBox(environment, settings) {
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
     return (mouseArea < this.body.area + 1)
   }
+
+  World.add(world, this.body)
+  bodies.push(this)
 }
 
 export function ImageBox(environment, settings) {
-  const { p5 } = environment
+  const { p5, world, bodies } = environment
   const { CENTER } = p5
   const { x, y, image, width, height, options, address } = settings
 
@@ -132,10 +140,13 @@ export function ImageBox(environment, settings) {
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
     return (mouseArea < this.body.area + 1)
   }
+
+  World.add(world, this.body)
+  bodies.push(this)
 }
 
 export function Spring(environment, settings) {
-  const {p5} = environment
+  const {p5, world} = environment
   const {bodyA, bodyB, length, stiffness} = settings
   
   this.body = Constraint.create({
@@ -153,6 +164,8 @@ export function Spring(environment, settings) {
     p5.line(a.x, a.y, b.x, b.y)
     p5.pop()
   }
+
+  World.add(world, this.body)
 }
 
 
