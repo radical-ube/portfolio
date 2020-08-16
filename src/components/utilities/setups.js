@@ -45,7 +45,7 @@ export const setupNav = (environment) => {
         stiffness: 0.65
       }
       new Spring(environment, constraintSettings)
-      
+
     }
     previousWord = word
   }
@@ -105,33 +105,46 @@ export const setupHome = (environment) => {
     })
 }
 
-export const setupAbout = (environment, bodies) => {
+export const setupAbout = (environment) => {
   const { width, height } = environment
 
-  let platform1 = 'i am a colorful non-binary queer performing artist turned software engineer.'
-  let platform2 = 'i '
-  let platform3 = 'as an engineer, coding feels like magic and i want to keep the spirit of that magic alive.'
-  let platform4 = 'as a performer, i take inspiration from post-modernist values, where bodies have agency'
-  // const words = titleText.split(' ')
-//   words.forEach((word, index, array) => {
-//     const settings = {
-//       inputText: word,
-//       options: {
-//         friction: 0.4,
-//         restitution: 0.8,
-//         isStatic: false
-//       },
-//       textSize: height / array.length,
-//       color: randomColor()
-//     }
+  const texts = [
+    'i am a colorful, non-binary, queer performing artist turned software engineer. i dance, i write, i do drag, and i code.',
+    'i think about illusion and reality and how to confuse the two. i believe in making fantasy come to life.',
+    'as an engineer, coding feels like magic and i want to always remember the joy that technology can bring.',
+    'as an artist, i think stories can be told with stillness as much as movement, and with color as much as grayscale.',
+    'have you tried moving around the words on the home page?'
+  ]
 
-//     settings.x = width / 2
-//     settings.y = height * 0.2 + (index * (settings.textSize / 2))
+  texts.forEach((text, index) => {
+    let textSize = 24
+    let x = width * 0.3
+    let y = (height * 0.15) + (index * 100)
+    let angle = 0.08
+    let boxWidth = width * 0.45
+    let boxHeight = height * 0.1
 
-//     let textBox = new TextBox(environment, settings)
-//     World.add(world, textBox.body)
-//     bodies.push(textBox)
-//   })
+    if (index % 2 === 1) {
+      x = width * 0.7
+      angle *= -1
+    }
+
+    new ParagraphBox(environment, {
+      x,
+      y,
+      options: {
+        friction: 0.4,
+        restitution: 0.7,
+        isStatic: true,
+        angle
+      },
+      inputText: text,
+      textSize,
+      boxWidth,
+      boxHeight
+    })
+  })
+
 }
 
 export const setupProjects = (environment) => {

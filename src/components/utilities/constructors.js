@@ -35,6 +35,8 @@ export function TextBox(environment, settings) {
     lightness: 100,
     alpha: 0.2
   }
+  World.add(world, this.body)
+  bodies.push(this)
 
   // class methods
   this.show = () => {
@@ -58,9 +60,6 @@ export function TextBox(environment, settings) {
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
     return (mouseArea < this.body.area + 1)
   }
-
-  World.add(world, this.body)
-  bodies.push(this)
 }
 
 export function ParagraphBox(environment, settings) {
@@ -70,7 +69,7 @@ export function ParagraphBox(environment, settings) {
   p5.textSize(textSize)
 
   // class properties
-  this.text = inputText
+  this.text = inputText || ''
   this.w = boxWidth
   this.h = boxHeight
   this.options = options
@@ -78,8 +77,10 @@ export function ParagraphBox(environment, settings) {
   this.color = color || {
     hue: 0,
     saturation: 0,
-    lightness: 100
+    lightness: 94
   }
+  World.add(world, this.body)
+  bodies.push(this)
 
   // class methods
   this.show = () => {
@@ -103,9 +104,6 @@ export function ParagraphBox(environment, settings) {
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
     return (mouseArea < this.body.area + 1)
   }
-
-  World.add(world, this.body)
-  bodies.push(this)
 }
 
 export function ImageBox(environment, settings) {
@@ -120,6 +118,8 @@ export function ImageBox(environment, settings) {
   this.options = options
   this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
   this.address = address
+  World.add(world, this.body)
+  bodies.push(this)
 
   // class methods
   this.show = () => {
@@ -140,9 +140,6 @@ export function ImageBox(environment, settings) {
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
     return (mouseArea < this.body.area + 1)
   }
-
-  World.add(world, this.body)
-  bodies.push(this)
 }
 
 export function Spring(environment, settings) {
@@ -155,6 +152,7 @@ export function Spring(environment, settings) {
     length,
     stiffness
   })
+  World.add(world, this.body)
 
   this.show = () => {
     let a = this.body.bodyA.position
@@ -164,8 +162,11 @@ export function Spring(environment, settings) {
     p5.line(a.x, a.y, b.x, b.y)
     p5.pop()
   }
+}
 
-  World.add(world, this.body)
+export function colorBall(environment, settings) {
+  const {p5, world} = environment
+  const {x, y, r, options, color} = settings
 }
 
 
