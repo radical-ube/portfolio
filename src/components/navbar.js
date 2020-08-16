@@ -23,6 +23,7 @@ const Navbar = props => {
       width: window.innerWidth, 
       height: window.innerHeight * 0.15, 
       bodies: [],
+      constraints: [],
       tabs: ['', 'home', 'about', 'projects', 'contact', '']
     }
 
@@ -52,6 +53,15 @@ const Navbar = props => {
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()
+          let mousePosition = {
+            x: p5.mouseX,
+            y: p5.mouseY
+          }
+          if (body.mouseInBounds(mousePosition)) {
+            body.overlay = true
+          } else {
+            body.overlay = false
+          }
         })
       }
     }
