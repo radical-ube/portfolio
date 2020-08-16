@@ -20,7 +20,20 @@ const Contact = props => {
       world, 
       width: window.innerWidth, 
       height: window.innerHeight * 0.85, 
-      bodies: [] 
+      bodies: [],
+      constraints: []
+    }
+
+    const handleAddressChange = () => {
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
+      }
+      environment.bodies.forEach(body => {
+        if (body.mouseInBounds(mousePosition) && body.address) {
+          document.location.assign(body.address)
+        }
+      })
     }
 
     p5.setup = () => {
@@ -28,6 +41,7 @@ const Contact = props => {
       Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
       createMouseConstraint(canvas, engine, world, p5)
+      canvas.mouseClicked(handleAddressChange)
       setupFrame(environment)
       setupContact(environment)
     }
@@ -37,6 +51,20 @@ const Contact = props => {
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()
+          let mousePosition = {
+            x: p5.mouseX,
+            y: p5.mouseY
+          }
+          if (body.mouseInBounds(mousePosition)) {
+            body.overlay = true
+          } else {
+            body.overlay = false
+          }
+        })
+      }
+      if (environment.constraints.length) {
+        environment.constraints.forEach(constraint => {
+          constraint.show()
         })
       }
     }

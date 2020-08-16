@@ -166,7 +166,7 @@ export const setupProjects = (environment) => {
     }
   })
 
-  let rainbowText = 'Rainbow On Me was a 2-day Hack-a-thon project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.'
+  let rainbowText = 'Rainbow On Me was a 2-day hack-a-thon style project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.'
 
   const rainbowDescription = new ParagraphBox(environment, {
     x: width * 0.7,
@@ -276,12 +276,12 @@ export const setupResume = (environment) => {
 
 export const setupContact = (environment) => {
   const { width, height } = environment
-
-  let titleText = 'contact me you awesomes'
+  let titleText = 'drop me a line'
   const words = titleText.split(' ')
   words.forEach((word, index, array) => {
+    let contactTextSize = height / array.length
     const settings = {
-      x: width / 2,
+      x: width * 0.3,
       y: height * 0.2 + (index * 100),
       inputText: word,
       options: {
@@ -289,10 +289,55 @@ export const setupContact = (environment) => {
         restitution: 0.8,
         isStatic: false
       },
-      textSize: height / array.length,
+      textSize: contactTextSize,
       color: randomColor()
     }
 
     new TextBox(environment, settings)
+  })
+
+  let invisibleBox = new TextBox(environment, {
+    x: (width * 0.7),
+    y: 0,
+    options: {
+      isStatic: true
+    }
+  })
+
+  let socials = ['github: radical-ube', 'instagram: @radical_ube', 'linkedIn: in/ube-halaya', 'email: eli.tamondong@gmail.com']
+  let socialAddresses = ['https://github.com/radical-ube', 'https://instagram.com/radical_ube', 'https://linkedin.com/in/ube-halaya', 'mailto:eli.tamondong@gmail.com']
+
+  let prevBody = invisibleBox
+  socials.forEach((social, i) => {
+    let buttonTextSize = width * 0.025
+    let x = width * 0.7
+    if (i % 2 === 0) {
+      x += 2
+    } else {
+      x -= 2
+    }
+    const buttonSettings = {
+      x,
+      y: (height * 0.1) + (i * 50),
+      options: {
+        friction: 0.4,
+        restitution: 0.7,
+        isStatic: false
+      },
+      inputText: social,
+      address: socialAddresses[i],
+      textSize: buttonTextSize,
+      color: randomColor()
+    }
+    let button = new Button(environment, buttonSettings)
+   
+    new Spring(environment, {
+      bodyA: prevBody.body,
+      bodyB: button.body,
+      length: height * 0.2,
+      stiffness: 0.2
+    })
+    prevBody = button
+
   })
 }

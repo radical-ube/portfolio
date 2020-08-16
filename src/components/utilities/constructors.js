@@ -19,12 +19,13 @@ export function Boundary(x, y, w, h, label, world) {
 
 export function TextBox(environment, settings) {
   const { p5, world, bodies } = environment
-  const { LEFT, CENTER, HSL } = p5
+  const { CENTER, HSL } = p5
   const { x, y, options, inputText, textSize, color } = settings
   p5.textSize(textSize || 18)
 
   // class properties
   this.text = inputText || ''
+  this.textSize = textSize
   this.w = p5.textWidth(this.text)
   this.h = p5.textAscent(this.text)
   this.options = options
@@ -48,6 +49,7 @@ export function TextBox(environment, settings) {
     p5.rotate(this.angle)
     p5.rectMode(CENTER)
     p5.textAlign(CENTER, CENTER)
+    p5.textSize(this.textSize)
     p5.colorMode(HSL)
     p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0)
@@ -69,6 +71,7 @@ export function ParagraphBox(environment, settings) {
 
   // class properties
   this.text = inputText || ''
+  this.textSize = textSize
   this.w = boxWidth
   this.h = boxHeight
   this.options = options
@@ -92,6 +95,7 @@ export function ParagraphBox(environment, settings) {
     p5.rotate(this.angle)
     p5.rectMode(CENTER)
     p5.textAlign(LEFT, TOP)
+    p5.textSize(this.textSize)
     p5.colorMode(HSL)
     p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0, boxWidth, boxHeight)
@@ -142,7 +146,7 @@ export function ImageBox(environment, settings) {
 }
 
 export function Spring(environment, settings) {
-  const {p5, world} = environment
+  const {p5, world, constraints} = environment
   const {bodyA, bodyB, length, stiffness} = settings
   
   this.body = Constraint.create({
@@ -152,12 +156,14 @@ export function Spring(environment, settings) {
     stiffness
   })
   World.add(world, this.body)
+  constraints.push(this)
 
   this.show = () => {
     let a = this.body.bodyA.position
     let b = this.body.bodyB.position
     p5.push()
-    p5.stroke('white')
+    p5.colorMode(p5.HSL)
+    p5.stroke(0, 0, 100, 0.1)
     p5.line(a.x, a.y, b.x, b.y)
     p5.pop()
   }
@@ -212,6 +218,7 @@ export function Button(environment, settings) {
 
   // class properties
   this.text = inputText || ''
+  this.textSize = textSize
   this.address = address
   this.w = p5.textWidth(this.text)
   this.h = p5.textAscent(this.text)
@@ -222,6 +229,7 @@ export function Button(environment, settings) {
     saturation: 0,
     lightness: 94,
   }
+  this.overlay = false
   World.add(world, this.body)
   bodies.push(this)
 
@@ -236,12 +244,17 @@ export function Button(environment, settings) {
     p5.rotate(this.angle)
     p5.rectMode(CENTER)
     p5.textAlign(CENTER, CENTER)
+    p5.textSize(this.textSize)
     p5.colorMode(HSL)
     p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0)
     p5.noFill()
     p5.stroke(hue, saturation, lightness)
     p5.rect(0, 0, this.w + 10, this.h + 10)
+    if (this.overlay) {
+      p5.fill(0, 0, 100, 0.05)
+      p5.rect(0, 0, this.w + 10, this.h + 10)
+    }
     p5.pop()
   }
 
