@@ -28,7 +28,7 @@ const About = props => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas, engine, world, p5)
+      // createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupAbout(environment)
       // Engine.run(engine)

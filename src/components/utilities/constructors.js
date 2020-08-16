@@ -176,7 +176,7 @@ export function ColorBall(environment, settings) {
     lightness: 100
   }
   this.body = Bodies.circle(x, y, this.r, this.options)
-  if (particles.length < 100) {
+  if (particles.length < 150) {
     World.add(world, this.body)
     particles.push(this)
   }
@@ -197,8 +197,7 @@ export function ColorBall(environment, settings) {
   }
 
   this.isBelowLine = () => {
-    // this.position = this.body.position
-    return (this.position.y > (height * 0.8))
+    return (this.position.y > (height * 0.95))
   }
   this.remove = () => {
     World.remove(world, this.body)

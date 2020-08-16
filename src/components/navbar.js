@@ -23,7 +23,7 @@ const Navbar = props => {
       width: window.innerWidth, 
       height: window.innerHeight * 0.15, 
       bodies: [],
-      tabs: ['', 'home', 'about', 'projects', 'resume', 'contact', '']
+      tabs: ['', 'home', 'about', 'projects', 'contact', '']
     }
 
     const handlePageChange = () => {
