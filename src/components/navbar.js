@@ -1,27 +1,27 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import { setupFrame, setupNav } from './utilities'
-import {setCurrentPage} from '../store/page'
+import { setCurrentPage } from '../store/page'
 
 const { Engine, World } = Matter
 
 const Navbar = props => {
-  const {setCurrentPage, bgColor} = props
+  const { setCurrentPage, bgColor } = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
 
   const Sketch = p5 => {
 
-    const environment = { 
-      p5, 
-      engine, 
-      world, 
-      width: window.innerWidth, 
-      height: window.innerHeight * 0.15, 
+    const environment = {
+      p5,
+      engine,
+      world,
+      width: window.innerWidth,
+      height: window.innerHeight * 0.15,
       bodies: [],
       constraints: [],
       tabs: ['', 'home', 'about', 'projects', 'contact', ''],
@@ -29,10 +29,6 @@ const Navbar = props => {
     }
 
     const handlePageChange = () => {
-      // const mousePosition = {
-      //   x: p5.mouseX,
-      //   y: p5.mouseY
-      // }
       environment.buttons.forEach(button => {
         if (button.mouseInBounds) {
           setCurrentPage(button.text)
@@ -51,27 +47,17 @@ const Navbar = props => {
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      if (environment.bodies.length) {
-        environment.bodies.forEach(body => {
-          body.show()
-          
-          // if (body.mouseInBounds(mousePosition)) {
-          //   body.overlay = true
-          // } else {
-          //   body.overlay = false
-          // }
-        })
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
       }
-      if (environment.buttons.length) {
-        environment.buttons.forEach(button => {
-          button.show()
-          const mousePosition = {
-            x: p5.mouseX,
-            y: p5.mouseY
-          }
-          button.checkMouseInBounds(mousePosition)
-        })
-      }
+      environment.bodies.forEach(body => {
+        body.show()
+      })
+      environment.buttons.forEach(button => {
+        button.show()
+        button.checkMouseInBounds(mousePosition)
+      })
     }
     p5.windowResized = () => {
       environment.width = window.innerWidth

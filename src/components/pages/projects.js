@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import { setupFrame, setupProjects } from '../utilities'
 
@@ -14,22 +14,18 @@ const Projects = props => {
   const world = engine.world
 
   const Sketch = p5 => {
-    const environment = { 
-      p5, 
-      engine, 
-      world, 
-      width: window.innerWidth, 
-      height: window.innerHeight * 0.85, 
+    const environment = {
+      p5,
+      engine,
+      world,
+      width: window.innerWidth,
+      height: window.innerHeight * 0.85,
       bodies: [],
       images: {},
       buttons: []
     }
 
     const handleAddressChange = () => {
-      // const mousePosition = {
-      //   x: p5.mouseX,
-      //   y: p5.mouseY
-      // }
       environment.buttons.forEach(button => {
         if (button.mouseInBounds && button.address) {
           document.location.assign(button.address)
@@ -52,27 +48,17 @@ const Projects = props => {
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      if (environment.bodies.length) {
-        environment.bodies.forEach(body => {
-          body.show()
-          
-          // ) {
-          //   body.overlay = true
-          // } else {
-          //   body.overlay = false
-          // }
-        })
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
       }
-      if (environment.buttons.length) {
-        environment.buttons.forEach(button => {
-          button.show()
-          const mousePosition = {
-            x: p5.mouseX,
-            y: p5.mouseY
-          }
-          button.checkMouseInBounds(mousePosition)
-        })
-      }
+      environment.bodies.forEach(body => {
+        body.show()
+      })
+      environment.buttons.forEach(button => {
+        button.show()
+        button.checkMouseInBounds(mousePosition)
+      })
     }
   }
 

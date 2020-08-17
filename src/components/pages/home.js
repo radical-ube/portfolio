@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import { setupFrame, setupHome, createMouseConstraint } from '../utilities'
 
@@ -14,12 +14,12 @@ const Home = props => {
   const world = engine.world
 
   const Sketch = p5 => {
-    const environment = { 
-      p5, 
-      engine, 
-      world, 
-      width: window.innerWidth, 
-      height: window.innerHeight * 0.85, 
+    const environment = {
+      p5,
+      engine,
+      world,
+      width: window.innerWidth,
+      height: window.innerHeight * 0.85,
       bodies: []
     }
 
@@ -34,11 +34,9 @@ const Home = props => {
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      if (environment.bodies.length) {
-        environment.bodies.forEach(body => {
-          body.show()
-        })
-      }
+      environment.bodies.forEach(body => {
+        body.show()
+      })
     }
     p5.windowResized = () => {
       environment.width = window.innerWidth

@@ -182,7 +182,7 @@ export function ColorBall(environment, settings) {
     lightness: 100
   }
   this.body = Bodies.circle(x, y, this.r, this.options)
-  if (particles.length < 150) {
+  if (particles.length < 200) {
     World.add(world, this.body)
     particles.push(this)
   }
