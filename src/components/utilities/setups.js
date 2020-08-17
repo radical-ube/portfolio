@@ -15,10 +15,12 @@ export const setupNav = (environment) => {
   const { width, height, tabs, buttons } = environment
   let textSize = height / 3
   let x = width / (tabs.length + 1)
+  let y = height * 0.5
+  let stiffness = 0.6
   
   let end1 = new TextBox(environment, {
     x: -15,
-    y: height * 0.5,
+    y,
     options: {
       isStatic: true
     }
@@ -27,8 +29,8 @@ export const setupNav = (environment) => {
 
   for (let i = 0; i < tabs.length; i++) {
     let buttonSettings = {
-      x: x + (x * i),
-      y: height * 0.5,
+      x: x + (40 * i),
+      y,
       inputText: tabs[i],
       options: {
         friction: 0.4,
@@ -44,15 +46,15 @@ export const setupNav = (environment) => {
       bodyA: prevElement.body,
       bodyB: button.body,
       length: x,
-      stiffness: 0.7
+      stiffness
     }
     new Spring(environment, constraintSettings)
     prevElement = button
   }
-  
+
   let end2 = new TextBox(environment, {
     x: width + 15,
-    y: height * 0.5,
+    y,
     options: {
       isStatic: true
     }
@@ -61,7 +63,7 @@ export const setupNav = (environment) => {
     bodyA: buttons[buttons.length - 1].body,
     bodyB: end2.body,
     length: x,
-    stiffness: 0.7
+    stiffness
   })
 }
 

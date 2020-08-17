@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { About, Contact, Projects, Resume, Home } from './pages'
+import { About, Contact, Projects, Experience, Home } from './pages'
 
 const Routes = props => {
   const { currentPage, bgColor } = props
@@ -13,8 +13,8 @@ const Routes = props => {
         <About bgColor={bgColor} />
       ) : currentPage === 'projects' ? (
         <Projects bgColor={bgColor} />
-      ) : currentPage === 'resume' ? (
-        <Resume bgColor={bgColor} />
+      ) : currentPage === 'experience' ? (
+        <Experience bgColor={bgColor} />
       ) : currentPage === 'contact' ? (
         <Contact bgColor={bgColor} />
       ) : (

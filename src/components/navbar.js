@@ -24,7 +24,7 @@ const Navbar = props => {
       height: window.innerHeight * 0.15,
       bodies: [],
       constraints: [],
-      tabs: ['home', 'about', 'projects', 'contact'],
+      tabs: ['home', 'about', 'projects', 'experience', 'contact'],
       buttons: []
     }
 

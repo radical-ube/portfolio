@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import { setupFrame, setupResume, createMouseConstraint } from '../utilities'
 
 const { Engine, World } = Matter
 
-const Resume = props => {
+const Experience = props => {
   const { currentPage, bgColor } = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
 
   const Sketch = p5 => {
-    const environment = { 
-      p5, 
-      engine, 
-      world, 
-      width: window.innerWidth, 
-      height: window.innerHeight * 0.85, 
-      bodies: [] 
+    const environment = {
+      p5,
+      engine,
+      world,
+      width: window.innerWidth,
+      height: window.innerHeight * 0.85,
+      bodies: []
     }
 
     p5.setup = () => {
@@ -34,11 +34,10 @@ const Resume = props => {
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      if (environment.bodies.length) {
-        environment.bodies.forEach(body => {
-          body.show()
-        })
-      }
+      environment.bodies.forEach(body => {
+        body.show()
+      })
+
     }
 
   }
@@ -59,4 +58,4 @@ const mapState = state => {
   }
 }
 
-export default connect(mapState)(Resume)
+export default connect(mapState)(Experience)
