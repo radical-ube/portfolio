@@ -21,17 +21,18 @@ const Projects = props => {
       width: window.innerWidth, 
       height: window.innerHeight * 0.85, 
       bodies: [],
-      images: {}
+      images: {},
+      buttons: []
     }
 
     const handleAddressChange = () => {
-      const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
-      }
-      environment.bodies.forEach(body => {
-        if (body.mouseInBounds(mousePosition) && body.address) {
-          document.location.assign(body.address)
+      // const mousePosition = {
+      //   x: p5.mouseX,
+      //   y: p5.mouseY
+      // }
+      environment.buttons.forEach(button => {
+        if (button.mouseInBounds && button.address) {
+          document.location.assign(button.address)
         }
       })
     }
@@ -54,15 +55,22 @@ const Projects = props => {
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()
-          let mousePosition = {
+          
+          // ) {
+          //   body.overlay = true
+          // } else {
+          //   body.overlay = false
+          // }
+        })
+      }
+      if (environment.buttons.length) {
+        environment.buttons.forEach(button => {
+          button.show()
+          const mousePosition = {
             x: p5.mouseX,
             y: p5.mouseY
           }
-          if (body.mouseInBounds(mousePosition)) {
-            body.overlay = true
-          } else {
-            body.overlay = false
-          }
+          button.checkMouseInBounds(mousePosition)
         })
       }
     }

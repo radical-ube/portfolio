@@ -211,7 +211,7 @@ export function ColorBall(environment, settings) {
 }
 
 export function Button(environment, settings) {
-  const { p5, world, bodies } = environment
+  const { p5, world, buttons } = environment
   const { CENTER, HSL } = p5
   const { x, y, options, inputText, address, textSize, color } = settings
   p5.textSize(textSize || 18)
@@ -229,9 +229,9 @@ export function Button(environment, settings) {
     saturation: 0,
     lightness: 94,
   }
-  this.overlay = false
+  this.mouseInBounds = false
   World.add(world, this.body)
-  bodies.push(this)
+  buttons.push(this)
 
   // class methods
   this.show = () => {
@@ -251,17 +251,22 @@ export function Button(environment, settings) {
     p5.noFill()
     p5.stroke(hue, saturation, lightness)
     p5.rect(0, 0, this.w + 10, this.h + 10)
-    if (this.overlay) {
+    if (this.mouseInBounds) {
       p5.fill(0, 0, 100, 0.05)
       p5.rect(0, 0, this.w + 10, this.h + 10)
     }
     p5.pop()
   }
 
-  this.mouseInBounds = (mousePosition) => {
+  this.checkMouseInBounds = (mousePosition) => {
     const vertices = this.body.vertices
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    return (mouseArea < this.body.area + 1)
+    if (mouseArea < this.body.area + 1) {
+      this.mouseInBounds = true
+    }
+    else {
+      this.mouseInBounds = false
+    }
   }
 }
 

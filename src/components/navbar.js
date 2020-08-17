@@ -24,17 +24,18 @@ const Navbar = props => {
       height: window.innerHeight * 0.15, 
       bodies: [],
       constraints: [],
-      tabs: ['', 'home', 'about', 'projects', 'contact', '']
+      tabs: ['', 'home', 'about', 'projects', 'contact', ''],
+      buttons: []
     }
 
     const handlePageChange = () => {
-      const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
-      }
-      environment.bodies.forEach(body => {
-        if (body.mouseInBounds(mousePosition)) {
-          setCurrentPage(body.text)
+      // const mousePosition = {
+      //   x: p5.mouseX,
+      //   y: p5.mouseY
+      // }
+      environment.buttons.forEach(button => {
+        if (button.mouseInBounds) {
+          setCurrentPage(button.text)
         }
       })
     }
@@ -53,15 +54,22 @@ const Navbar = props => {
       if (environment.bodies.length) {
         environment.bodies.forEach(body => {
           body.show()
-          let mousePosition = {
+          
+          // if (body.mouseInBounds(mousePosition)) {
+          //   body.overlay = true
+          // } else {
+          //   body.overlay = false
+          // }
+        })
+      }
+      if (environment.buttons.length) {
+        environment.buttons.forEach(button => {
+          button.show()
+          const mousePosition = {
             x: p5.mouseX,
             y: p5.mouseY
           }
-          if (body.mouseInBounds(mousePosition)) {
-            body.overlay = true
-          } else {
-            body.overlay = false
-          }
+          button.checkMouseInBounds(mousePosition)
         })
       }
     }
