@@ -24,7 +24,7 @@ const Navbar = props => {
       height: window.innerHeight * 0.15,
       bodies: [],
       constraints: [],
-      tabs: ['', 'home', 'about', 'projects', 'contact', ''],
+      tabs: ['home', 'about', 'projects', 'contact'],
       buttons: []
     }
 
@@ -51,9 +51,6 @@ const Navbar = props => {
         x: p5.mouseX,
         y: p5.mouseY
       }
-      environment.bodies.forEach(body => {
-        body.show()
-      })
       environment.buttons.forEach(button => {
         button.show()
         button.checkMouseInBounds(mousePosition)

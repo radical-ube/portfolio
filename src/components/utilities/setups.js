@@ -12,43 +12,57 @@ export const setupFrame = environment => {
 }
 
 export const setupNav = (environment) => {
-  const { width, height, bodies, tabs } = environment
+  const { width, height, tabs, buttons } = environment
+  let textSize = height / 3
+  let x = width / (tabs.length + 1)
+  
+  let end1 = new TextBox(environment, {
+    x: -15,
+    y: height * 0.5,
+    options: {
+      isStatic: true
+    }
+  })
+  let prevElement = end1
 
-  let previousWord = null
   for (let i = 0; i < tabs.length; i++) {
-    let settings = {
-      x: 0,
-      y: 0,
+    let buttonSettings = {
+      x: x + (x * i),
+      y: height * 0.5,
       inputText: tabs[i],
       options: {
         friction: 0.4,
         restitution: 0.8,
         isStatic: false
       },
-      textSize: height / 3,
+      textSize,
       color: randomColor()
     }
-    if (!previousWord || i === tabs.length - 1) settings.options.isStatic = true
-    settings.x = -15 + (i * 20)
-    settings.y = height * 0.5
-    if (i === tabs.length - 1) {
-      settings.x = width + 15
-    }
-    let word = new Button(environment, settings)
-    bodies.push(word)
+    let button = new Button(environment, buttonSettings)
 
-    if (i > 0) {
-      let constraintSettings = {
-        bodyA: word.body,
-        bodyB: previousWord.body,
-        length: width * 0.135,
-        stiffness: 0.65
-      }
-      new Spring(environment, constraintSettings)
-
+    let constraintSettings = {
+      bodyA: prevElement.body,
+      bodyB: button.body,
+      length: x,
+      stiffness: 0.7
     }
-    previousWord = word
+    new Spring(environment, constraintSettings)
+    prevElement = button
   }
+  
+  let end2 = new TextBox(environment, {
+    x: width + 15,
+    y: height * 0.5,
+    options: {
+      isStatic: true
+    }
+  })
+  new Spring(environment, {
+    bodyA: buttons[buttons.length - 1].body,
+    bodyB: end2.body,
+    length: x,
+    stiffness: 0.7
+  })
 }
 
 export const setupHome = (environment) => {
@@ -213,7 +227,7 @@ export const setupProjects = (environment) => {
     }
   })
 
-  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with Lyle Aigbedion and Ousainu Jabbi. We used d3.js for data calculation and React for rendering. Find out how \"danceable\" your favorite songs are!'
+  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how \"danceable\" your favorite songs are!'
 
   const ekopiqueDescription = new ParagraphBox(environment, {
     x: width * 0.7,
@@ -330,7 +344,7 @@ export const setupContact = (environment) => {
       color: randomColor()
     }
     let button = new Button(environment, buttonSettings)
-   
+
     new Spring(environment, {
       bodyA: prevBody.body,
       bodyB: button.body,
