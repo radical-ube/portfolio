@@ -1,40 +1,37 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import { setupFrame, setupNav } from './utilities'
-import {setCurrentPage} from '../store/page'
+import { setCurrentPage } from '../store/page'
 
 const { Engine, World } = Matter
 
 const Navbar = props => {
-  const {setCurrentPage, bgColor} = props
+  const { setCurrentPage, bgColor } = props
   const ref = React.createRef()
   const engine = Engine.create()
   const world = engine.world
 
   const Sketch = p5 => {
 
-    const environment = { 
-      p5, 
-      engine, 
-      world, 
-      width: window.innerWidth, 
-      height: window.innerHeight * 0.15, 
+    const environment = {
+      p5,
+      engine,
+      world,
+      width: window.innerWidth,
+      height: window.innerHeight * 0.15,
       bodies: [],
       constraints: [],
-      tabs: ['', 'home', 'about', 'projects', 'contact', '']
+      tabs: ['home', 'about', 'projects', 'experience', 'contact'],
+      buttons: []
     }
 
-    const handlePageChange = () => {
-      const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
-      }
-      environment.bodies.forEach(body => {
-        if (body.mouseInBounds(mousePosition)) {
-          setCurrentPage(body.text)
+    const handleClick = () => {
+      environment.buttons.forEach(button => {
+        if (button.mouseInBounds) {
+          setCurrentPage(button.text)
         }
       })
     }
@@ -43,27 +40,21 @@ const Navbar = props => {
       Engine.clear(engine)
       World.clear(world, false)
       const canvas = p5.createCanvas(environment.width, environment.height)
-      canvas.mouseClicked(handlePageChange)
+      canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupNav(environment)
     }
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      if (environment.bodies.length) {
-        environment.bodies.forEach(body => {
-          body.show()
-          let mousePosition = {
-            x: p5.mouseX,
-            y: p5.mouseY
-          }
-          if (body.mouseInBounds(mousePosition)) {
-            body.overlay = true
-          } else {
-            body.overlay = false
-          }
-        })
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
       }
+      environment.buttons.forEach(button => {
+        button.show()
+        button.checkMouseInBounds(mousePosition)
+      })
     }
     p5.windowResized = () => {
       environment.width = window.innerWidth

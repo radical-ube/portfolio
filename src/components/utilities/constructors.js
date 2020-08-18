@@ -182,7 +182,7 @@ export function ColorBall(environment, settings) {
     lightness: 100
   }
   this.body = Bodies.circle(x, y, this.r, this.options)
-  if (particles.length < 150) {
+  if (particles.length < 200) {
     World.add(world, this.body)
     particles.push(this)
   }
@@ -211,7 +211,7 @@ export function ColorBall(environment, settings) {
 }
 
 export function Button(environment, settings) {
-  const { p5, world, bodies } = environment
+  const { p5, world, buttons } = environment
   const { CENTER, HSL } = p5
   const { x, y, options, inputText, address, textSize, color } = settings
   p5.textSize(textSize || 18)
@@ -229,9 +229,9 @@ export function Button(environment, settings) {
     saturation: 0,
     lightness: 94,
   }
-  this.overlay = false
+  this.mouseInBounds = false
   World.add(world, this.body)
-  bodies.push(this)
+  buttons.push(this)
 
   // class methods
   this.show = () => {
@@ -251,17 +251,90 @@ export function Button(environment, settings) {
     p5.noFill()
     p5.stroke(hue, saturation, lightness)
     p5.rect(0, 0, this.w + 10, this.h + 10)
-    if (this.overlay) {
+    if (this.mouseInBounds) {
       p5.fill(0, 0, 100, 0.05)
       p5.rect(0, 0, this.w + 10, this.h + 10)
     }
     p5.pop()
   }
 
-  this.mouseInBounds = (mousePosition) => {
+  this.checkMouseInBounds = (mousePosition) => {
     const vertices = this.body.vertices
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    return (mouseArea < this.body.area + 1)
+    if (mouseArea < this.body.area + 1) {
+      this.mouseInBounds = true
+    }
+    else {
+      this.mouseInBounds = false
+    }
   }
 }
 
+export function Bubble(environment, settings) {
+  const { p5, world, bubbles, height } = environment
+  const { CENTER, HSL } = p5
+  const { x, y, options, inputText, textSize, color } = settings
+  p5.textSize(textSize || 18)
+
+  // class properties
+  this.text = inputText || ''
+  this.textSize = textSize
+  // this.address = address
+  this.d = p5.textWidth(this.text)
+  // this.h = p5.textAscent(this.text)
+  this.options = options
+  this.body = Bodies.circle(x, y, this.d / 2, this.options)
+  this.color = color || {
+    hue: 0,
+    saturation: 0,
+    lightness: 94,
+  }
+  this.mouseInBounds = false
+  this.bubbleShouldPop = false
+  World.add(world, this.body)
+  bubbles.push(this)
+
+  // class methods
+  this.show = () => {
+    const { hue, saturation, lightness } = this.color
+    this.position = this.body.position
+    this.angle = this.body.angle
+
+    p5.push()
+    p5.translate(this.position.x, this.position.y)
+    p5.rotate(this.angle)
+    // p5.rectMode(CENTER)
+    p5.textAlign(CENTER, CENTER)
+    p5.textSize(this.textSize)
+    p5.colorMode(HSL)
+    p5.fill(hue, saturation, lightness)
+    p5.text(this.text, 0, 0)
+    p5.noFill()
+    p5.stroke(hue, saturation, lightness)
+    p5.ellipse(0, 0, this.d + 10)
+    if (this.mouseInBounds) {
+      p5.fill(0, 0, 100, 0.05)
+      p5.ellipse(0, 0, this.d + 10)
+    }
+    p5.pop()
+  }
+
+  this.checkMouseInBounds = (mousePosition) => {
+    const distance = p5.dist(this.position.x, this.position.y, mousePosition.x, mousePosition.y)
+    if (distance < (this.d / 2)) {
+      this.mouseInBounds = true
+    }
+    else {
+      this.mouseInBounds = false
+    }
+  }
+
+  this.checkBubblePop = () => {
+    if (this.position.y - (this.d / 2) < 10) {
+      this.bubbleShouldPop = true
+    }
+    else {
+      this.bubbleShouldPop = false
+    }
+  }
+}

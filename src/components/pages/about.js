@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
 import Matter from 'matter-js'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
-import { setupFrame, setupAbout, createMouseConstraint, createColorParticles } from '../utilities'
+import { setupFrame, setupAbout, createColorParticles } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -28,35 +28,28 @@ const About = props => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
-      // createMouseConstraint(canvas, engine, world, p5)
       setupFrame(environment)
       setupAbout(environment)
-      // Engine.run(engine)
     }
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      if (p5.frameCount % 3 === 0) {
+      if (p5.frameCount % 4 === 0) {
         createColorParticles(environment)
       }
-      if (environment.bodies.length) {
-        environment.bodies.forEach(body => {
-          body.show()
-        })
-      }
-      if (environment.particles.length) {
-        for (let i = 0; i < environment.particles.length; i++) {
-          let particle = environment.particles[i]
-          particle.show()
-          if (particle.isBelowLine()) {
-            particle.remove()
-            environment.particles.splice(i, 1)
-            i--
-          }
+      environment.bodies.forEach(body => {
+        body.show()
+      })
+      for (let i = 0; i < environment.particles.length; i++) {
+        let particle = environment.particles[i]
+        particle.show()
+        if (particle.isBelowLine()) {
+          particle.remove()
+          environment.particles.splice(i, 1)
+          i--
         }
       }
     }
-
   }
 
   useEffect(() => {

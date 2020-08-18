@@ -3,11 +3,11 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupContact, createMouseConstraint } from '../utilities'
+import { setupFrame, setupExperience, createBubbles } from '../utilities'
 
 const { Engine, World } = Matter
 
-const Contact = props => {
+const Experience = props => {
   const { currentPage, bgColor } = props
   const ref = React.createRef()
   const engine = Engine.create()
@@ -21,26 +21,37 @@ const Contact = props => {
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
       bodies: [],
-      constraints: [],
-      buttons: []
+      buttons: [],
+      bubbles: []
     }
 
     const handleClick = () => {
       environment.buttons.forEach(button => {
+        if (button.mouseInBounds && button.values) {
+          createBubbles(environment, button)
+        }
         if (button.mouseInBounds && button.address) {
           document.location.assign(button.address)
         }
       })
+      for (let i = 0; i < environment.bubbles.length; i++) {
+        let bubble = environment.bubbles[i]
+        if (bubble.mouseInBounds) {
+          World.remove(world, bubble.body)
+          environment.bubbles.splice(i, 1)
+          i--
+        }
+      }
     }
 
     p5.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
+      world.gravity.y *= -1
       const canvas = p5.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas, engine, world, p5)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      setupContact(environment)
+      setupExperience(environment)
     }
     p5.draw = () => {
       p5.background(bgColor)
@@ -52,13 +63,21 @@ const Contact = props => {
       environment.bodies.forEach(body => {
         body.show()
       })
-      environment.constraints.forEach(constraint => {
-        constraint.show()
-      })
       environment.buttons.forEach(button => {
         button.show()
         button.checkMouseInBounds(mousePosition)
       })
+      for (let index = 0; index < environment.bubbles.length; index++) {
+        let bubble = environment.bubbles[index]
+        bubble.show()
+        bubble.checkMouseInBounds(mousePosition)
+        bubble.checkBubblePop()
+        if (bubble.bubbleShouldPop) {
+          World.remove(world, bubble.body)
+          environment.bubbles.splice(index, 1)
+          index--
+        }
+      }
     }
 
   }
@@ -79,4 +98,4 @@ const mapState = state => {
   }
 }
 
-export default connect(mapState)(Contact)
+export default connect(mapState)(Experience)

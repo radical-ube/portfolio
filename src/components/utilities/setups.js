@@ -1,4 +1,4 @@
-import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button } from './constructors'
+import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button, Bubble } from './constructors'
 import { randomColor } from './utils'
 
 
@@ -12,43 +12,59 @@ export const setupFrame = environment => {
 }
 
 export const setupNav = (environment) => {
-  const { width, height, bodies, tabs } = environment
+  const { width, height, tabs, buttons } = environment
+  let textSize = height / 3
+  let x = width / (tabs.length + 1)
+  let y = height * 0.5
+  let stiffness = 0.6
 
-  let previousWord = null
+  let end1 = new TextBox(environment, {
+    x: -15,
+    y,
+    options: {
+      isStatic: true
+    }
+  })
+  let prevElement = end1
+
   for (let i = 0; i < tabs.length; i++) {
-    let settings = {
-      x: 0,
-      y: 0,
+    let buttonSettings = {
+      x: x + (40 * i),
+      y,
       inputText: tabs[i],
       options: {
         friction: 0.4,
         restitution: 0.8,
         isStatic: false
       },
-      textSize: height / 3,
+      textSize,
       color: randomColor()
     }
-    if (!previousWord || i === tabs.length - 1) settings.options.isStatic = true
-    settings.x = -15 + (i * 20)
-    settings.y = height * 0.5
-    if (i === tabs.length - 1) {
-      settings.x = width + 15
-    }
-    let word = new Button(environment, settings)
-    bodies.push(word)
+    let button = new Button(environment, buttonSettings)
 
-    if (i > 0) {
-      let constraintSettings = {
-        bodyA: word.body,
-        bodyB: previousWord.body,
-        length: width * 0.135,
-        stiffness: 0.65
-      }
-      new Spring(environment, constraintSettings)
-
+    let constraintSettings = {
+      bodyA: prevElement.body,
+      bodyB: button.body,
+      length: x,
+      stiffness
     }
-    previousWord = word
+    new Spring(environment, constraintSettings)
+    prevElement = button
   }
+
+  let end2 = new TextBox(environment, {
+    x: width + 15,
+    y,
+    options: {
+      isStatic: true
+    }
+  })
+  new Spring(environment, {
+    bodyA: buttons[buttons.length - 1].body,
+    bodyB: end2.body,
+    length: x,
+    stiffness
+  })
 }
 
 export const setupHome = (environment) => {
@@ -213,7 +229,7 @@ export const setupProjects = (environment) => {
     }
   })
 
-  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with Lyle Aigbedion and Ousainu Jabbi. We used d3.js for data calculation and React for rendering. Find out how \"danceable\" your favorite songs are!'
+  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how \"danceable\" your favorite songs are!'
 
   const ekopiqueDescription = new ParagraphBox(environment, {
     x: width * 0.7,
@@ -250,28 +266,104 @@ export const setupProjects = (environment) => {
   })
 }
 
-export const setupResume = (environment) => {
+export const setupExperience = (environment) => {
   const { width, height } = environment
 
-  let titleText = 'resume will be a PDF cloth-like object'
-  const words = titleText.split(' ')
-  words.forEach((word, index, array) => {
-
-    const settings = {
-      x: width / 2,
-      y: height * 0.2 + (index * 100),
-      inputText: word,
-      options: {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      },
-      textSize: height / array.length,
-      color: randomColor()
+  const credentials = [
+    {
+      type: 'languages',
+      values: ['JavaScript', 'Git', 'C#']
+    },
+    {
+      type: 'front end',
+      values: ['React', 'Redux', 'HTML5', 'CSS', 'p5.js', 'Matter.js', 'd3.js']
+    },
+    {
+      type: 'back end',
+      values: ['Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'MongoDB', 'Mongoose']
+    },
+    {
+      type: 'platforms',
+      values: ['Github', 'Heroku', 'Netlify']
+    },
+    {
+      type: 'testing',
+      values: ['Mocha', 'Chai', 'Jasmine']
     }
+  ]
 
-    new TextBox(environment, settings)
+  let xCreds = width / (credentials.length + 1) / 2
+  let bubbleSize = width * 0.0125
+
+  credentials.forEach((credential, index) => {
+    const button = new Button(environment, {
+      x: xCreds + (xCreds * index),
+      y: height * 0.8,
+      options: {
+        isStatic: true
+      },
+      inputText: credential.type,
+      textSize: bubbleSize,
+    })
+    button.values = credential.values
   })
+
+  const skills = [
+    {
+      type: 'artistry',
+      values: ['improvise freely', 'share vulnerably', 'bold choices', 'play']
+    },
+    {
+      type: 'communication',
+      values: ['clarity', 'active listening', 'make space', 'don\'t assume']
+    },
+    {
+      type: 'learning',
+      values: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
+    },
+    {
+      type: 'resume',
+      address: './Ube.Halaya.pdf'
+    }
+  ]
+
+  let xSkills = (width / (skills.length + 1) / 2)
+
+  skills.forEach((skill, index) => {
+    const button = new Button(environment, {
+      x: xSkills + (xSkills * index) + (width / 2),
+      y: height * 0.8,
+      options: {
+        isStatic: true
+      },
+      inputText: skill.type,
+      textSize: bubbleSize,
+    })
+    if (skill.values) button.values = skill.values
+    if (skill.address) button.address = skill.address
+  })
+
+  let headerSize1 =  width * 0.06
+  new TextBox(environment, {
+    x: width * 0.25,
+    y: height * 0.9,
+    options: {
+      isStatic: true
+    },
+    inputText: 'technologies',
+    textSize: headerSize1
+  })
+
+  new TextBox(environment, {
+    x: width * 0.75,
+    y: height * 0.9,
+    options: {
+      isStatic: true
+    },
+    inputText: 'values and skills',
+    textSize: headerSize1
+  })
+
 }
 
 export const setupContact = (environment) => {
@@ -308,8 +400,8 @@ export const setupContact = (environment) => {
   let socialAddresses = ['https://github.com/radical-ube', 'https://instagram.com/radical_ube', 'https://linkedin.com/in/ube-halaya', 'mailto:eli.tamondong@gmail.com']
 
   let prevBody = invisibleBox
+  let buttonTextSize = width * 0.025
   socials.forEach((social, i) => {
-    let buttonTextSize = width * 0.025
     let x = width * 0.7
     if (i % 2 === 0) {
       x += 2
@@ -330,7 +422,7 @@ export const setupContact = (environment) => {
       color: randomColor()
     }
     let button = new Button(environment, buttonSettings)
-   
+
     new Spring(environment, {
       bodyA: prevBody.body,
       bodyB: button.body,
@@ -340,4 +432,5 @@ export const setupContact = (environment) => {
     prevBody = button
 
   })
+
 }
