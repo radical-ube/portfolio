@@ -25,7 +25,7 @@ const Projects = props => {
       buttons: []
     }
 
-    const handleAddressChange = () => {
+    const handleClick = () => {
       environment.buttons.forEach(button => {
         if (button.mouseInBounds && button.address) {
           document.location.assign(button.address)
@@ -41,7 +41,7 @@ const Projects = props => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
-      canvas.mouseClicked(handleAddressChange)
+      canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupProjects(environment)
     }

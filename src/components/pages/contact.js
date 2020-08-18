@@ -25,7 +25,7 @@ const Contact = props => {
       buttons: []
     }
 
-    const handleAddressChange = () => {
+    const handleClick = () => {
       environment.buttons.forEach(button => {
         if (button.mouseInBounds && button.address) {
           document.location.assign(button.address)
@@ -38,7 +38,7 @@ const Contact = props => {
       Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
       createMouseConstraint(canvas, engine, world, p5)
-      canvas.mouseClicked(handleAddressChange)
+      canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupContact(environment)
     }

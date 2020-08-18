@@ -1,4 +1,4 @@
-import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button } from './constructors'
+import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button, Bubble } from './constructors'
 import { randomColor } from './utils'
 
 
@@ -17,7 +17,7 @@ export const setupNav = (environment) => {
   let x = width / (tabs.length + 1)
   let y = height * 0.5
   let stiffness = 0.6
-  
+
   let end1 = new TextBox(environment, {
     x: -15,
     y,
@@ -266,28 +266,54 @@ export const setupProjects = (environment) => {
   })
 }
 
-export const setupResume = (environment) => {
+export const setupExperience = (environment) => {
   const { width, height } = environment
 
-  let titleText = 'resume will be a PDF cloth-like object'
-  const words = titleText.split(' ')
-  words.forEach((word, index, array) => {
-
-    const settings = {
-      x: width / 2,
-      y: height * 0.2 + (index * 100),
-      inputText: word,
-      options: {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      },
-      textSize: height / array.length,
-      color: randomColor()
+  let titleText = 'technologies'
+  const credentials = [
+    {
+      type: 'proficient',
+      technologies: ['JavaScript', 'Git', 'Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'React', 'Redux', 'HTML5']
+    },
+    {
+      type: 'comfortable',
+      technologies: ['CSS', 'p5.js', 'Matter.js']
+    },
+    {
+      type: 'fundamentals',
+      technologies: ['C#', 'MongoDB', 'Mongoose', 'Mocha', 'Chai', 'Jasmine', 'd3.js']
     }
+   
+  ]
 
-    new TextBox(environment, settings)
+  let x = width / (credentials.length + 1)
+  let textSize = width * 0.0125
+
+  credentials.forEach((credential, index) => {
+    const button = new Button(environment, {
+      x: x + (x * index),
+      y: height * 0.9,
+      options: {
+        isStatic: true
+      },
+      inputText: credential.type,
+      textSize,
+    })
+    button.technologies = credential.technologies
   })
+  // new Bubble(environment, {
+  //   x: 200,
+  //   y: 200,
+  //   options: {
+  //     friction: 0.4,
+  //     frictionAir: 0.3,
+  //     restitution: 0.8,
+  //     isStatic: false
+  //   },
+  //   inputText: titleText,
+  //   textSize: width * 0.0125
+  // })
+
 }
 
 export const setupContact = (environment) => {

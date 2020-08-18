@@ -28,7 +28,7 @@ const Navbar = props => {
       buttons: []
     }
 
-    const handlePageChange = () => {
+    const handleClick = () => {
       environment.buttons.forEach(button => {
         if (button.mouseInBounds) {
           setCurrentPage(button.text)
@@ -40,7 +40,7 @@ const Navbar = props => {
       Engine.clear(engine)
       World.clear(world, false)
       const canvas = p5.createCanvas(environment.width, environment.height)
-      canvas.mouseClicked(handlePageChange)
+      canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupNav(environment)
     }

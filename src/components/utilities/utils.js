@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import {ImageBox, ParagraphBox, Button, ColorBall} from './constructors'
+import {ImageBox, ParagraphBox, Button, ColorBall, Bubble} from './constructors'
 
 const {World, Mouse, MouseConstraint} = Matter
 
@@ -134,11 +134,33 @@ export const createColorParticles = (environment) => {
   new ColorBall(environment, particleSettings)
 }
 
-export const createProjectDescription = (environment, assets) => {
-  const { width, height } = environment
-  const {imageWidth, imageHeight, image, text, address} = assets
-  const imageSettings = {
+// export const createProjectDescription = (environment, assets) => {
+//   const { width, height } = environment
+//   const {imageWidth, imageHeight, image, text, address} = assets
+//   const imageSettings = {
     
-  }
-  new ImageBox(environment)
+//   }
+//   new ImageBox(environment)
+// }
+
+export const createBubbles = (environment, button) => {
+  const {width, height} = environment
+  const position = button.body.position
+  const textSize = width * 0.0125
+
+  button.technologies.forEach(technology => {
+    let x = getRandomInt(position.x - 10, position.x + 10)
+    let y = getRandomInt(position.y - 30, position.y -50)
+    new Bubble(environment, {
+      x,
+      y,
+      options: {
+        frictionAir: 0.25,
+        restitution: 0.8,
+        isStatic: false
+      },
+      inputText: technology,
+      textSize
+    })
+  })
 }

@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupResume, createMouseConstraint } from '../utilities'
+import { setupFrame, setupExperience, createBubbles } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -20,24 +20,62 @@ const Experience = props => {
       world,
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
-      bodies: []
+      bodies: [],
+      buttons: [],
+      bubbles: []
+    }
+
+    const handleClick = () => {
+      environment.buttons.forEach(button => {
+        if (button.mouseInBounds) {
+          createBubbles(environment, button)
+        }
+      })
+      for (let i = 0; i < environment.bubbles.length; i++) {
+        let bubble = environment.bubbles[i]
+        if (bubble.mouseInBounds) {
+          World.remove(world, bubble.body)
+          environment.bubbles.splice(i, 1)
+          i--
+        }
+      }
     }
 
     p5.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
+      console.log('world', world)
+      world.gravity.y *= -1
       const canvas = p5.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas, engine, world, p5)
+      canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      setupResume(environment)
+      setupExperience(environment)
     }
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
+      const mousePosition = {
+        x: p5.mouseX,
+        y: p5.mouseY
+      }
       environment.bodies.forEach(body => {
         body.show()
       })
-
+      environment.buttons.forEach(button => {
+        button.show()
+        button.checkMouseInBounds(mousePosition)
+      })
+      for (let index = 0; index < environment.bubbles.length; index++) {
+        let bubble = environment.bubbles[index]
+        bubble.show()
+        bubble.checkMouseInBounds(mousePosition)
+        bubble.checkBubblePop()
+        if (bubble.bubbleShouldPop) {
+          World.remove(world, bubble.body)
+          environment.bubbles.splice(index, 1)
+          index--
+        }
+      }
     }
 
   }
