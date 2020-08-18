@@ -148,7 +148,7 @@ export const createBubbles = (environment, button) => {
   const position = button.body.position
   const textSize = width * 0.0125
 
-  button.technologies.forEach(technology => {
+  button.values.forEach(value => {
     let x = getRandomInt(position.x - 10, position.x + 10)
     let y = getRandomInt(position.y - 30, position.y -50)
     new Bubble(environment, {
@@ -159,7 +159,7 @@ export const createBubbles = (environment, button) => {
         restitution: 0.8,
         isStatic: false
       },
-      inputText: technology,
+      inputText: value,
       textSize
     })
   })

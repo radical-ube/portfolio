@@ -27,8 +27,11 @@ const Experience = props => {
 
     const handleClick = () => {
       environment.buttons.forEach(button => {
-        if (button.mouseInBounds) {
+        if (button.mouseInBounds && button.values) {
           createBubbles(environment, button)
+        }
+        if (button.mouseInBounds && button.address) {
+          document.location.assign(button.address)
         }
       })
       for (let i = 0; i < environment.bubbles.length; i++) {
@@ -44,7 +47,6 @@ const Experience = props => {
     p5.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
-      console.log('world', world)
       world.gravity.y *= -1
       const canvas = p5.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)

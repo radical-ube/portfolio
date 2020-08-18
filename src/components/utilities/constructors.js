@@ -330,17 +330,11 @@ export function Bubble(environment, settings) {
   }
 
   this.checkBubblePop = () => {
-    if (this.position.y < height * 0.2) {
+    if (this.position.y - (this.d / 2) < 10) {
       this.bubbleShouldPop = true
     }
     else {
       this.bubbleShouldPop = false
     }
   }
-
-  // this.removeBubble = (index, array) => {
-  //   World.remove(world, this.body)
-  //   array.splice(index, 1)
-  //   index--
-  // }
 }

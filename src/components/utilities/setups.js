@@ -269,50 +269,100 @@ export const setupProjects = (environment) => {
 export const setupExperience = (environment) => {
   const { width, height } = environment
 
-  let titleText = 'technologies'
   const credentials = [
     {
-      type: 'proficient',
-      technologies: ['JavaScript', 'Git', 'Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'React', 'Redux', 'HTML5']
+      type: 'languages',
+      values: ['JavaScript', 'Git', 'C#']
     },
     {
-      type: 'comfortable',
-      technologies: ['CSS', 'p5.js', 'Matter.js']
+      type: 'front end',
+      values: ['React', 'Redux', 'HTML5', 'CSS', 'p5.js', 'Matter.js', 'd3.js']
     },
     {
-      type: 'fundamentals',
-      technologies: ['C#', 'MongoDB', 'Mongoose', 'Mocha', 'Chai', 'Jasmine', 'd3.js']
+      type: 'back end',
+      values: ['Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'MongoDB', 'Mongoose']
+    },
+    {
+      type: 'platforms',
+      values: ['Github', 'Heroku', 'Netlify']
+    },
+    {
+      type: 'testing',
+      values: ['Mocha', 'Chai', 'Jasmine']
     }
-   
   ]
 
-  let x = width / (credentials.length + 1)
-  let textSize = width * 0.0125
+  let xCreds = width / (credentials.length + 1) / 2
+  let bubbleSize = width * 0.0125
 
   credentials.forEach((credential, index) => {
     const button = new Button(environment, {
-      x: x + (x * index),
-      y: height * 0.9,
+      x: xCreds + (xCreds * index),
+      y: height * 0.8,
       options: {
         isStatic: true
       },
       inputText: credential.type,
-      textSize,
+      textSize: bubbleSize,
     })
-    button.technologies = credential.technologies
+    button.values = credential.values
   })
-  // new Bubble(environment, {
-  //   x: 200,
-  //   y: 200,
-  //   options: {
-  //     friction: 0.4,
-  //     frictionAir: 0.3,
-  //     restitution: 0.8,
-  //     isStatic: false
-  //   },
-  //   inputText: titleText,
-  //   textSize: width * 0.0125
-  // })
+
+  const skills = [
+    {
+      type: 'artistry',
+      values: ['improvise freely', 'share vulnerably', 'bold choices', 'play']
+    },
+    {
+      type: 'communication',
+      values: ['clarity', 'active listening', 'make space', 'don\'t assume']
+    },
+    {
+      type: 'learning',
+      values: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
+    },
+    {
+      type: 'resume',
+      address: './Ube.Halaya.pdf'
+    }
+  ]
+
+  let xSkills = (width / (skills.length + 1) / 2)
+
+  skills.forEach((skill, index) => {
+    const button = new Button(environment, {
+      x: xSkills + (xSkills * index) + (width / 2),
+      y: height * 0.8,
+      options: {
+        isStatic: true
+      },
+      inputText: skill.type,
+      textSize: bubbleSize,
+    })
+    if (skill.values) button.values = skill.values
+    if (skill.address) button.address = skill.address
+  })
+
+  let headerSize1 =  width * 0.06
+  new TextBox(environment, {
+    x: width * 0.25,
+    y: height * 0.9,
+    options: {
+      isStatic: true
+    },
+    inputText: 'technologies',
+    textSize: headerSize1
+  })
+
+  new TextBox(environment, {
+    x: width * 0.75,
+    y: height * 0.9,
+    options: {
+      isStatic: true
+    },
+    inputText: 'values and skills',
+    textSize: headerSize1
+  })
 
 }
 
@@ -350,8 +400,8 @@ export const setupContact = (environment) => {
   let socialAddresses = ['https://github.com/radical-ube', 'https://instagram.com/radical_ube', 'https://linkedin.com/in/ube-halaya', 'mailto:eli.tamondong@gmail.com']
 
   let prevBody = invisibleBox
+  let buttonTextSize = width * 0.025
   socials.forEach((social, i) => {
-    let buttonTextSize = width * 0.025
     let x = width * 0.7
     if (i % 2 === 0) {
       x += 2
@@ -382,4 +432,5 @@ export const setupContact = (environment) => {
     prevBody = button
 
   })
+
 }
