@@ -164,3 +164,26 @@ export const createBubbles = (environment, button) => {
     })
   })
 }
+
+export const transformBody = (p5, body) => {
+  const position = body.position
+  const angle = body.angle
+
+  p5.translate(position.x, position.y)
+  p5.rotate(angle)
+}
+
+export const setTextDimensions = (p5, textSettings) => {
+  const { text, textSize, boxWidth, boxHeight } = textSettings
+  p5.textSize(textSize || 18)
+  return {
+    textSize: textSize,
+    w: boxWidth || p5.textWidth(text),
+    h: boxHeight || p5.textAscent(text)
+  }
+}
+
+export const addToWorld = (world, instance, container) => {
+  World.add(world, instance.body)
+  container.push(instance)
+}

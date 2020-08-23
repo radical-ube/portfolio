@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { areaFromPoints } from './utils'
+import { areaFromPoints, setTextDimensions, transformBody, addToWorld } from './utils'
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
@@ -20,36 +20,29 @@ export function Boundary(x, y, w, h, label, world) {
 export function TextBox(environment, settings) {
   const { p5, world, bodies } = environment
   const { CENTER, HSL } = p5
-  const { x, y, options, inputText, textSize, color } = settings
-  p5.textSize(textSize || 18)
+  const { x, y, options, textSettings, color } = settings
 
   // class properties
-  this.text = inputText || ''
-  this.textSize = textSize
-  this.w = p5.textWidth(this.text)
-  this.h = p5.textAscent(this.text)
+  this.text = textSettings.text || ''
+  this.dimensions = setTextDimensions(p5, textSettings)
   this.options = options
-  this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
+  this.body = Bodies.rectangle(x, y, this.dimensions.w, this.dimensions.h, this.options)
   this.color = color || {
     hue: 0,
     saturation: 0,
     lightness: 94,
   }
-  World.add(world, this.body)
-  bodies.push(this)
+  addToWorld(world, this, bodies)
 
   // class methods
   this.show = () => {
     const { hue, saturation, lightness } = this.color
-    this.position = this.body.position
-    this.angle = this.body.angle
-
+   
     p5.push()
-    p5.translate(this.position.x, this.position.y)
-    p5.rotate(this.angle)
+    transformBody(p5, this.body)
     p5.rectMode(CENTER)
     p5.textAlign(CENTER, CENTER)
-    p5.textSize(this.textSize)
+    p5.textSize(this.dimensions.textSize)
     p5.colorMode(HSL)
     p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0)
@@ -66,39 +59,32 @@ export function TextBox(environment, settings) {
 export function ParagraphBox(environment, settings) {
   const { p5, world, bodies } = environment
   const { CENTER, LEFT, TOP, HSL } = p5
-  const { x, y, options, inputText, textSize, boxWidth, boxHeight, color } = settings
-  p5.textSize(textSize)
+  const { x, y, options, textSettings, color } = settings
 
   // class properties
-  this.text = inputText || ''
-  this.textSize = textSize
-  this.w = boxWidth
-  this.h = boxHeight
+  this.text = textSettings.text || ''
+  this.dimensions = setTextDimensions(p5, textSettings)
   this.options = options
-  this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
+  this.body = Bodies.rectangle(x, y, this.dimensions.w, this.dimensions.h, this.options)
   this.color = color || {
     hue: 0,
     saturation: 0,
     lightness: 94
   }
-  World.add(world, this.body)
-  bodies.push(this)
+  addToWorld(world, this, bodies)
 
   // class methods
   this.show = () => {
     const { hue, saturation, lightness } = this.color
-    this.position = this.body.position
-    this.angle = this.body.angle
-
+  
     p5.push()
-    p5.translate(this.position.x, this.position.y)
-    p5.rotate(this.angle)
+    transformBody(p5, this.body)
     p5.rectMode(CENTER)
     p5.textAlign(LEFT, TOP)
-    p5.textSize(this.textSize)
+    p5.textSize(this.dimensions.textSize)
     p5.colorMode(HSL)
     p5.fill(hue, saturation, lightness)
-    p5.text(this.text, 0, 0, boxWidth, boxHeight)
+    p5.text(this.text, 0, 0, this.dimensions.w, this.dimensions.h)
     p5.pop()
   }
 
@@ -121,17 +107,12 @@ export function ImageBox(environment, settings) {
   this.options = options
   this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
   this.address = address
-  World.add(world, this.body)
-  bodies.push(this)
+  addToWorld(world, this, bodies)
 
   // class methods
   this.show = () => {
-    this.position = this.body.position
-    this.angle = this.body.angle
-
     p5.push()
-    p5.translate(this.position.x, this.position.y)
-    p5.rotate(this.angle)
+    transformBody(p5, this.body)
     p5.rectMode(CENTER)
     p5.imageMode(CENTER)
     p5.image(this.image, 0, 0, this.w, this.h)
@@ -155,8 +136,7 @@ export function Spring(environment, settings) {
     length,
     stiffness
   })
-  World.add(world, this.body)
-  constraints.push(this)
+  addToWorld(world, this, constraints)
 
   this.show = () => {
     let a = this.body.bodyA.position
@@ -183,18 +163,14 @@ export function ColorBall(environment, settings) {
   }
   this.body = Bodies.circle(x, y, this.r, this.options)
   if (particles.length < 200) {
-    World.add(world, this.body)
-    particles.push(this)
+    addToWorld(world, this, particles)
   }
 
   this.show = () => {
     const { hue, saturation, lightness } = this.color
-    this.position = this.body.position
-    this.angle = this.body.angle
 
     p5.push()
-    p5.translate(this.position.x, this.position.y)
-    p5.rotate(this.angle)
+    transformBody(p5, this.body)
     p5.noStroke()
     p5.colorMode(HSL)
     p5.fill(hue, saturation, lightness)
@@ -203,7 +179,7 @@ export function ColorBall(environment, settings) {
   }
 
   this.isBelowLine = () => {
-    return (this.position.y > (height * 0.95))
+    return (this.body.position.y > (height * 0.95))
   }
   this.remove = () => {
     World.remove(world, this.body)
@@ -213,47 +189,40 @@ export function ColorBall(environment, settings) {
 export function Button(environment, settings) {
   const { p5, world, buttons } = environment
   const { CENTER, HSL } = p5
-  const { x, y, options, inputText, address, textSize, color } = settings
-  p5.textSize(textSize || 18)
+  const { x, y, options, textSettings, color } = settings
 
   // class properties
-  this.text = inputText || ''
-  this.textSize = textSize
-  this.address = address
-  this.w = p5.textWidth(this.text)
-  this.h = p5.textAscent(this.text)
+  this.text = textSettings.text || ''
+  this.address = textSettings.address
+  this.dimensions = setTextDimensions(p5, textSettings)
   this.options = options
-  this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
+  this.body = Bodies.rectangle(x, y, this.dimensions.w, this.dimensions.h, this.options)
   this.color = color || {
     hue: 0,
     saturation: 0,
     lightness: 94,
   }
   this.mouseInBounds = false
-  World.add(world, this.body)
-  buttons.push(this)
+  addToWorld(world, this, buttons)
 
   // class methods
   this.show = () => {
     const { hue, saturation, lightness } = this.color
-    this.position = this.body.position
-    this.angle = this.body.angle
-
+ 
     p5.push()
-    p5.translate(this.position.x, this.position.y)
-    p5.rotate(this.angle)
+    transformBody(p5, this.body)
     p5.rectMode(CENTER)
     p5.textAlign(CENTER, CENTER)
-    p5.textSize(this.textSize)
+    p5.textSize(this.dimensions.textSize)
     p5.colorMode(HSL)
     p5.fill(hue, saturation, lightness)
     p5.text(this.text, 0, 0)
     p5.noFill()
     p5.stroke(hue, saturation, lightness)
-    p5.rect(0, 0, this.w + 10, this.h + 10)
+    p5.rect(0, 0, this.dimensions.w + 10, this.dimensions.h + 10)
     if (this.mouseInBounds) {
       p5.fill(0, 0, 100, 0.05)
-      p5.rect(0, 0, this.w + 10, this.h + 10)
+      p5.rect(0, 0, this.dimensions.w + 10, this.dimensions.h + 10)
     }
     p5.pop()
   }
@@ -279,9 +248,7 @@ export function Bubble(environment, settings) {
   // class properties
   this.text = inputText || ''
   this.textSize = textSize
-  // this.address = address
   this.d = p5.textWidth(this.text)
-  // this.h = p5.textAscent(this.text)
   this.options = options
   this.body = Bodies.circle(x, y, this.d / 2, this.options)
   this.color = color || {
@@ -291,19 +258,14 @@ export function Bubble(environment, settings) {
   }
   this.mouseInBounds = false
   this.bubbleShouldPop = false
-  World.add(world, this.body)
-  bubbles.push(this)
+  addToWorld(world, this, bubbles)
 
   // class methods
   this.show = () => {
     const { hue, saturation, lightness } = this.color
-    this.position = this.body.position
-    this.angle = this.body.angle
 
     p5.push()
-    p5.translate(this.position.x, this.position.y)
-    p5.rotate(this.angle)
-    // p5.rectMode(CENTER)
+    transformBody(p5, this.body)
     p5.textAlign(CENTER, CENTER)
     p5.textSize(this.textSize)
     p5.colorMode(HSL)
@@ -320,7 +282,7 @@ export function Bubble(environment, settings) {
   }
 
   this.checkMouseInBounds = (mousePosition) => {
-    const distance = p5.dist(this.position.x, this.position.y, mousePosition.x, mousePosition.y)
+    const distance = p5.dist(this.body.position.x, this.body.position.y, mousePosition.x, mousePosition.y)
     if (distance < (this.d / 2)) {
       this.mouseInBounds = true
     }
@@ -330,7 +292,7 @@ export function Bubble(environment, settings) {
   }
 
   this.checkBubblePop = () => {
-    if (this.position.y - (this.d / 2) < 10) {
+    if (this.body.position.y - (this.d / 2) < 10) {
       this.bubbleShouldPop = true
     }
     else {
