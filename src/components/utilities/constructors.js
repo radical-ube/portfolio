@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { areaFromPoints, setTextDimensions, transformBody, addToWorld } from './utils'
+import { setTextDimensions, transformBody, addToWorld, renderText, renderOutline, renderHighlight, checkMouseInBounds } from './utils'
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
@@ -19,79 +19,66 @@ export function Boundary(x, y, w, h, label, world) {
 
 export function TextBox(environment, settings) {
   const { p5, world, bodies } = environment
-  const { CENTER, HSL } = p5
   const { x, y, options, textSettings, color } = settings
 
   // class properties
-  this.text = textSettings.text || ''
-  this.dimensions = setTextDimensions(p5, textSettings)
-  this.options = options
-  this.body = Bodies.rectangle(x, y, this.dimensions.w, this.dimensions.h, this.options)
-  this.color = color || {
-    hue: 0,
-    saturation: 0,
-    lightness: 94,
+  this.config = {
+    p5,
+    textSettings,
+    color: color || {
+      hue: 0,
+      saturation: 0,
+      lightness: 94,
+    },
+    alignment: {
+      horizontal: p5.CENTER,
+      vertical: p5.CENTER
+    },
+    shape: 'rect'
   }
+  this.config.dimensions = setTextDimensions(this.config)
+  this.options = options
+  this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
   addToWorld(world, this, bodies)
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness } = this.color
-   
     p5.push()
     transformBody(p5, this.body)
-    p5.rectMode(CENTER)
-    p5.textAlign(CENTER, CENTER)
-    p5.textSize(this.dimensions.textSize)
-    p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness)
-    p5.text(this.text, 0, 0)
+    renderText(this.config)
     p5.pop()
-  }
-
-  this.mouseInBounds = (mousePosition) => {
-    const vertices = this.body.vertices
-    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    return (mouseArea < this.body.area + 1)
   }
 }
 
 export function ParagraphBox(environment, settings) {
   const { p5, world, bodies } = environment
-  const { CENTER, LEFT, TOP, HSL } = p5
   const { x, y, options, textSettings, color } = settings
 
   // class properties
-  this.text = textSettings.text || ''
-  this.dimensions = setTextDimensions(p5, textSettings)
-  this.options = options
-  this.body = Bodies.rectangle(x, y, this.dimensions.w, this.dimensions.h, this.options)
-  this.color = color || {
-    hue: 0,
-    saturation: 0,
-    lightness: 94
+  this.config = {
+    p5,
+    textSettings,
+    color: color || {
+      hue: 0,
+      saturation: 0,
+      lightness: 94
+    },
+    alignment: {
+      horizontal: p5.LEFT,
+      vertical: p5.TOP
+    }
   }
+  this.config.dimensions = setTextDimensions(this.config)
+  this.options = options
+  this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
   addToWorld(world, this, bodies)
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness } = this.color
-  
     p5.push()
     transformBody(p5, this.body)
-    p5.rectMode(CENTER)
-    p5.textAlign(LEFT, TOP)
-    p5.textSize(this.dimensions.textSize)
-    p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness)
-    p5.text(this.text, 0, 0, this.dimensions.w, this.dimensions.h)
+    renderText(this.config)
     p5.pop()
-  }
-
-  this.mouseInBounds = (mousePosition) => {
-    const vertices = this.body.vertices
-    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    return (mouseArea < this.body.area + 1)
   }
 }
 
@@ -117,12 +104,6 @@ export function ImageBox(environment, settings) {
     p5.imageMode(CENTER)
     p5.image(this.image, 0, 0, this.w, this.h)
     p5.pop()
-  }
-
-  this.mouseInBounds = (mousePosition) => {
-    const vertices = this.body.vertices
-    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    return (mouseArea < this.body.area + 1)
   }
 }
 
@@ -188,115 +169,90 @@ export function ColorBall(environment, settings) {
 
 export function Button(environment, settings) {
   const { p5, world, buttons } = environment
-  const { CENTER, HSL } = p5
   const { x, y, options, textSettings, color } = settings
 
   // class properties
-  this.text = textSettings.text || ''
-  this.address = textSettings.address
-  this.dimensions = setTextDimensions(p5, textSettings)
-  this.options = options
-  this.body = Bodies.rectangle(x, y, this.dimensions.w, this.dimensions.h, this.options)
-  this.color = color || {
-    hue: 0,
-    saturation: 0,
-    lightness: 94,
+  this.config = {
+    p5,
+    textSettings,
+    color: color || {
+      hue: 0,
+      saturation: 0,
+      lightness: 94,
+    },
+    alignment: {
+      horizontal: p5.CENTER,
+      vertical: p5.CENTER
+    },
+    shape: 'rect'
   }
+  this.config.dimensions = setTextDimensions(this.config)
+  this.options = options
+  this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
+  this.address = textSettings.address
   this.mouseInBounds = false
   addToWorld(world, this, buttons)
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness } = this.color
- 
     p5.push()
     transformBody(p5, this.body)
-    p5.rectMode(CENTER)
-    p5.textAlign(CENTER, CENTER)
-    p5.textSize(this.dimensions.textSize)
-    p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness)
-    p5.text(this.text, 0, 0)
-    p5.noFill()
-    p5.stroke(hue, saturation, lightness)
-    p5.rect(0, 0, this.dimensions.w + 10, this.dimensions.h + 10)
+    renderText(this.config)
+    renderOutline(this.config)
     if (this.mouseInBounds) {
-      p5.fill(0, 0, 100, 0.05)
-      p5.rect(0, 0, this.dimensions.w + 10, this.dimensions.h + 10)
+      renderHighlight(this.config)
     }
     p5.pop()
   }
 
   this.checkMouseInBounds = (mousePosition) => {
-    const vertices = this.body.vertices
-    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    if (mouseArea < this.body.area + 1) {
-      this.mouseInBounds = true
-    }
-    else {
-      this.mouseInBounds = false
-    }
+    this.mouseInBounds = checkMouseInBounds(this, mousePosition, this.config)
   }
 }
 
 export function Bubble(environment, settings) {
-  const { p5, world, bubbles, height } = environment
-  const { CENTER, HSL } = p5
-  const { x, y, options, inputText, textSize, color } = settings
-  p5.textSize(textSize || 18)
+  const { p5, world, bubbles } = environment
+  const { x, y, options, textSettings, color } = settings
 
   // class properties
-  this.text = inputText || ''
-  this.textSize = textSize
-  this.d = p5.textWidth(this.text)
-  this.options = options
-  this.body = Bodies.circle(x, y, this.d / 2, this.options)
-  this.color = color || {
-    hue: 0,
-    saturation: 0,
-    lightness: 94,
+  this.config = {
+    p5,
+    textSettings,
+    color: color || {
+      hue: 0,
+      saturation: 0,
+      lightness: 94,
+    },
+    alignment: {
+      horizontal: p5.CENTER,
+      vertical: p5.CENTER
+    },
+    shape: 'circle'
   }
+  this.config.dimensions = setTextDimensions(this.config)
+  this.options = options
+  this.body = Bodies.circle(x, y, this.config.dimensions.w / 2, this.options)
   this.mouseInBounds = false
   this.bubbleShouldPop = false
   addToWorld(world, this, bubbles)
 
   // class methods
   this.show = () => {
-    const { hue, saturation, lightness } = this.color
-
     p5.push()
     transformBody(p5, this.body)
-    p5.textAlign(CENTER, CENTER)
-    p5.textSize(this.textSize)
-    p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness)
-    p5.text(this.text, 0, 0)
-    p5.noFill()
-    p5.stroke(hue, saturation, lightness)
-    p5.ellipse(0, 0, this.d + 10)
+    renderText(this.config)
+    renderOutline(this.config)
     if (this.mouseInBounds) {
-      p5.fill(0, 0, 100, 0.05)
-      p5.ellipse(0, 0, this.d + 10)
+      renderHighlight(this.config)
     }
     p5.pop()
   }
 
   this.checkMouseInBounds = (mousePosition) => {
-    const distance = p5.dist(this.body.position.x, this.body.position.y, mousePosition.x, mousePosition.y)
-    if (distance < (this.d / 2)) {
-      this.mouseInBounds = true
-    }
-    else {
-      this.mouseInBounds = false
-    }
+    this.mouseInBounds = checkMouseInBounds(this, mousePosition, this.config)
   }
 
   this.checkBubblePop = () => {
-    if (this.body.position.y - (this.d / 2) < 10) {
-      this.bubbleShouldPop = true
-    }
-    else {
-      this.bubbleShouldPop = false
-    }
+    this.bubbleShouldPop = (this.body.position.y - (this.config.dimensions.w / 2) < 1)
   }
 }

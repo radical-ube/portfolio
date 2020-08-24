@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import {ImageBox, ParagraphBox, Button, ColorBall, Bubble} from './constructors'
+import {ColorBall, Bubble} from './constructors'
 
 const {World, Mouse, MouseConstraint} = Matter
 
@@ -134,17 +134,8 @@ export const createColorParticles = (environment) => {
   new ColorBall(environment, particleSettings)
 }
 
-// export const createProjectDescription = (environment, assets) => {
-//   const { width, height } = environment
-//   const {imageWidth, imageHeight, image, text, address} = assets
-//   const imageSettings = {
-    
-//   }
-//   new ImageBox(environment)
-// }
-
 export const createBubbles = (environment, button) => {
-  const {width, height} = environment
+  const {width} = environment
   const position = button.body.position
   const textSize = width * 0.0125
 
@@ -159,8 +150,10 @@ export const createBubbles = (environment, button) => {
         restitution: 0.8,
         isStatic: false
       },
-      inputText: value,
-      textSize
+      textSettings: {
+        text: value,
+        textSize
+      }
     })
   })
 }
@@ -173,7 +166,8 @@ export const transformBody = (p5, body) => {
   p5.rotate(angle)
 }
 
-export const setTextDimensions = (p5, textSettings) => {
+export const setTextDimensions = (config) => {
+  const {p5, textSettings} = config
   const { text, textSize, boxWidth, boxHeight } = textSettings
   p5.textSize(textSize || 18)
   return {
@@ -186,4 +180,61 @@ export const setTextDimensions = (p5, textSettings) => {
 export const addToWorld = (world, instance, container) => {
   World.add(world, instance.body)
   container.push(instance)
+}
+
+export const renderText = (config) => {
+  const {p5, textSettings, color, alignment} = config
+  const {CENTER, HSL} = p5
+  const {textSize, text, boxWidth, boxHeight} = textSettings
+  const {hue, saturation, lightness} = color
+
+  p5.rectMode(CENTER)
+  p5.textAlign(alignment.horizontal, alignment.vertical)
+  p5.textSize(textSize)
+  p5.colorMode(HSL)
+  p5.fill(hue, saturation, lightness)
+  if (boxWidth && boxHeight) {
+    p5.text(text, 0, 0, boxWidth, boxHeight)
+  }
+  else {
+    p5.text(text, 0, 0)
+  }
+}
+
+export const renderOutline = (config) => {
+  const {p5, color, dimensions, shape} = config
+  const { hue, saturation, lightness } = color
+  p5.noFill()
+  p5.stroke(hue, saturation, lightness)
+  if (shape === 'rect') {
+    p5.rect(0, 0, dimensions.w + 10, dimensions.h + 10)
+  }
+  else if (shape === 'circle') {
+    p5.ellipse(0, 0, dimensions.w + 10)
+  }
+}
+
+export const renderHighlight = (config) => {
+  const {p5, dimensions, shape} = config
+  p5.fill(0, 0, 100, 0.05)
+  if (shape === 'rect') {
+    p5.rect(0, 0, dimensions.w + 10, dimensions.h + 10)
+  }
+  else if (shape === 'circle') {
+    p5.ellipse(0, 0, dimensions.w + 10)
+  }
+}
+
+export const checkMouseInBounds = (instance, mousePosition, config) => {
+  const {p5, shape} = config
+  const {body} = instance
+  if (shape === 'rect') {
+    const vertices = body.vertices
+    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
+    return (mouseArea < body.area + 1)
+  }
+  else if (shape === 'circle') {
+    const distance = p5.dist(body.position.x, body.position.y, mousePosition.x, mousePosition.y)
+    return (distance < instance.config.dimensions.w / 2)
+  }
 }

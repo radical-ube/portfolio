@@ -31,7 +31,7 @@ const Navbar = props => {
     const handleClick = () => {
       environment.buttons.forEach(button => {
         if (button.mouseInBounds) {
-          setCurrentPage(button.text)
+          setCurrentPage(button.config.textSettings.text)
         }
       })
     }
