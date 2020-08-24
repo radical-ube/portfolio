@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { setTextDimensions, transformBody, addToWorld, renderText, renderOutline, renderHighlight, checkMouseInBounds } from './utils'
+import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, checkMouseInBounds, defaultColor } from './utils'
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
@@ -25,11 +25,7 @@ export function TextBox(environment, settings) {
   this.config = {
     p5,
     textSettings,
-    color: color || {
-      hue: 0,
-      saturation: 0,
-      lightness: 94,
-    },
+    color: color || defaultColor,
     alignment: {
       horizontal: p5.CENTER,
       vertical: p5.CENTER
@@ -58,11 +54,7 @@ export function ParagraphBox(environment, settings) {
   this.config = {
     p5,
     textSettings,
-    color: color || {
-      hue: 0,
-      saturation: 0,
-      lightness: 94
-    },
+    color: color || defaultColor,
     alignment: {
       horizontal: p5.LEFT,
       vertical: p5.TOP
@@ -84,15 +76,19 @@ export function ParagraphBox(environment, settings) {
 
 export function ImageBox(environment, settings) {
   const { p5, world, bodies } = environment
-  const { CENTER } = p5
   const { x, y, image, width, height, options, address } = settings
 
   // class properties
-  this.image = image
-  this.w = width
-  this.h = height
+  this.config = {
+    p5,
+    image,
+    dimensions: {
+      w: width,
+      h: height
+    }
+  }
   this.options = options
-  this.body = Bodies.rectangle(x, y, this.w, this.h, this.options)
+  this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
   this.address = address
   addToWorld(world, this, bodies)
 
@@ -100,9 +96,7 @@ export function ImageBox(environment, settings) {
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    p5.rectMode(CENTER)
-    p5.imageMode(CENTER)
-    p5.image(this.image, 0, 0, this.w, this.h)
+    renderImage(this.config)
     p5.pop()
   }
 }
@@ -137,11 +131,7 @@ export function ColorBall(environment, settings) {
 
   this.r = r
   this.options = options
-  this.color = color || {
-    hue: 0,
-    saturation: 0,
-    lightness: 100
-  }
+  this.color = color || defaultColor
   this.body = Bodies.circle(x, y, this.r, this.options)
   if (particles.length < 200) {
     addToWorld(world, this, particles)
@@ -175,11 +165,7 @@ export function Button(environment, settings) {
   this.config = {
     p5,
     textSettings,
-    color: color || {
-      hue: 0,
-      saturation: 0,
-      lightness: 94,
-    },
+    color: color || defaultColor,
     alignment: {
       horizontal: p5.CENTER,
       vertical: p5.CENTER
@@ -188,7 +174,7 @@ export function Button(environment, settings) {
   }
   this.config.dimensions = setTextDimensions(this.config)
   this.options = options
-  this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
+  this.body = Bodies.rectangle(x, y, this.config.dimensions.w + this.config.dimensions.padding, this.config.dimensions.h + this.config.dimensions.padding, this.options)
   this.address = textSettings.address
   this.mouseInBounds = false
   addToWorld(world, this, buttons)
@@ -218,11 +204,7 @@ export function Bubble(environment, settings) {
   this.config = {
     p5,
     textSettings,
-    color: color || {
-      hue: 0,
-      saturation: 0,
-      lightness: 94,
-    },
+    color: color || defaultColor,
     alignment: {
       horizontal: p5.CENTER,
       vertical: p5.CENTER

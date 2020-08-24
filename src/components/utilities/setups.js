@@ -13,7 +13,7 @@ export const setupFrame = environment => {
 
 export const setupNav = (environment) => {
   const { width, height, tabs, buttons } = environment
-  let textSize = height / 3
+  let textSize = height / 2.85
   let x = width / (tabs.length + 1)
   let y = height * 0.5
   let stiffness = 0.6
@@ -32,7 +32,6 @@ export const setupNav = (environment) => {
     let buttonSettings = {
       x: x + (40 * i),
       y,
-      // inputText: tabs[i],
       options: {
         friction: 0.4,
         restitution: 0.8,
@@ -42,7 +41,6 @@ export const setupNav = (environment) => {
         textSize,
         text: tabs[i]
       },
-      // textSize,
       color: randomColor()
     }
     let button = new Button(environment, buttonSettings)

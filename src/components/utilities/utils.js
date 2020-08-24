@@ -12,24 +12,24 @@ const getRandomInt = (min, max) => {
 
 export const getRedColor = () => {
   return {
-    hue: getRandomInt(344, 352),
-    saturation: getRandomInt(85, 101),
-    lightness: getRandomInt(48, 55),
+    hue: getRandomInt(347, 353),
+    saturation: getRandomInt(150, 201),
+    lightness: getRandomInt(47, 51),
   }
 }
 
 export const getOrangeColor = () => {
   return {
     hue: getRandomInt(20, 28),
-    saturation: getRandomInt(90, 101),
-    lightness: getRandomInt(45, 52),
+    saturation: getRandomInt(150, 256),
+    lightness: getRandomInt(50, 61),
   }
 }
 
 export const getYellowColor = () => {
   return {
     hue: getRandomInt(47, 58),
-    saturation: getRandomInt(85, 101),
+    saturation: getRandomInt(150, 256),
     lightness: getRandomInt(52, 60),
   }
 }
@@ -37,23 +37,23 @@ export const getYellowColor = () => {
 export const getGreenColor = () => {
   return {
     hue: getRandomInt(112, 128),
-    saturation: getRandomInt(47, 55),
-    lightness: getRandomInt(38, 42),
+    saturation: getRandomInt(200, 256),
+    lightness: getRandomInt(35, 38),
   }
 }
 
 export const getBlueColor = () => {
   return {
     hue: getRandomInt(223, 240),
-    saturation: getRandomInt(75, 90),
-    lightness: getRandomInt(56, 58),
+    saturation: getRandomInt(150, 201),
+    lightness: getRandomInt(64, 68),
   }
 }
 
 export const getPurpleColor = () => {
   return {
-    hue: getRandomInt(268, 288),
-    saturation: getRandomInt(80, 95),
+    hue: getRandomInt(270, 283),
+    saturation: getRandomInt(175, 226),
     lightness: getRandomInt(52, 58),
   }
 }
@@ -74,6 +74,12 @@ export const randomColor = () => {
     case 6:
       return getPurpleColor()
   }
+}
+
+export const defaultColor = {
+  hue: 0,
+  saturation: 0,
+  lightness: 94
 }
 
 export const areaFromPoints = (position, vertices, p5) => {
@@ -166,23 +172,25 @@ export const transformBody = (p5, body) => {
   p5.rotate(angle)
 }
 
-export const setTextDimensions = (config) => {
+export const setTextDimensions = config => {
   const {p5, textSettings} = config
-  const { text, textSize, boxWidth, boxHeight } = textSettings
+  const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   p5.textSize(textSize || 18)
   return {
     textSize: textSize,
     w: boxWidth || p5.textWidth(text),
-    h: boxHeight || p5.textAscent(text)
+    h: boxHeight || p5.textAscent(text),
+    padding: padding || 10
   }
 }
 
 export const addToWorld = (world, instance, container) => {
   World.add(world, instance.body)
   container.push(instance)
+  instance.index = container.length - 1
 }
 
-export const renderText = (config) => {
+export const renderText = config => {
   const {p5, textSettings, color, alignment} = config
   const {CENTER, HSL} = p5
   const {textSize, text, boxWidth, boxHeight} = textSettings
@@ -201,27 +209,35 @@ export const renderText = (config) => {
   }
 }
 
-export const renderOutline = (config) => {
+export const renderImage = config => {
+  const {p5, image, dimensions} = config
+  const {CENTER} = p5
+
+  p5.imageMode(CENTER)
+  p5.image(image, 0, 0, dimensions.w, dimensions.h)
+}
+
+export const renderOutline = config => {
   const {p5, color, dimensions, shape} = config
   const { hue, saturation, lightness } = color
   p5.noFill()
   p5.stroke(hue, saturation, lightness)
   if (shape === 'rect') {
-    p5.rect(0, 0, dimensions.w + 10, dimensions.h + 10)
+    p5.rect(0, 0, dimensions.w + dimensions.padding, dimensions.h + dimensions.padding)
   }
   else if (shape === 'circle') {
-    p5.ellipse(0, 0, dimensions.w + 10)
+    p5.ellipse(0, 0, dimensions.w + dimensions.padding)
   }
 }
 
-export const renderHighlight = (config) => {
+export const renderHighlight = config => {
   const {p5, dimensions, shape} = config
   p5.fill(0, 0, 100, 0.05)
   if (shape === 'rect') {
-    p5.rect(0, 0, dimensions.w + 10, dimensions.h + 10)
+    p5.rect(0, 0, dimensions.w + dimensions.padding, dimensions.h + dimensions.padding)
   }
   else if (shape === 'circle') {
-    p5.ellipse(0, 0, dimensions.w + 10)
+    p5.ellipse(0, 0, dimensions.w + dimensions.padding)
   }
 }
 
@@ -238,3 +254,5 @@ export const checkMouseInBounds = (instance, mousePosition, config) => {
     return (distance < instance.config.dimensions.w / 2)
   }
 }
+
+
