@@ -1,4 +1,4 @@
-import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button, Bubble } from './constructors'
+import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button } from './constructors'
 import { randomColor } from './utils'
 
 
@@ -13,7 +13,7 @@ export const setupFrame = environment => {
 
 export const setupNav = (environment) => {
   const { width, height, tabs, buttons } = environment
-  let textSize = height / 3
+  let textSize = height / 2.85
   let x = width / (tabs.length + 1)
   let y = height * 0.5
   let stiffness = 0.6
@@ -23,7 +23,8 @@ export const setupNav = (environment) => {
     y,
     options: {
       isStatic: true
-    }
+    },
+    textSettings: {}
   })
   let prevElement = end1
 
@@ -31,13 +32,15 @@ export const setupNav = (environment) => {
     let buttonSettings = {
       x: x + (40 * i),
       y,
-      inputText: tabs[i],
       options: {
         friction: 0.4,
         restitution: 0.8,
         isStatic: false
       },
-      textSize,
+      textSettings: {
+        textSize,
+        text: tabs[i]
+      },
       color: randomColor()
     }
     let button = new Button(environment, buttonSettings)
@@ -57,7 +60,8 @@ export const setupNav = (environment) => {
     y,
     options: {
       isStatic: true
-    }
+    },
+    textSettings: {}
   })
   new Spring(environment, {
     bodyA: buttons[buttons.length - 1].body,
@@ -82,14 +86,16 @@ export const setupHome = (environment) => {
       }
 
       const settings = {
-        textSize,
         x,
         y,
-        inputText: word,
         options: {
           friction: 0.4,
           restitution: 0.8,
           isStatic: false
+        },
+        textSettings: {
+          textSize,
+          text: word
         },
         color: randomColor()
       }
@@ -105,14 +111,16 @@ export const setupHome = (environment) => {
       let y = height * 0.2 + (index * textSize)
 
       const settings = {
-        textSize,
         x,
         y,
-        inputText: word,
         options: {
           friction: 0.4,
           restitution: 0.8,
           isStatic: false
+        },
+        textSettings: {
+          textSize,
+          text: word
         },
         color: randomColor()
       }
@@ -154,10 +162,12 @@ export const setupAbout = (environment) => {
         isStatic: true,
         angle
       },
-      inputText: text,
-      textSize,
-      boxWidth,
-      boxHeight
+      textSettings: {
+        textSize,
+        text,
+        boxWidth,
+        boxHeight
+      }
     })
   })
 
@@ -190,10 +200,12 @@ export const setupProjects = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: rainbowText,
-    textSize,
-    boxWidth: imageWidth,
-    boxHeight: imageHeight / 2,
+    textSettings: {
+      textSize,
+      text: rainbowText,
+      boxWidth: imageWidth,
+      boxHeight: imageHeight / 2
+    }
   })
 
   const rainbowWebButton = new Button(environment, {
@@ -202,9 +214,11 @@ export const setupProjects = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: 'website',
-    address: 'https://rainbow-on-me.herokuapp.com/rainbow',
-    textSize
+    textSettings: {
+      text: 'website',
+      address: 'https://rainbow-on-me.herokuapp.com/rainbow',
+      textSize
+    }
   })
 
   const rainbowGithubButton = new Button(environment, {
@@ -213,9 +227,11 @@ export const setupProjects = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: 'github',
-    address: 'https://github.com/radical-ube/stackathon',
-    textSize
+    textSettings: {
+      text: 'github',
+      address: 'https://github.com/radical-ube/stackathon',
+      textSize
+    }
   })
 
   const ekopiqueImage = new ImageBox(environment, {
@@ -237,10 +253,12 @@ export const setupProjects = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: ekopiqueText,
-    textSize,
-    boxWidth: imageWidth,
-    boxHeight: imageHeight / 2,
+    textSettings: {
+      textSize,
+      text: ekopiqueText,
+      boxWidth: imageWidth,
+      boxHeight: imageHeight / 2
+    }
   })
 
   const ekopiqueWebButton = new Button(environment, {
@@ -249,9 +267,11 @@ export const setupProjects = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: 'website',
-    address: 'https://ekopique.herokuapp.com',
-    textSize
+    textSettings: {
+      text: 'website',
+      address: 'https://ekopique.herokuapp.com',
+      textSize
+    }
   })
 
   const ekopiqueGithubButton = new Button(environment, {
@@ -260,9 +280,11 @@ export const setupProjects = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: 'github',
-    address: 'https://github.com/2004-wdf-capstone-d/capstone-spotify',
-    textSize
+    textSettings: {
+      text: 'github',
+      address: 'https://github.com/2004-wdf-capstone-d/capstone-spotify',
+      textSize
+    }
   })
 }
 
@@ -293,7 +315,7 @@ export const setupExperience = (environment) => {
   ]
 
   let xCreds = width / (credentials.length + 1) / 2
-  let bubbleSize = width * 0.0125
+  let bubbleSize = width * 0.015
 
   credentials.forEach((credential, index) => {
     const button = new Button(environment, {
@@ -302,8 +324,10 @@ export const setupExperience = (environment) => {
       options: {
         isStatic: true
       },
-      inputText: credential.type,
-      textSize: bubbleSize,
+      textSettings: {
+        text: credential.type,
+        textSize: bubbleSize,
+      }
     })
     button.values = credential.values
   })
@@ -321,10 +345,10 @@ export const setupExperience = (environment) => {
       type: 'learning',
       values: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
     },
-    {
-      type: 'resume',
-      address: './Ube.Halaya.pdf'
-    }
+    // {
+    //   type: 'resume',
+    //   address: './Ube.Halaya.pdf'
+    // }
   ]
 
   let xSkills = (width / (skills.length + 1) / 2)
@@ -336,8 +360,10 @@ export const setupExperience = (environment) => {
       options: {
         isStatic: true
       },
-      inputText: skill.type,
-      textSize: bubbleSize,
+      textSettings: {
+        text: skill.type,
+        textSize: bubbleSize,
+      }
     })
     if (skill.values) button.values = skill.values
     if (skill.address) button.address = skill.address
@@ -350,8 +376,10 @@ export const setupExperience = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: 'technologies',
-    textSize: headerSize1
+    textSettings: {
+      textSize: headerSize1,
+      text: 'technologies'
+    }
   })
 
   new TextBox(environment, {
@@ -360,8 +388,10 @@ export const setupExperience = (environment) => {
     options: {
       isStatic: true
     },
-    inputText: 'values and skills',
-    textSize: headerSize1
+    textSettings: {
+      textSize: headerSize1,
+      text: 'values and skills'
+    }
   })
 
 }
@@ -375,13 +405,15 @@ export const setupContact = (environment) => {
     const settings = {
       x: width * 0.3,
       y: height * 0.2 + (index * 100),
-      inputText: word,
       options: {
         friction: 0.4,
         restitution: 0.8,
         isStatic: false
       },
-      textSize: contactTextSize,
+      textSettings: {
+        text: word,
+        textSize: contactTextSize
+      },
       color: randomColor()
     }
 
@@ -393,7 +425,8 @@ export const setupContact = (environment) => {
     y: 0,
     options: {
       isStatic: true
-    }
+    },
+    textSettings: {}
   })
 
   let socials = ['github: radical-ube', 'instagram: @radical_ube', 'linkedIn: in/ube-halaya', 'email: eli.tamondong@gmail.com']
@@ -416,9 +449,11 @@ export const setupContact = (environment) => {
         restitution: 0.7,
         isStatic: false
       },
-      inputText: social,
-      address: socialAddresses[i],
-      textSize: buttonTextSize,
+      textSettings: {
+        text: social,
+        address: socialAddresses[i],
+        textSize: buttonTextSize,
+      },
       color: randomColor()
     }
     let button = new Button(environment, buttonSettings)
