@@ -21,7 +21,7 @@ export const getRedColor = () => {
 export const getOrangeColor = () => {
   return {
     hue: getRandomInt(20, 28),
-    saturation: getRandomInt(150, 256),
+    saturation: getRandomInt(200, 256),
     lightness: getRandomInt(50, 61),
   }
 }
@@ -29,7 +29,7 @@ export const getOrangeColor = () => {
 export const getYellowColor = () => {
   return {
     hue: getRandomInt(47, 58),
-    saturation: getRandomInt(150, 256),
+    saturation: getRandomInt(200, 256),
     lightness: getRandomInt(52, 60),
   }
 }
@@ -37,7 +37,7 @@ export const getYellowColor = () => {
 export const getGreenColor = () => {
   return {
     hue: getRandomInt(112, 128),
-    saturation: getRandomInt(200, 256),
+    saturation: getRandomInt(210, 251),
     lightness: getRandomInt(35, 38),
   }
 }
@@ -45,15 +45,15 @@ export const getGreenColor = () => {
 export const getBlueColor = () => {
   return {
     hue: getRandomInt(223, 240),
-    saturation: getRandomInt(150, 201),
-    lightness: getRandomInt(64, 68),
+    saturation: getRandomInt(210, 241),
+    lightness: getRandomInt(58, 61),
   }
 }
 
 export const getPurpleColor = () => {
   return {
-    hue: getRandomInt(270, 283),
-    saturation: getRandomInt(175, 226),
+    hue: getRandomInt(277, 286),
+    saturation: getRandomInt(210, 246),
     lightness: getRandomInt(52, 58),
   }
 }
