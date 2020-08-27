@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupExperience, createBubbles } from '../utilities'
+import { setupFrame, resetPageFrame, setupExperience, createBubbles } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -21,6 +21,7 @@ const Experience = props => {
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
       bodies: [],
+      boundaries: [],
       buttons: [],
       bubbles: []
     }
@@ -78,6 +79,10 @@ const Experience = props => {
           index--
         }
       }
+    }
+    p5.windowResized = () => {
+      resetPageFrame(environment)
+      setupFrame(environment)
     }
 
   }

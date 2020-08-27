@@ -3,12 +3,34 @@ import { randomColor } from './utils'
 
 
 export const setupFrame = environment => {
-  const { world, width, height } = environment
+  const { width, height } = environment
 
-  new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground', world)
-  new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling', world)
-  new Boundary(width * -1, height / 2, width * 2, height, 'leftwall', world)
-  new Boundary(width * 2, height / 2, width * 2, height, 'rightwall', world)
+  new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground', environment)
+  new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling', environment)
+  new Boundary(width * -1, height / 2, width * 2, height, 'leftwall', environment)
+  new Boundary(width * 2, height / 2, width * 2, height, 'rightwall', environment)
+}
+
+export const resetPageFrame = environment => {
+  const {p5} = environment
+  environment.width = window.innerWidth
+  environment.height = window.innerHeight * 0.85
+  p5.resizeCanvas(environment.width, environment.height)
+  environment.boundaries.forEach(boundary => {
+    boundary.remove()
+  })
+  environment.boundaries.splice(0, 1)
+}
+
+export const resetNavFrame = environment => {
+  const {p5} = environment
+  environment.width = window.innerWidth
+  environment.height = window.innerHeight * 0.15
+  p5.resizeCanvas(environment.width, environment.height)
+  environment.boundaries.forEach(boundary => {
+    boundary.remove()
+  })
+  environment.boundaries.splice(0, 1)
 }
 
 export const setupNav = (environment) => {

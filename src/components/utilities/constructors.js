@@ -3,7 +3,8 @@ import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, 
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
-export function Boundary(x, y, w, h, label, world) {
+export function Boundary(x, y, w, h, label, environment) {
+  const {world, boundaries} = environment
   const options = {
     friction: 0.3,
     restitution: 1,
@@ -13,8 +14,11 @@ export function Boundary(x, y, w, h, label, world) {
   this.body = Bodies.rectangle(x, y, w, h, options)
   this.w = w
   this.h = h
+  addToWorld(world, this, boundaries)
 
-  World.add(world, this.body)
+  this.remove = () => {
+    World.remove(world, this.body)
+  }
 }
 
 export function TextBox(environment, settings) {

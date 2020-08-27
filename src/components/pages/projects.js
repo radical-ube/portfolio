@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupProjects } from '../utilities'
+import { setupFrame, resetPageFrame, setupProjects } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -21,6 +21,7 @@ const Projects = props => {
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
       bodies: [],
+      boundaries: [],
       images: {},
       buttons: []
     }
@@ -59,6 +60,10 @@ const Projects = props => {
         button.show()
         button.checkMouseInBounds(mousePosition)
       })
+    }
+    p5.windowResized = () => {
+      resetPageFrame(environment)
+      setupFrame(environment)
     }
   }
 
