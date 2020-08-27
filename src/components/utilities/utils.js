@@ -255,4 +255,32 @@ export const checkMouseInBounds = (instance, mousePosition, config) => {
   }
 }
 
+export const manageParticleRender = array => {
+  for (let i = 0; i < array.length; i++) {
+    let particle = array[i]
+    particle.show()
+    if (particle.isBelowLine()) {
+      particle.remove()
+      array.splice(i, 1)
+      i--
+    }
+  }
+}
+
+export const manageBubbleRender = (array, mousePosition) => {
+  for (let i = 0; i < array.length; i++) {
+    let bubble = array[i]
+    bubble.show()
+    bubble.checkMouseInBounds(mousePosition)
+    bubble.checkBubblePop()
+    if (bubble.bubbleShouldPop) {
+      bubble.remove()
+      array.splice(i, 1)
+      i--
+    }
+  }
+}
+
+
+
 

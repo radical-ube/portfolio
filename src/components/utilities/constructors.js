@@ -241,4 +241,8 @@ export function Bubble(environment, settings) {
   this.checkBubblePop = () => {
     this.bubbleShouldPop = (this.body.position.y - (this.config.dimensions.w / 2) < 1)
   }
+
+  this.remove = () => {
+    World.remove(world, this.body)
+  }
 }
