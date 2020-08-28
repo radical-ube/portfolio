@@ -292,7 +292,6 @@ export const setupExperience = (environment) => {
         text: credential.type,
         textSize: bubbleSize,
       },
-      // color: randomColor()
     })
     button.values = credential.values
   })
