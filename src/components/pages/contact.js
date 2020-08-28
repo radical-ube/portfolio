@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupContact, createMouseConstraint } from '../utilities'
+import { setupFrame, resetPageFrame, setupContact, createMouseConstraint } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -21,6 +21,7 @@ const Contact = props => {
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
       bodies: [],
+      boundaries: [],
       constraints: [],
       buttons: []
     }
@@ -59,6 +60,10 @@ const Contact = props => {
         button.show()
         button.checkMouseInBounds(mousePosition)
       })
+    }
+    p5.windowResized = () => {
+      resetPageFrame(environment)
+      setupFrame(environment)
     }
 
   }

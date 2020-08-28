@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupHome, createMouseConstraint } from '../utilities'
+import { setupFrame, resetPageFrame, setupHome, createMouseConstraint } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -20,7 +20,8 @@ const Home = props => {
       world,
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
-      bodies: []
+      bodies: [],
+      boundaries: []
     }
 
     p5.setup = () => {
@@ -39,9 +40,8 @@ const Home = props => {
       })
     }
     p5.windowResized = () => {
-      environment.width = window.innerWidth
-      environment.height = window.innerHeight * 0.85
-      p5.resizeCanvas(environment.width, environment.height)
+      resetPageFrame(environment)
+      setupFrame(environment)
     }
   }
 

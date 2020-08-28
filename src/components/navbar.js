@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupNav } from './utilities'
+import { setupFrame, resetNavFrame, setupNav } from './utilities'
 import { setCurrentPage } from '../store/page'
 
 const { Engine, World } = Matter
@@ -23,6 +23,7 @@ const Navbar = props => {
       width: window.innerWidth,
       height: window.innerHeight * 0.15,
       bodies: [],
+      boundaries: [],
       constraints: [],
       tabs: ['home', 'about', 'projects', 'experience', 'contact'],
       buttons: []
@@ -57,9 +58,8 @@ const Navbar = props => {
       })
     }
     p5.windowResized = () => {
-      environment.width = window.innerWidth
-      environment.height = window.innerHeight * 0.15
-      p5.resizeCanvas(environment.width, environment.height)
+      resetNavFrame(environment)
+      setupFrame(environment)
     }
   }
 

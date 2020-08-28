@@ -1,19 +1,41 @@
-import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button } from './constructors'
+import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button, Project } from './constructors'
 import { randomColor } from './utils'
 
 
 export const setupFrame = environment => {
-  const { world, width, height } = environment
+  const { width, height } = environment
 
-  new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground', world)
-  new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling', world)
-  new Boundary(width * -1, height / 2, width * 2, height, 'leftwall', world)
-  new Boundary(width * 2, height / 2, width * 2, height, 'rightwall', world)
+  new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground', environment)
+  new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling', environment)
+  new Boundary(width * -1, height / 2, width * 2, height, 'leftwall', environment)
+  new Boundary(width * 2, height / 2, width * 2, height, 'rightwall', environment)
+}
+
+export const resetPageFrame = environment => {
+  const {p5} = environment
+  environment.width = window.innerWidth
+  environment.height = window.innerHeight * 0.85
+  p5.resizeCanvas(environment.width, environment.height)
+  environment.boundaries.forEach(boundary => {
+    boundary.remove()
+  })
+  environment.boundaries.splice(0, 1)
+}
+
+export const resetNavFrame = environment => {
+  const {p5} = environment
+  environment.width = window.innerWidth
+  environment.height = window.innerHeight * 0.15
+  p5.resizeCanvas(environment.width, environment.height)
+  environment.boundaries.forEach(boundary => {
+    boundary.remove()
+  })
+  environment.boundaries.splice(0, 1)
 }
 
 export const setupNav = (environment) => {
   const { width, height, tabs, buttons } = environment
-  let textSize = height / 2.85
+  let textSize = width * 0.035
   let x = width / (tabs.length + 1)
   let y = height * 0.5
   let stiffness = 0.6
@@ -177,115 +199,45 @@ export const setupProjects = (environment) => {
   const { width, height, images } = environment
   const { rainbow, ekopique } = images
 
-  const imageWidth = width * 0.375
+  const imageWidth = width * 0.8
   const imageHeight = imageWidth * (9 / 16)
   const textSize = width * 0.015
 
-  const rainbowImage = new ImageBox(environment, {
-    x: width * 0.3,
-    y: (height * 0.25),
-    image: rainbow,
-    width: imageWidth,
-    height: imageHeight,
-    options: {
-      isStatic: true
-    }
-  })
-
   let rainbowText = 'Rainbow On Me was a 2-day hack-a-thon style project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.'
+  let rainbowAddress = 'https://rainbow-on-me.herokuapp.com/rainbow'
+  let rainbowGithub = 'https://github.com/radical-ube/stackathon'
 
-  const rainbowDescription = new ParagraphBox(environment, {
-    x: width * 0.7,
-    y: (height * 0.2),
-    options: {
-      isStatic: true
-    },
-    textSettings: {
-      textSize,
-      text: rainbowText,
-      boxWidth: imageWidth,
-      boxHeight: imageHeight / 2
-    }
-  })
-
-  const rainbowWebButton = new Button(environment, {
-    x: (width * 0.65),
-    y: (height * 0.35),
-    options: {
-      isStatic: true
-    },
-    textSettings: {
-      text: 'website',
-      address: 'https://rainbow-on-me.herokuapp.com/rainbow',
-      textSize
-    }
-  })
-
-  const rainbowGithubButton = new Button(environment, {
-    x: (width * 0.75),
-    y: (height * 0.35),
-    options: {
-      isStatic: true
-    },
-    textSettings: {
-      text: 'github',
-      address: 'https://github.com/radical-ube/stackathon',
-      textSize
-    }
-  })
-
-  const ekopiqueImage = new ImageBox(environment, {
-    x: width * 0.3,
-    y: (height * 0.25) + (imageHeight * 1.05),
-    image: ekopique,
+  const rainbowProject = new Project(environment, {
+    x: width * 0.5,
+    y: height * 0.25,
     width: imageWidth,
     height: imageHeight,
-    options: {
-      isStatic: true
-    }
+    image: rainbow,
+    description: rainbowText,
+    textSize,
+    website: rainbowAddress,
+    github: rainbowGithub,
+    options: {isStatic: true}
   })
+
 
   let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how \"danceable\" your favorite songs are!'
+  let ekopiqueAddress = 'https://ekopique.herokuapp.com'
+  let ekopiqueGithub = 'https://github.com/2004-wdf-capstone-d/capstone-spotify'
 
-  const ekopiqueDescription = new ParagraphBox(environment, {
-    x: width * 0.7,
-    y: (height * 0.2) + (imageHeight * 1.05),
-    options: {
-      isStatic: true
-    },
-    textSettings: {
-      textSize,
-      text: ekopiqueText,
-      boxWidth: imageWidth,
-      boxHeight: imageHeight / 2
-    }
+  const ekopiqueProject = new Project(environment, {
+    x: width * 0.5,
+    y: height * 0.75,
+    width: imageWidth,
+    height: imageHeight,
+    image: ekopique,
+    description: ekopiqueText,
+    textSize,
+    website: ekopiqueAddress,
+    github: ekopiqueGithub,
+    options: {isStatic: true}
   })
-
-  const ekopiqueWebButton = new Button(environment, {
-    x: (width * 0.65),
-    y: (height * 0.35) + (imageHeight * 1.05),
-    options: {
-      isStatic: true
-    },
-    textSettings: {
-      text: 'website',
-      address: 'https://ekopique.herokuapp.com',
-      textSize
-    }
-  })
-
-  const ekopiqueGithubButton = new Button(environment, {
-    x: (width * 0.75),
-    y: (height * 0.35) + (imageHeight * 1.05),
-    options: {
-      isStatic: true
-    },
-    textSettings: {
-      text: 'github',
-      address: 'https://github.com/2004-wdf-capstone-d/capstone-spotify',
-      textSize
-    }
-  })
+  
 }
 
 export const setupExperience = (environment) => {
@@ -294,7 +246,7 @@ export const setupExperience = (environment) => {
   const credentials = [
     {
       type: 'languages',
-      values: ['JavaScript', 'Git', 'C#']
+      values: ['JavaScript', 'Python', 'C#']
     },
     {
       type: 'front end',
@@ -308,13 +260,25 @@ export const setupExperience = (environment) => {
       type: 'platforms',
       values: ['Github', 'Heroku', 'Netlify']
     },
+    // {
+    //   type: 'testing',
+    //   values: ['Mocha', 'Chai', 'Jasmine']
+    // }
     {
-      type: 'testing',
-      values: ['Mocha', 'Chai', 'Jasmine']
-    }
+      type: 'artistry',
+      values: ['improvise freely', 'share vulnerably', 'bold composition', 'play']
+    },
+    {
+      type: 'communication',
+      values: ['clarity', 'active listening', 'make space', 'don\'t assume']
+    },
+    {
+      type: 'learning',
+      values: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
+    },
   ]
 
-  let xCreds = width / (credentials.length + 1) / 2
+  let xCreds = width / (credentials.length + 1)
   let bubbleSize = width * 0.015
 
   credentials.forEach((credential, index) => {
@@ -327,72 +291,25 @@ export const setupExperience = (environment) => {
       textSettings: {
         text: credential.type,
         textSize: bubbleSize,
-      }
+      },
     })
     button.values = credential.values
   })
 
-  const skills = [
-    {
-      type: 'artistry',
-      values: ['improvise freely', 'share vulnerably', 'bold choices', 'play']
-    },
-    {
-      type: 'communication',
-      values: ['clarity', 'active listening', 'make space', 'don\'t assume']
-    },
-    {
-      type: 'learning',
-      values: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
-    },
-    // {
-    //   type: 'resume',
-    //   address: './Ube.Halaya.pdf'
-    // }
-  ]
-
-  let xSkills = (width / (skills.length + 1) / 2)
-
-  skills.forEach((skill, index) => {
-    const button = new Button(environment, {
-      x: xSkills + (xSkills * index) + (width / 2),
-      y: height * 0.8,
-      options: {
-        isStatic: true
-      },
-      textSettings: {
-        text: skill.type,
-        textSize: bubbleSize,
-      }
-    })
-    if (skill.values) button.values = skill.values
-    if (skill.address) button.address = skill.address
-  })
 
   let headerSize1 =  width * 0.06
   new TextBox(environment, {
-    x: width * 0.25,
+    x: width * 0.5,
     y: height * 0.9,
     options: {
       isStatic: true
     },
     textSettings: {
       textSize: headerSize1,
-      text: 'technologies'
+      text: 'technologies, values, and skills'
     }
   })
 
-  new TextBox(environment, {
-    x: width * 0.75,
-    y: height * 0.9,
-    options: {
-      isStatic: true
-    },
-    textSettings: {
-      textSize: headerSize1,
-      text: 'values and skills'
-    }
-  })
 
 }
 

@@ -1,9 +1,10 @@
 import Matter from 'matter-js'
-import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, checkMouseInBounds, defaultColor } from './utils'
+import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, checkMouseInBounds, defaultColor } from './utils'
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
-export function Boundary(x, y, w, h, label, world) {
+export function Boundary(x, y, w, h, label, environment) {
+  const { world, boundaries } = environment
   const options = {
     friction: 0.3,
     restitution: 1,
@@ -13,8 +14,11 @@ export function Boundary(x, y, w, h, label, world) {
   this.body = Bodies.rectangle(x, y, w, h, options)
   this.w = w
   this.h = h
+  addToWorld(world, this, boundaries)
 
-  World.add(world, this.body)
+  this.remove = () => {
+    World.remove(world, this.body)
+  }
 }
 
 export function TextBox(environment, settings) {
@@ -74,37 +78,84 @@ export function ParagraphBox(environment, settings) {
   }
 }
 
-export function ImageBox(environment, settings) {
-  const { p5, world, bodies } = environment
-  const { x, y, image, width, height, options, address } = settings
+export function Project(environment, settings) {
+  const { p5, world, projects, descriptions, buttons } = environment
+  const { x, y, width, height, image, description, textSize, website, github, options } = settings
 
-  // class properties
-  this.config = {
+  this.bodyConfig = {
     p5,
     image,
     dimensions: {
       w: width,
       h: height
-    }
+    },
+    shape: 'rect'
   }
-  this.options = options
-  this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
-  this.address = address
-  addToWorld(world, this, bodies)
 
-  // class methods
+  this.description = new ParagraphBox(environment, {
+    x,
+    y,
+    textSettings: {
+      text: description,
+      textSize,
+      boxWidth: width / 2,
+      boxHeight: height / 2
+    },
+    options
+  })
+
+  this.webButton = new Button(environment, {
+    x: x - 50,
+    y: y + 50,
+    textSettings: {
+      text: 'Website',
+      textSize,
+      address: website
+    },
+    options
+  })
+
+  this.githubButton = new Button(environment, {
+    x: x + 50,
+    y: y + 50,
+    textSettings: {
+      text: 'Github',
+      textSize,
+      address: github
+    },
+    options
+  })
+  
+  this.body = Bodies.rectangle(x, y, width, height, options)
+  this.mouseInBounds = false
+  addToWorld(world, this, projects)
+  addToWorld(world, this.description, descriptions)
+  addToWorld(world, this.webButton, buttons)
+  addToWorld(world, this.githubButton, buttons)
+
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    renderImage(this.config)
+    renderImage(this.bodyConfig)
+    if (this.mouseInBounds) {
+      renderLowlight(this.bodyConfig)
+    }
+    else {
+      this.webButton.remove()
+      this.githubButton.remove()
+    }
     p5.pop()
+  }
+
+  this.checkMouseInBounds = (mousePosition) => {
+    this.mouseInBounds = checkMouseInBounds(this, mousePosition, this.bodyConfig)
   }
 }
 
 export function Spring(environment, settings) {
-  const {p5, world, constraints} = environment
-  const {bodyA, bodyB, length, stiffness} = settings
-  
+  const { p5, world, constraints } = environment
+  const { bodyA, bodyB, length, stiffness } = settings
+
   this.body = Constraint.create({
     bodyA,
     bodyB,
@@ -125,9 +176,9 @@ export function Spring(environment, settings) {
 }
 
 export function ColorBall(environment, settings) {
-  const {p5, world, particles, height} = environment
-  const {HSL} = p5
-  const {x, y, r, options, color} = settings
+  const { p5, world, particles, height } = environment
+  const { HSL } = p5
+  const { x, y, r, options, color } = settings
 
   this.r = r
   this.options = options
@@ -194,6 +245,10 @@ export function Button(environment, settings) {
   this.checkMouseInBounds = (mousePosition) => {
     this.mouseInBounds = checkMouseInBounds(this, mousePosition, this.config)
   }
+
+  this.remove = () => {
+    World.remove(world, this.body)
+  }
 }
 
 export function Bubble(environment, settings) {
@@ -236,5 +291,9 @@ export function Bubble(environment, settings) {
 
   this.checkBubblePop = () => {
     this.bubbleShouldPop = (this.body.position.y - (this.config.dimensions.w / 2) < 1)
+  }
+
+  this.remove = () => {
+    World.remove(world, this.body)
   }
 }

@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupExperience, createBubbles } from '../utilities'
+import { setupFrame, resetPageFrame, setupExperience, createBubbles, manageBubbleRender } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -21,6 +21,7 @@ const Experience = props => {
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
       bodies: [],
+      boundaries: [],
       buttons: [],
       bubbles: []
     }
@@ -67,17 +68,11 @@ const Experience = props => {
         button.show()
         button.checkMouseInBounds(mousePosition)
       })
-      for (let index = 0; index < environment.bubbles.length; index++) {
-        let bubble = environment.bubbles[index]
-        bubble.show()
-        bubble.checkMouseInBounds(mousePosition)
-        bubble.checkBubblePop()
-        if (bubble.bubbleShouldPop) {
-          World.remove(world, bubble.body)
-          environment.bubbles.splice(index, 1)
-          index--
-        }
-      }
+      manageBubbleRender(environment.bubbles, mousePosition)
+    }
+    p5.windowResized = () => {
+      resetPageFrame(environment)
+      setupFrame(environment)
     }
 
   }

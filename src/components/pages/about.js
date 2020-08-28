@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, setupAbout, createColorParticles } from '../utilities'
+import { setupFrame, resetPageFrame, setupAbout, createColorParticles, manageParticleRender } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -21,6 +21,7 @@ const About = props => {
       width: window.innerWidth,
       height: window.innerHeight * 0.85,
       bodies: [],
+      boundaries: [],
       particles: []
     }
 
@@ -40,15 +41,11 @@ const About = props => {
       environment.bodies.forEach(body => {
         body.show()
       })
-      for (let i = 0; i < environment.particles.length; i++) {
-        let particle = environment.particles[i]
-        particle.show()
-        if (particle.isBelowLine()) {
-          particle.remove()
-          environment.particles.splice(i, 1)
-          i--
-        }
-      }
+      manageParticleRender(environment.particles)
+    }
+    p5.windowResized = () => {
+      resetPageFrame(environment)
+      setupFrame(environment)
     }
   }
 
