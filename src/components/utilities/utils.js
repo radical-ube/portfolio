@@ -259,7 +259,7 @@ export const renderLowlight = config => {
   const { p5, dimensions, shape } = config
   p5.colorMode(p5.HSL)
   p5.noStroke()
-  p5.fill(0, 0, 0, 0.7)
+  p5.fill(0, 0, 0, 0.8)
   if (shape === 'rect') {
     p5.rectMode(p5.CENTER)
     p5.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))

@@ -19,7 +19,7 @@ const Projects = props => {
       engine,
       world,
       width: window.innerWidth,
-      height: window.innerHeight * 0.85,
+      height: window.innerHeight * 0.85 * 2,
       bodies: [],
       boundaries: [],
       images: {},

@@ -78,33 +78,6 @@ export function ParagraphBox(environment, settings) {
   }
 }
 
-// export function ImageBox(environment, settings) {
-//   const { p5, world, bodies } = environment
-//   const { x, y, image, width, height, options, address } = settings
-
-//   // class properties
-//   this.config = {
-//     p5,
-//     image,
-//     dimensions: {
-//       w: width,
-//       h: height
-//     }
-//   }
-//   this.options = options
-//   this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
-//   this.address = address
-//   addToWorld(world, this, bodies)
-
-//   // class methods
-//   this.show = () => {
-//     p5.push()
-//     transformBody(p5, this.body)
-//     renderImage(this.config)
-//     p5.pop()
-//   }
-// }
-
 export function Project(environment, settings) {
   const { p5, world, projects, descriptions, buttons } = environment
   const { x, y, width, height, image, description, textSize, website, github, options } = settings

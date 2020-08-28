@@ -203,24 +203,13 @@ export const setupProjects = (environment) => {
   const imageHeight = imageWidth * (9 / 16)
   const textSize = width * 0.015
 
-  // const rainbowImage = new ImageBox(environment, {
-  //   x: width * 0.5,
-  //   y: (height * 0.5),
-  //   image: rainbow,
-  //   width: imageWidth,
-  //   height: imageHeight,
-  //   options: {
-  //     isStatic: true
-  //   }
-  // })
-
   let rainbowText = 'Rainbow On Me was a 2-day hack-a-thon style project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.'
   let rainbowAddress = 'https://rainbow-on-me.herokuapp.com/rainbow'
   let rainbowGithub = 'https://github.com/radical-ube/stackathon'
 
   const rainbowProject = new Project(environment, {
     x: width * 0.5,
-    y: height * 0.5,
+    y: height * 0.25,
     width: imageWidth,
     height: imageHeight,
     image: rainbow,
@@ -231,100 +220,24 @@ export const setupProjects = (environment) => {
     options: {isStatic: true}
   })
 
-  // const rainbowDescription = new ParagraphBox(environment, {
-  //   x: width * 0.7,
-  //   y: (height * 0.2),
-  //   options: {
-  //     isStatic: true
-  //   },
-  //   textSettings: {
-  //     textSize,
-  //     text: rainbowText,
-  //     boxWidth: imageWidth,
-  //     boxHeight: imageHeight / 2
-  //   }
-  // })
 
-  // const rainbowWebButton = new Button(environment, {
-  //   x: (width * 0.65),
-  //   y: (height * 0.35),
-  //   options: {
-  //     isStatic: true
-  //   },
-  //   textSettings: {
-  //     text: 'website',
-  //     address: 'https://rainbow-on-me.herokuapp.com/rainbow',
-  //     textSize
-  //   }
-  // })
+  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how \"danceable\" your favorite songs are!'
+  let ekopiqueAddress = 'https://ekopique.herokuapp.com'
+  let ekopiqueGithub = 'https://github.com/2004-wdf-capstone-d/capstone-spotify'
 
-  // const rainbowGithubButton = new Button(environment, {
-  //   x: (width * 0.75),
-  //   y: (height * 0.35),
-  //   options: {
-  //     isStatic: true
-  //   },
-  //   textSettings: {
-  //     text: 'github',
-  //     address: 'https://github.com/radical-ube/stackathon',
-  //     textSize
-  //   }
-  // })
-
-//
-
-  // const ekopiqueImage = new ImageBox(environment, {
-  //   x: width * 0.3,
-  //   y: (height * 0.25) + (imageHeight * 1.05),
-  //   image: ekopique,
-  //   width: imageWidth,
-  //   height: imageHeight,
-  //   options: {
-  //     isStatic: true
-  //   }
-  // })
-
-  // let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how \"danceable\" your favorite songs are!'
-
-  // const ekopiqueDescription = new ParagraphBox(environment, {
-  //   x: width * 0.7,
-  //   y: (height * 0.2) + (imageHeight * 1.05),
-  //   options: {
-  //     isStatic: true
-  //   },
-  //   textSettings: {
-  //     textSize,
-  //     text: ekopiqueText,
-  //     boxWidth: imageWidth,
-  //     boxHeight: imageHeight / 2
-  //   }
-  // })
-
-  // const ekopiqueWebButton = new Button(environment, {
-  //   x: (width * 0.65),
-  //   y: (height * 0.35) + (imageHeight * 1.05),
-  //   options: {
-  //     isStatic: true
-  //   },
-  //   textSettings: {
-  //     text: 'website',
-  //     address: 'https://ekopique.herokuapp.com',
-  //     textSize
-  //   }
-  // })
-
-  // const ekopiqueGithubButton = new Button(environment, {
-  //   x: (width * 0.75),
-  //   y: (height * 0.35) + (imageHeight * 1.05),
-  //   options: {
-  //     isStatic: true
-  //   },
-  //   textSettings: {
-  //     text: 'github',
-  //     address: 'https://github.com/2004-wdf-capstone-d/capstone-spotify',
-  //     textSize
-  //   }
-  // })
+  const ekopiqueProject = new Project(environment, {
+    x: width * 0.5,
+    y: height * 0.75,
+    width: imageWidth,
+    height: imageHeight,
+    image: ekopique,
+    description: ekopiqueText,
+    textSize,
+    website: ekopiqueAddress,
+    github: ekopiqueGithub,
+    options: {isStatic: true}
+  })
+  
 }
 
 export const setupExperience = (environment) => {
