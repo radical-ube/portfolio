@@ -1,13 +1,13 @@
 import Matter from 'matter-js'
-import {ColorBall, Bubble} from './constructors'
+import { ColorBall, Bubble } from './constructors'
 
-const {World, Mouse, MouseConstraint} = Matter
+const { World, Mouse, MouseConstraint } = Matter
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min)
   max = Math.floor(max)
   // The maximum is exclusive and the minimum is inclusive
-  return Math.floor(Math.random() * (max - min)) + min 
+  return Math.floor(Math.random() * (max - min)) + min
 }
 
 export const getRedColor = () => {
@@ -82,6 +82,15 @@ export const defaultColor = {
   lightness: 94
 }
 
+export const desaturateColor = (environment, color) => {
+  const { p5 } = environment
+  return {
+    hue: color.hue,
+    saturation: p5.lerp(color.saturation, defaultColor.saturation, 0.4),
+    lightness: p5.lerp(color.lightness, defaultColor.lightness, 0.2)
+  }
+}
+
 export const areaFromPoints = (position, vertices, p5) => {
   // find and sum the triangles created from position and vertices
   return vertices
@@ -124,7 +133,7 @@ export const createMouseConstraint = (canvas, engine, world, p5) => {
 }
 
 export const createColorParticles = (environment) => {
-  const {width} = environment
+  const { width } = environment
   const particleSettings = {
     x: width * 0.3,
     y: 10,
@@ -141,13 +150,13 @@ export const createColorParticles = (environment) => {
 }
 
 export const createBubbles = (environment, button) => {
-  const {width} = environment
   const position = button.body.position
-  const textSize = width * 0.0125
+  const textSize = button.config.textSettings.textSize
 
   button.values.forEach(value => {
     let x = getRandomInt(position.x - 10, position.x + 10)
-    let y = getRandomInt(position.y - 30, position.y -50)
+    let y = getRandomInt(position.y - 30, position.y - 50)
+
     new Bubble(environment, {
       x,
       y,
@@ -159,7 +168,8 @@ export const createBubbles = (environment, button) => {
       textSettings: {
         text: value,
         textSize
-      }
+      },
+      color: desaturateColor(environment, randomColor())
     })
   })
 }
@@ -173,7 +183,7 @@ export const transformBody = (p5, body) => {
 }
 
 export const setTextDimensions = config => {
-  const {p5, textSettings} = config
+  const { p5, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   p5.textSize(textSize || 18)
   return {
@@ -191,10 +201,10 @@ export const addToWorld = (world, instance, container) => {
 }
 
 export const renderText = config => {
-  const {p5, textSettings, color, alignment} = config
-  const {CENTER, HSL} = p5
-  const {textSize, text, boxWidth, boxHeight} = textSettings
-  const {hue, saturation, lightness} = color
+  const { p5, textSettings, color, alignment } = config
+  const { CENTER, HSL } = p5
+  const { textSize, text, boxWidth, boxHeight } = textSettings
+  const { hue, saturation, lightness } = color
 
   p5.rectMode(CENTER)
   p5.textAlign(alignment.horizontal, alignment.vertical)
@@ -210,16 +220,17 @@ export const renderText = config => {
 }
 
 export const renderImage = config => {
-  const {p5, image, dimensions} = config
-  const {CENTER} = p5
+  const { p5, image, dimensions } = config
+  const { CENTER } = p5
 
   p5.imageMode(CENTER)
   p5.image(image, 0, 0, dimensions.w, dimensions.h)
 }
 
 export const renderOutline = config => {
-  const {p5, color, dimensions, shape} = config
+  const { p5, color, dimensions, shape } = config
   const { hue, saturation, lightness } = color
+  p5.colorMode(p5.HSL)
   p5.noFill()
   p5.stroke(hue, saturation, lightness)
   if (shape === 'rect') {
@@ -231,10 +242,27 @@ export const renderOutline = config => {
 }
 
 export const renderHighlight = config => {
-  const {p5, dimensions, shape} = config
-  p5.fill(0, 0, 100, 0.05)
+  const { p5, dimensions, shape } = config
+  p5.colorMode(p5.HSL)
+  p5.noStroke()
+  p5.fill(0, 0, 100, 0.1)
   if (shape === 'rect') {
-    p5.rect(0, 0, dimensions.w + dimensions.padding, dimensions.h + dimensions.padding)
+    p5.rectMode(p5.CENTER)
+    p5.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
+  }
+  else if (shape === 'circle') {
+    p5.ellipse(0, 0, dimensions.w + dimensions.padding)
+  }
+}
+
+export const renderLowlight = config => {
+  const { p5, dimensions, shape } = config
+  p5.colorMode(p5.HSL)
+  p5.noStroke()
+  p5.fill(0, 0, 0, 0.7)
+  if (shape === 'rect') {
+    p5.rectMode(p5.CENTER)
+    p5.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
   }
   else if (shape === 'circle') {
     p5.ellipse(0, 0, dimensions.w + dimensions.padding)
@@ -242,8 +270,8 @@ export const renderHighlight = config => {
 }
 
 export const checkMouseInBounds = (instance, mousePosition, config) => {
-  const {p5, shape} = config
-  const {body} = instance
+  const { p5, shape } = config
+  const { body } = instance
   if (shape === 'rect') {
     const vertices = body.vertices
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)

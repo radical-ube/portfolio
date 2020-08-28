@@ -23,7 +23,9 @@ const Projects = props => {
       bodies: [],
       boundaries: [],
       images: {},
-      buttons: []
+      buttons: [],
+      descriptions: [],
+      projects: []
     }
 
     const handleClick = () => {
@@ -53,11 +55,18 @@ const Projects = props => {
         x: p5.mouseX,
         y: p5.mouseY
       }
-      environment.bodies.forEach(body => {
-        body.show()
+      environment.projects.forEach(project => {
+        project.show()
+        project.checkMouseInBounds(mousePosition)
+        if (project.mouseInBounds) {
+          project.description.show()
+          project.webButton.show()
+          project.githubButton.show()
+        }
       })
       environment.buttons.forEach(button => {
-        button.show()
+
+        // button.show()
         button.checkMouseInBounds(mousePosition)
       })
     }
