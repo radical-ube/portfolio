@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, defaultColor } from './utils'
+import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, defaultColor } from './'
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
