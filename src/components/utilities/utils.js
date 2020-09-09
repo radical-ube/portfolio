@@ -269,46 +269,65 @@ export const renderLowlight = config => {
   }
 }
 
-export const checkMouseInBounds = (instance, mousePosition, config) => {
+export const checkMouseInBounds = (instance) => {
+  const { config, body } = instance
   const { p5, shape } = config
-  const { body } = instance
+  const mousePosition = {
+    x: p5.mouseX,
+    y: p5.mouseY
+  }
   if (shape === 'rect') {
     const vertices = body.vertices
     const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    return (mouseArea < body.area + 1)
+    instance.mouseInBounds = (mouseArea < body.area + 1)
   }
   else if (shape === 'circle') {
     const distance = p5.dist(body.position.x, body.position.y, mousePosition.x, mousePosition.y)
-    return (distance < instance.config.dimensions.w / 2)
+    instance.mouseInBounds = (distance < instance.config.dimensions.w / 2)
   }
 }
 
-export const manageParticleRender = array => {
-  for (let i = 0; i < array.length; i++) {
-    let particle = array[i]
-    particle.show()
-    if (particle.isBelowLine()) {
-      particle.remove()
-      array.splice(i, 1)
-      i--
+export const checkGroupForMouse = (group) => {
+  group.forEach(instance => {
+    checkMouseInBounds(instance)
+  })
+}
+
+export const checkGroupForRemoval = (world, group) => {
+  if (group.length) {
+    for (let i = 0; i < group.length; i++) {
+      const instance = group[i]
+      if (instance.shouldBeRemoved()) {
+        World.remove(world, instance.body)
+        group.splice(i, 1)
+        i--
+      }
     }
   }
 }
 
-export const manageBubbleRender = (array, mousePosition) => {
-  for (let i = 0; i < array.length; i++) {
-    let bubble = array[i]
-    bubble.show()
-    bubble.checkMouseInBounds(mousePosition)
-    bubble.checkBubblePop()
-    if (bubble.bubbleShouldPop) {
-      bubble.remove()
-      array.splice(i, 1)
-      i--
-    }
-  }
+export const renderGroup = array => {
+  array.forEach(body => {
+    body.show()
+  })
 }
 
+export const renderGroups = groups => {
+  groups.forEach(group => {
+    group.forEach(object => {
+      object.show()
+    })
+  })
+}
 
+export const renderProjectDescription = projects => {
+  projects.forEach(project => {
+    if (project.mouseInBounds) {
+      project.description.show()
+      project.webButton.show()
+      project.githubButton.show()
+    }
+  })
+}
 
 

@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupAbout, createColorParticles, manageParticleRender } from '../utilities'
+import { setupFrame, resetPageFrame, setupAbout, createColorParticles, renderGroup, checkGroupForRemoval } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -38,10 +38,9 @@ const About = props => {
       if (p5.frameCount % 4 === 0) {
         createColorParticles(environment)
       }
-      environment.bodies.forEach(body => {
-        body.show()
-      })
-      manageParticleRender(environment.particles)
+      renderGroup(environment.bodies)
+      renderGroup(environment.particles)
+      checkGroupForRemoval(world, environment.particles)
     }
     p5.windowResized = () => {
       resetPageFrame(environment)

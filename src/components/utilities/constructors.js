@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, checkMouseInBounds, defaultColor } from './utils'
+import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, defaultColor } from './utils'
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
@@ -82,7 +82,7 @@ export function Project(environment, settings) {
   const { p5, world, projects, descriptions, buttons } = environment
   const { x, y, width, height, image, description, textSize, website, github, options } = settings
 
-  this.bodyConfig = {
+  this.config = {
     p5,
     image,
     dimensions: {
@@ -136,19 +136,11 @@ export function Project(environment, settings) {
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    renderImage(this.bodyConfig)
+    renderImage(this.config)
     if (this.mouseInBounds) {
-      renderLowlight(this.bodyConfig)
-    }
-    else {
-      this.webButton.remove()
-      this.githubButton.remove()
+      renderLowlight(this.config)
     }
     p5.pop()
-  }
-
-  this.checkMouseInBounds = (mousePosition) => {
-    this.mouseInBounds = checkMouseInBounds(this, mousePosition, this.bodyConfig)
   }
 }
 
@@ -200,11 +192,8 @@ export function ColorBall(environment, settings) {
     p5.pop()
   }
 
-  this.isBelowLine = () => {
+  this.shouldBeRemoved = () => {
     return (this.body.position.y > (height * 0.95))
-  }
-  this.remove = () => {
-    World.remove(world, this.body)
   }
 }
 
@@ -227,7 +216,6 @@ export function Button(environment, settings) {
   this.options = options
   this.body = Bodies.rectangle(x, y, this.config.dimensions.w + this.config.dimensions.padding, this.config.dimensions.h + this.config.dimensions.padding, this.options)
   this.address = textSettings.address
-  this.mouseInBounds = false
   addToWorld(world, this, buttons)
 
   // class methods
@@ -240,14 +228,6 @@ export function Button(environment, settings) {
       renderHighlight(this.config)
     }
     p5.pop()
-  }
-
-  this.checkMouseInBounds = (mousePosition) => {
-    this.mouseInBounds = checkMouseInBounds(this, mousePosition, this.config)
-  }
-
-  this.remove = () => {
-    World.remove(world, this.body)
   }
 }
 
@@ -269,8 +249,6 @@ export function Bubble(environment, settings) {
   this.config.dimensions = setTextDimensions(this.config)
   this.options = options
   this.body = Bodies.circle(x, y, this.config.dimensions.w / 2, this.options)
-  this.mouseInBounds = false
-  this.bubbleShouldPop = false
   addToWorld(world, this, bubbles)
 
   // class methods
@@ -285,15 +263,7 @@ export function Bubble(environment, settings) {
     p5.pop()
   }
 
-  this.checkMouseInBounds = (mousePosition) => {
-    this.mouseInBounds = checkMouseInBounds(this, mousePosition, this.config)
-  }
-
-  this.checkBubblePop = () => {
-    this.bubbleShouldPop = (this.body.position.y - (this.config.dimensions.w / 2) < 1)
-  }
-
-  this.remove = () => {
-    World.remove(world, this.body)
-  }
+  this.shouldBeRemoved = () => {
+    return (this.body.position.y - (this.config.dimensions.w / 2) < 1) 
+  } 
 }
