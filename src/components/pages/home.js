@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupHome, createMouseConstraint } from '../utilities'
+import { setupFrame, resetPageFrame, setupHome, createMouseConstraint, renderGroup } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -35,9 +35,7 @@ const Home = props => {
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      environment.bodies.forEach(body => {
-        body.show()
-      })
+      renderGroup(environment.bodies)
     }
     p5.windowResized = () => {
       resetPageFrame(environment)

@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupProjects } from '../utilities'
+import { setupFrame, resetPageFrame, setupProjects, renderGroup, checkGroupForMouse, renderProjectDescription } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -51,24 +51,10 @@ const Projects = props => {
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
-      }
-      environment.projects.forEach(project => {
-        project.show()
-        project.checkMouseInBounds(mousePosition)
-        if (project.mouseInBounds) {
-          project.description.show()
-          project.webButton.show()
-          project.githubButton.show()
-        }
-      })
-      environment.buttons.forEach(button => {
-
-        // button.show()
-        button.checkMouseInBounds(mousePosition)
-      })
+      renderGroup(environment.projects)
+      checkGroupForMouse(environment.projects)
+      renderProjectDescription(environment.projects)
+      checkGroupForMouse(environment.buttons)
     }
     p5.windowResized = () => {
       resetPageFrame(environment)

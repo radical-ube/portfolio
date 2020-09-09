@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupContact, createMouseConstraint } from '../utilities'
+import { setupFrame, resetPageFrame, setupContact, createMouseConstraint, renderGroup, checkGroupForMouse } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -46,26 +46,15 @@ const Contact = props => {
     p5.draw = () => {
       p5.background(bgColor)
       Engine.update(engine)
-      const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
-      }
-      environment.bodies.forEach(body => {
-        body.show()
-      })
-      environment.constraints.forEach(constraint => {
-        constraint.show()
-      })
-      environment.buttons.forEach(button => {
-        button.show()
-        button.checkMouseInBounds(mousePosition)
-      })
+      renderGroup(environment.bodies)
+      renderGroup(environment.constraints)
+      renderGroup(environment.buttons)
+      checkGroupForMouse(environment.buttons)
     }
     p5.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }
-
   }
 
   useEffect(() => {

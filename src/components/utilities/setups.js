@@ -1,5 +1,4 @@
-import { Boundary, TextBox, ParagraphBox, ImageBox, Spring, Button, Project } from './constructors'
-import { randomColor } from './utils'
+import { Boundary, TextBox, ParagraphBox, Spring, Button, Project, randomColor } from './'
 
 
 export const setupFrame = environment => {
