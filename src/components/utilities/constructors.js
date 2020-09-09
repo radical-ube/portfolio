@@ -1,5 +1,5 @@
 import Matter from 'matter-js'
-import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, defaultColor } from './'
+import { setTextDimensions, transformBody, addToWorld, drawText, drawImage, drawOutline, drawHighlight, drawLowlight, defaultColor } from './'
 
 const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
 
@@ -45,7 +45,7 @@ export function TextBox(environment, settings) {
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    renderText(this.config)
+    drawText(this.config)
     p5.pop()
   }
 }
@@ -73,7 +73,7 @@ export function ParagraphBox(environment, settings) {
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    renderText(this.config)
+    drawText(this.config)
     p5.pop()
   }
 }
@@ -136,9 +136,9 @@ export function Project(environment, settings) {
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    renderImage(this.config)
+    drawImage(this.config)
     if (this.mouseInBounds) {
-      renderLowlight(this.config)
+      drawLowlight(this.config)
     }
     p5.pop()
   }
@@ -222,10 +222,10 @@ export function Button(environment, settings) {
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    renderText(this.config)
-    renderOutline(this.config)
+    drawText(this.config)
+    drawOutline(this.config)
     if (this.mouseInBounds) {
-      renderHighlight(this.config)
+      drawHighlight(this.config)
     }
     p5.pop()
   }
@@ -255,10 +255,10 @@ export function Bubble(environment, settings) {
   this.show = () => {
     p5.push()
     transformBody(p5, this.body)
-    renderText(this.config)
-    renderOutline(this.config)
+    drawText(this.config)
+    drawOutline(this.config)
     if (this.mouseInBounds) {
-      renderHighlight(this.config)
+      drawHighlight(this.config)
     }
     p5.pop()
   }

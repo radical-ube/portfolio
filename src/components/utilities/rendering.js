@@ -18,30 +18,44 @@ export const renderProjectDescription = projects => {
   })
 }
 
-export const areaFromPoints = (position, vertices, p5) => {
+const distanceBetweenTwoPoints = (pointOne, pointTwo) => {
+  let sideOne = pointOne.x - pointTwo.x
+  let sideTwo = pointOne.y - pointTwo.y
+
+  return Math.sqrt( sideOne*sideOne + sideTwo*sideTwo )
+}
+
+const triangleFromVertices = (vertexOne, vertexTwo, vertexThree) => {
+  const sideOne = distanceBetweenTwoPoints(vertexOne, vertexTwo)
+  const sideTwo = distanceBetweenTwoPoints(vertexOne, vertexThree)
+  const sideThree = distanceBetweenTwoPoints(vertexTwo, vertexThree)
+
+  return {
+    sideOne,
+    sideTwo,
+    sideThree
+  }
+}
+
+const areaOfTriangle = triangle => {
+  const { sideOne, sideTwo, sideThree } = triangle
+  const semiPerimeter = (sideOne + sideTwo + sideThree) / 2
+
+  return Math.sqrt(semiPerimeter * (semiPerimeter - sideOne) * (semiPerimeter - sideTwo) * (semiPerimeter - sideThree))
+}
+
+const rectAreaFromVertices = (position, vertices) => {
   // find and sum the triangles created from position and vertices
   return vertices
-    // find edges of triangles
+    // find sides of triangles
     .map((vertex, index, array) => {
       let nextPointIdx = index + 1
       if (index === array.length - 1) nextPointIdx = 0
-
-      const edgeOne = p5.dist(position.x, position.y, vertex.x, vertex.y)
-      const edgeTwo = p5.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
-      const edgeThree = p5.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
-
-      return {
-        edgeOne,
-        edgeTwo,
-        edgeThree
-      }
+      return triangleFromVertices(position, vertex, array[nextPointIdx])
     })
     // find areas of triangles
-    .map((edges, index, array) => {
-      const { edgeOne, edgeTwo, edgeThree } = edges
-      const semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
-
-      return p5.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
+    .map(triangle => {
+      return areaOfTriangle(triangle)
     })
     // sum all the triangles
     .reduce((sum, curVal) => {
@@ -58,11 +72,11 @@ export const checkMouseInBounds = (instance) => {
   }
   if (shape === 'rect') {
     const vertices = body.vertices
-    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
+    const mouseArea = rectAreaFromVertices(mousePosition, vertices)
     instance.mouseInBounds = (mouseArea < body.area + 1)
   }
   else if (shape === 'circle') {
-    const distance = p5.dist(body.position.x, body.position.y, mousePosition.x, mousePosition.y)
+    const distance = distanceBetweenTwoPoints(body.position, mousePosition)
     instance.mouseInBounds = (distance < instance.config.dimensions.w / 2)
   }
 }

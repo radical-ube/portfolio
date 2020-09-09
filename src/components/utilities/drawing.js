@@ -106,7 +106,7 @@ export const transformBody = (p5, body) => {
   p5.rotate(angle)
 }
 
-export const renderText = config => {
+export const drawText = config => {
   const { p5, textSettings, color, alignment } = config
   const { CENTER, HSL } = p5
   const { textSize, text, boxWidth, boxHeight } = textSettings
@@ -125,7 +125,7 @@ export const renderText = config => {
   }
 }
 
-export const renderImage = config => {
+export const drawImage = config => {
   const { p5, image, dimensions } = config
   const { CENTER } = p5
 
@@ -133,7 +133,7 @@ export const renderImage = config => {
   p5.image(image, 0, 0, dimensions.w, dimensions.h)
 }
 
-export const renderOutline = config => {
+export const drawOutline = config => {
   const { p5, color, dimensions, shape } = config
   const { hue, saturation, lightness } = color
   p5.colorMode(p5.HSL)
@@ -147,7 +147,7 @@ export const renderOutline = config => {
   }
 }
 
-export const renderHighlight = config => {
+export const drawHighlight = config => {
   const { p5, dimensions, shape } = config
   p5.colorMode(p5.HSL)
   p5.noStroke()
@@ -161,7 +161,7 @@ export const renderHighlight = config => {
   }
 }
 
-export const renderLowlight = config => {
+export const drawLowlight = config => {
   const { p5, dimensions, shape } = config
   p5.colorMode(p5.HSL)
   p5.noStroke()
