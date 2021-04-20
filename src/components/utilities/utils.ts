@@ -1,16 +1,17 @@
 import Matter from 'matter-js'
 import { ColorBall, Bubble } from './constructors'
+import { Environment, Color, Position, Vertex, Button, Body } from '../../types'
 
 const { World, Mouse, MouseConstraint } = Matter
 
-const getRandomInt = (min, max) => {
+const getRandomInt = (min: number, max: number): number => {
   min = Math.ceil(min)
   max = Math.floor(max)
   // The maximum is exclusive and the minimum is inclusive
   return Math.floor(Math.random() * (max - min)) + min
 }
 
-export const getRedColor = () => {
+export const getRedColor = (): Color => {
   return {
     hue: getRandomInt(347, 353),
     saturation: getRandomInt(150, 201),
@@ -18,7 +19,7 @@ export const getRedColor = () => {
   }
 }
 
-export const getOrangeColor = () => {
+export const getOrangeColor = (): Color => {
   return {
     hue: getRandomInt(20, 28),
     saturation: getRandomInt(200, 256),
@@ -26,7 +27,7 @@ export const getOrangeColor = () => {
   }
 }
 
-export const getYellowColor = () => {
+export const getYellowColor = (): Color => {
   return {
     hue: getRandomInt(47, 58),
     saturation: getRandomInt(200, 256),
@@ -34,7 +35,7 @@ export const getYellowColor = () => {
   }
 }
 
-export const getGreenColor = () => {
+export const getGreenColor = (): Color => {
   return {
     hue: getRandomInt(112, 128),
     saturation: getRandomInt(210, 251),
@@ -42,7 +43,7 @@ export const getGreenColor = () => {
   }
 }
 
-export const getBlueColor = () => {
+export const getBlueColor = (): Color => {
   return {
     hue: getRandomInt(223, 240),
     saturation: getRandomInt(210, 241),
@@ -50,7 +51,7 @@ export const getBlueColor = () => {
   }
 }
 
-export const getPurpleColor = () => {
+export const getPurpleColor = (): Color => {
   return {
     hue: getRandomInt(277, 286),
     saturation: getRandomInt(210, 246),
@@ -58,7 +59,7 @@ export const getPurpleColor = () => {
   }
 }
 
-export const randomColor = () => {
+export const randomColor = (): Color => {
   let choice = getRandomInt(1, 7)
   switch (choice) {
     case 1:
@@ -73,16 +74,22 @@ export const randomColor = () => {
       return getBlueColor()
     case 6:
       return getPurpleColor()
+    default:
+      return {
+        hue: 0,
+        saturation: 0,
+        lightness: 0
+      }
   }
 }
 
-export const defaultColor = {
+export const defaultColor: Color = {
   hue: 0,
   saturation: 0,
   lightness: 94
 }
 
-export const desaturateColor = (environment, color) => {
+export const desaturateColor = (environment: Environment, color: Color): Color => {
   const { p5 } = environment
   return {
     hue: color.hue,
@@ -91,7 +98,7 @@ export const desaturateColor = (environment, color) => {
   }
 }
 
-export const areaFromPoints = (position, vertices, p5) => {
+export const areaFromPoints = (position: Position, vertices: Vertex[], p5: any) => {
   // find and sum the triangles created from position and vertices
   return vertices
     // find edges of triangles
@@ -110,7 +117,7 @@ export const areaFromPoints = (position, vertices, p5) => {
       }
     })
     // find areas of triangles
-    .map((edges, index, array) => {
+    .map((edges) => {
       const { edgeOne, edgeTwo, edgeThree } = edges
       const semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
 
@@ -122,7 +129,7 @@ export const areaFromPoints = (position, vertices, p5) => {
     }, 0)
 }
 
-export const createMouseConstraint = (canvas, engine, world, p5) => {
+export const createMouseConstraint = (canvas: any, engine: any, world: any, p5: any) => {
   const mouse = Mouse.create(canvas.elt)
   mouse.pixelRatio = p5.pixelDensity()
   const mouseOptions = {
@@ -132,7 +139,7 @@ export const createMouseConstraint = (canvas, engine, world, p5) => {
   World.add(world, mouseConstraint)
 }
 
-export const createColorParticles = (environment) => {
+export const createColorParticles = (environment: Environment) => {
   const { width } = environment
   const particleSettings = {
     x: width * 0.3,
@@ -149,7 +156,7 @@ export const createColorParticles = (environment) => {
   new ColorBall(environment, particleSettings)
 }
 
-export const createBubbles = (environment, button) => {
+export const createBubbles = (environment: Environment, button: Button) => {
   const position = button.body.position
   const textSize = button.config.textSettings.textSize
 
@@ -174,7 +181,7 @@ export const createBubbles = (environment, button) => {
   })
 }
 
-export const transformBody = (p5, body) => {
+export const transformBody = (p5: any, body: Body) => {
   const position = body.position
   const angle = body.angle
 
@@ -182,7 +189,7 @@ export const transformBody = (p5, body) => {
   p5.rotate(angle)
 }
 
-export const setTextDimensions = config => {
+export const setTextDimensions = (config: any) => {
   const { p5, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   p5.textSize(textSize || 18)
@@ -194,13 +201,13 @@ export const setTextDimensions = config => {
   }
 }
 
-export const addToWorld = (world, instance, container) => {
+export const addToWorld = (world: any, instance: any, container: any[]) => {
   World.add(world, instance.body)
   container.push(instance)
   instance.index = container.length - 1
 }
 
-export const renderText = config => {
+export const renderText = (config: any) => {
   const { p5, textSettings, color, alignment } = config
   const { CENTER, HSL } = p5
   const { textSize, text, boxWidth, boxHeight } = textSettings
@@ -219,7 +226,7 @@ export const renderText = config => {
   }
 }
 
-export const renderImage = config => {
+export const renderImage = (config: any) => {
   const { p5, image, dimensions } = config
   const { CENTER } = p5
 
@@ -227,7 +234,7 @@ export const renderImage = config => {
   p5.image(image, 0, 0, dimensions.w, dimensions.h)
 }
 
-export const renderOutline = config => {
+export const renderOutline = (config: any) => {
   const { p5, color, dimensions, shape } = config
   const { hue, saturation, lightness } = color
   p5.colorMode(p5.HSL)
@@ -241,7 +248,7 @@ export const renderOutline = config => {
   }
 }
 
-export const renderHighlight = config => {
+export const renderHighlight = (config: any) => {
   const { p5, dimensions, shape } = config
   p5.colorMode(p5.HSL)
   p5.noStroke()
@@ -255,7 +262,7 @@ export const renderHighlight = config => {
   }
 }
 
-export const renderLowlight = config => {
+export const renderLowlight = (config: any) => {
   const { p5, dimensions, shape } = config
   p5.colorMode(p5.HSL)
   p5.noStroke()
@@ -269,7 +276,7 @@ export const renderLowlight = config => {
   }
 }
 
-export const checkMouseInBounds = (instance, mousePosition, config) => {
+export const checkMouseInBounds = (instance: any, mousePosition: any, config: any) => {
   const { p5, shape } = config
   const { body } = instance
   if (shape === 'rect') {
@@ -283,7 +290,7 @@ export const checkMouseInBounds = (instance, mousePosition, config) => {
   }
 }
 
-export const manageParticleRender = array => {
+export const manageParticleRender = (array: any[]) => {
   for (let i = 0; i < array.length; i++) {
     let particle = array[i]
     particle.show()
@@ -295,7 +302,7 @@ export const manageParticleRender = array => {
   }
 }
 
-export const manageBubbleRender = (array, mousePosition) => {
+export const manageBubbleRender = (array: any[], mousePosition: any) => {
   for (let i = 0; i < array.length; i++) {
     let bubble = array[i]
     bubble.show()
