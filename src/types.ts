@@ -1,5 +1,12 @@
+import * as p5 from 'p5'
+import Matter from 'matter-js'
+
+// const { Engine, World } = Matter
+// const engineShape = Engine.create()
+// const worldShape = engineShape.world
+
 export interface Environment {
-  p5: any;
+  p5: p5;
   width: number;
 }
 
@@ -29,3 +36,12 @@ export interface Body {
   position: Position;
   angle: any;
 }
+
+export enum Shape {
+  Rectangle =  "rect",
+  Circle = "circle"
+}
+
+export type EngineType = Matter.Engine
+
+export type WorldType = Matter.World

@@ -1,6 +1,7 @@
 import Matter from 'matter-js'
+import * as p5 from 'p5'
 import { ColorBall, Bubble } from './constructors'
-import { Environment, Color, Position, Vertex, Button, Body } from '../../types'
+import { Environment, Color, Position, Vertex, Button, Body, EngineType, WorldType } from '../../types'
 
 const { World, Mouse, MouseConstraint } = Matter
 
@@ -59,6 +60,12 @@ export const getPurpleColor = (): Color => {
   }
 }
 
+export const defaultColor: Color = {
+  hue: 0,
+  saturation: 0,
+  lightness: 94
+}
+
 export const randomColor = (): Color => {
   let choice = getRandomInt(1, 7)
   switch (choice) {
@@ -75,18 +82,8 @@ export const randomColor = (): Color => {
     case 6:
       return getPurpleColor()
     default:
-      return {
-        hue: 0,
-        saturation: 0,
-        lightness: 0
-      }
+      return defaultColor
   }
-}
-
-export const defaultColor: Color = {
-  hue: 0,
-  saturation: 0,
-  lightness: 94
 }
 
 export const desaturateColor = (environment: Environment, color: Color): Color => {
@@ -98,7 +95,7 @@ export const desaturateColor = (environment: Environment, color: Color): Color =
   }
 }
 
-export const areaFromPoints = (position: Position, vertices: Vertex[], p5: any) => {
+export const areaFromPoints = (position: Position, vertices: Vertex[], p5: p5): number => {
   // find and sum the triangles created from position and vertices
   return vertices
     // find edges of triangles
@@ -129,7 +126,7 @@ export const areaFromPoints = (position: Position, vertices: Vertex[], p5: any) 
     }, 0)
 }
 
-export const createMouseConstraint = (canvas: any, engine: any, world: any, p5: any) => {
+export const createMouseConstraint = (canvas: any, engine: EngineType, world: WorldType, p5: p5) => {
   const mouse = Mouse.create(canvas.elt)
   mouse.pixelRatio = p5.pixelDensity()
   const mouseOptions = {
@@ -181,7 +178,7 @@ export const createBubbles = (environment: Environment, button: Button) => {
   })
 }
 
-export const transformBody = (p5: any, body: Body) => {
+export const transformBody = (p5: p5, body: Body) => {
   const position = body.position
   const angle = body.angle
 
@@ -201,7 +198,7 @@ export const setTextDimensions = (config: any) => {
   }
 }
 
-export const addToWorld = (world: any, instance: any, container: any[]) => {
+export const addToWorld = (world: WorldType, instance: any, container: any[]) => {
   World.add(world, instance.body)
   container.push(instance)
   instance.index = container.length - 1
@@ -276,7 +273,7 @@ export const renderLowlight = (config: any) => {
   }
 }
 
-export const checkMouseInBounds = (instance: any, mousePosition: any, config: any) => {
+export const checkMouseInBounds = (instance: any, mousePosition: Position, config: any) => {
   const { p5, shape } = config
   const { body } = instance
   if (shape === 'rect') {
@@ -302,7 +299,7 @@ export const manageParticleRender = (array: any[]) => {
   }
 }
 
-export const manageBubbleRender = (array: any[], mousePosition: any) => {
+export const manageBubbleRender = (array: any[], mousePosition: Position) => {
   for (let i = 0; i < array.length; i++) {
     let bubble = array[i]
     bubble.show()
