@@ -1,13 +1,20 @@
 import Matter from 'matter-js'
 import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, checkMouseInBounds, defaultColor } from './utils'
-// import {
-//   Environment,
-//   // BoundaryType
-// } from '../../types'
+import {
+  Environment,
+  Boundary,
+  TextBox,
+  ParagraphBox,
+  Project,
+  Spring,
+  ColorBall,
+  Button,
+  Bubble
+} from '../../types'
 
 const { World, Bodies, Constraint } = Matter
 
-export function Boundary(x, y, w, h, label, environment) {
+export function BoundaryConstructor(this: Boundary, x: number, y: number, w: number, h: number, label: string, environment: Environment) {
   const { world, boundaries } = environment
   const options = {
     friction: 0.3,
@@ -25,7 +32,7 @@ export function Boundary(x, y, w, h, label, environment) {
   }
 }
 
-export function TextBox(environment, settings) {
+export function TextBoxConstructor(this: TextBox, environment: Environment, settings: any) {
   const { sketch, world, bodies } = environment
   const { x, y, options, textSettings, color } = settings
 
@@ -54,7 +61,7 @@ export function TextBox(environment, settings) {
   }
 }
 
-export function ParagraphBox(environment, settings) {
+export function ParagraphBoxConstructor(this: ParagraphBox, environment: Environment, settings: any) {
   const { sketch, world, bodies } = environment
   const { x, y, options, textSettings, color } = settings
 
@@ -82,7 +89,7 @@ export function ParagraphBox(environment, settings) {
   }
 }
 
-export function Project(environment, settings) {
+export function ProjectConstructor(this: Project, environment: Environment, settings: any) {
   const { sketch, world, projects, descriptions, buttons } = environment
   const { x, y, width, height, image, description, textSize, website, github, options } = settings
 
@@ -96,7 +103,7 @@ export function Project(environment, settings) {
     shape: 'rect'
   }
 
-  this.description = new ParagraphBox(environment, {
+  this.description = new ParagraphBoxConstructor(environment, {
     x,
     y,
     textSettings: {
@@ -108,7 +115,7 @@ export function Project(environment, settings) {
     options
   })
 
-  this.webButton = new Button(environment, {
+  this.webButton = new ButtonConstructor(environment, {
     x: x - 50,
     y: y + 50,
     textSettings: {
@@ -119,7 +126,7 @@ export function Project(environment, settings) {
     options
   })
 
-  this.githubButton = new Button(environment, {
+  this.githubButton = new ButtonConstructor(environment, {
     x: x + 50,
     y: y + 50,
     textSettings: {
@@ -156,7 +163,7 @@ export function Project(environment, settings) {
   }
 }
 
-export function Spring(environment, settings) {
+export function SpringConstructor(this: Spring, environment: Environment, settings: any) {
   const { sketch, world, constraints } = environment
   const { bodyA, bodyB, length, stiffness } = settings
 
@@ -179,9 +186,8 @@ export function Spring(environment, settings) {
   }
 }
 
-export function ColorBall(environment, settings) {
+export function ColorBallConstructor(this: ColorBall, environment: Environment, settings: any) {
   const { sketch, world, particles, height } = environment
-  // const { HSL } = sketch
   const { x, y, r, options, color } = settings
 
   this.r = r
@@ -212,7 +218,7 @@ export function ColorBall(environment, settings) {
   }
 }
 
-export function Button(environment, settings) {
+export function ButtonConstructor(this: Button, environment: Environment, settings: any) {
   const { sketch, world, buttons } = environment
   const { x, y, options, textSettings, color } = settings
 
@@ -255,7 +261,7 @@ export function Button(environment, settings) {
   }
 }
 
-export function Bubble(environment, settings) {
+export function BubbleConstructor(this: Bubble, environment: Environment, settings: any) {
   const { sketch, world, bubbles } = environment
   const { x, y, options, textSettings, color } = settings
 

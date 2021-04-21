@@ -4,6 +4,8 @@ import Matter from 'matter-js'
 // matter-js
 export type Body = Matter.Body
 
+export type Constraint = Matter.Constraint
+
 export type EngineType = Matter.Engine
 
 export type WorldType = Matter.World
@@ -18,10 +20,26 @@ interface Bodies {
 }
 
 interface Boundaries {
-  boundaries: object[]
+  boundaries: Boundary[]
 }
 
-export type Container = Bodies | Boundaries
+interface Projects {
+  projects: any[]
+}
+
+interface Descriptions {
+  descriptions: any[]
+}
+
+interface Buttons {
+  buttons: Button[]
+}
+
+interface Springs {
+  constraints: any[]
+}
+
+export type Container = Bodies | Boundaries | Projects | Descriptions | Buttons | Springs
 
 
 // p5
@@ -80,19 +98,75 @@ export interface Button {
   body: Body;
   config: Config;
   text: string[];
+  options: any;
+  address: string;
+  mouseInBounds: boolean | undefined;
+  show: () => void;
+  checkMouseInBounds: (mousePosition: Position) => void;
+  remove: () => void;
 }
 
 export type Canvas = HTMLCanvasElement
 
 export type Image = HTMLImageElement
 
-interface TextBox {
+export interface Boundary {
   body: Body;
-  position: Position;
-  color: Color;
-  textSettings: TextSettings;
-  alignment: Alignment;
-  dimensions: Dimensions;
+  w: number;
+  h: number;
+  index: number;
+  remove: () => void;
+}
+
+export interface Spring {
+  body: Constraint;
+  show: () => void;
+}
+
+export interface TextBox {
+  config: Config;
+  options: any;
+  body: Body;
+  show: () => void;
+}
+
+export interface ParagraphBox {
+  config: Config;
+  options: any;
+  body: Body;
+  show: () => void;
+}
+
+export interface ColorBall {
+  r: number;
+  options: any;
+  body: Body;
+  show: () => void;
+  isBelowLine: () => void;
+  remove: () => void;
+}
+
+export interface Bubble {
+  config: Config;
+  options: any;
+  body: Body;
+  mouseInBounds: boolean | undefined;
+  bubbleShouldPop: boolean | undefined;
+  show: () => void;
+  checkMouseInBounds: (mousePosition: Position) => void;
+  checkBubblePop: () => void;
+  remove: () => void;
+}
+
+export interface Project {
+  bodyConfig: any;
+  description: ParagraphBox;
+  webButton: Button;
+  githubButton: Button;
+  body: Body;
+  mouseInBounds: boolean | undefined;
+  show: () => void;
+  checkMouseInBounds: (mousePosition: Position) => void;
 }
 
 export interface Environment {
@@ -101,6 +175,11 @@ export interface Environment {
   height: number;
   world: WorldType;
   boundaries: Container;
+  bodies: Container;
+  projects: Container;
+  descriptions: Container;
+  buttons: Container;
+  constraints: Container;
 }
 
 export interface Config {

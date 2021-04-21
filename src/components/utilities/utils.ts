@@ -11,7 +11,8 @@ import {
   WorldType,
   Canvas,
   Instance,
-  Config
+  Config,
+  Container
 } from '../../types'
 
 import { ColorBall, Bubble } from './constructors'
@@ -210,7 +211,7 @@ export const setTextDimensions = (config: Config) => {
   }
 }
 
-export const addToWorld = (world: WorldType, instance: Instance, container: any[]) => {
+export const addToWorld = (world: WorldType, instance: Instance, container: Container) => {
   World.add(world, instance.body)
   container.push(instance)
   instance.index = container.length - 1
