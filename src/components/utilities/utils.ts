@@ -1,6 +1,6 @@
+import p5 from 'p5'
 import Matter from 'matter-js'
-import * as p5 from 'p5'
-import { ColorBall, Bubble } from './constructors'
+
 import { 
   Environment, 
   Color, 
@@ -14,6 +14,7 @@ import {
   Config
 } from '../../types'
 
+import { ColorBall, Bubble } from './constructors'
 const { World, Mouse, MouseConstraint } = Matter
 
 const getRandomInt = (min: number, max: number): number => {
@@ -106,7 +107,7 @@ export const desaturateColor = (environment: Environment, color: Color): Color =
   }
 }
 
-export const areaFromPoints = (position: Position, vertices: Position[], p5: p5): number => {
+const areaFromPoints = (position: Position, vertices: Position[], sketch: p5): number => {
   // find and sum the triangles created from position and vertices
   return vertices
     // find edges of triangles
@@ -114,9 +115,9 @@ export const areaFromPoints = (position: Position, vertices: Position[], p5: p5)
       let nextPointIdx = index + 1
       if (index === array.length - 1) nextPointIdx = 0
 
-      const edgeOne = p5.dist(position.x, position.y, vertex.x, vertex.y)
-      const edgeTwo = p5.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
-      const edgeThree = p5.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
+      const edgeOne = sketch.dist(position.x, position.y, vertex.x, vertex.y)
+      const edgeTwo = sketch.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
+      const edgeThree = sketch.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
 
       return {
         edgeOne,
@@ -129,7 +130,7 @@ export const areaFromPoints = (position: Position, vertices: Position[], p5: p5)
       const { edgeOne, edgeTwo, edgeThree } = edges
       const semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
 
-      return p5.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
+      return sketch.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
     })
     // sum all the triangles
     .reduce((sum, curVal) => {

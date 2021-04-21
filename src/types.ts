@@ -1,4 +1,4 @@
-import * as p5 from 'p5'
+import p5 from 'p5'
 import Matter from 'matter-js'
 
 // matter-js
@@ -18,7 +18,7 @@ interface Bodies {
 }
 
 interface Boundaries {
-  boundaries: any[]
+  boundaries: object[]
 }
 
 export type Container = Bodies | Boundaries
@@ -61,19 +61,17 @@ interface Dimensions {
   padding: number;
 }
 
-// interface Rectangle {
-//   shape: 'rect';
-// }
-
-// interface Circle {
-//   shape: 'circle';
-// }
-
-// export type Shape = Rectangle | Circle
-
 enum Shape {
   Circle = 'circle',
   Rectangle = 'rect'
+}
+
+interface TextSettings {
+  text: string;
+  textSize: number;
+  boxWidth: number;
+  boxHeight: number;
+  padding: number;
 }
 
 
@@ -88,12 +86,13 @@ export type Canvas = HTMLCanvasElement
 
 export type Image = HTMLImageElement
 
-interface TextSettings {
-  text: string;
-  textSize: number;
-  boxWidth: number;
-  boxHeight: number;
-  padding: number;
+interface TextBox {
+  body: Body;
+  position: Position;
+  color: Color;
+  textSettings: TextSettings;
+  alignment: Alignment;
+  dimensions: Dimensions;
 }
 
 export interface Environment {
@@ -109,7 +108,7 @@ export interface Config {
   textSettings: TextSettings;
   color: Color;
   alignment: Alignment;
-  image: any;
+  image: p5.Image;
   dimensions: Dimensions;
   shape: Shape;
 }

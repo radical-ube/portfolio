@@ -12,10 +12,10 @@ export const setupFrame = environment => {
 }
 
 export const resetPageFrame = environment => {
-  const {p5} = environment
+  const {sketch} = environment
   environment.width = window.innerWidth
   environment.height = window.innerHeight * 0.85
-  p5.resizeCanvas(environment.width, environment.height)
+  sketch.resizeCanvas(environment.width, environment.height)
   environment.boundaries.forEach(boundary => {
     boundary.remove()
   })
@@ -23,10 +23,10 @@ export const resetPageFrame = environment => {
 }
 
 export const resetNavFrame = environment => {
-  const {p5} = environment
+  const {sketch} = environment
   environment.width = window.innerWidth
   environment.height = window.innerHeight * 0.15
-  p5.resizeCanvas(environment.width, environment.height)
+  sketch.resizeCanvas(environment.width, environment.height)
   environment.boundaries.forEach(boundary => {
     boundary.remove()
   })
