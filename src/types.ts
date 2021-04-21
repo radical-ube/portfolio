@@ -10,10 +10,7 @@ export type EngineType = Matter.Engine
 
 export type WorldType = Matter.World
 
-export interface Instance {
-  body: Body;
-  index: number;
-}
+
 
 interface Bodies {
   bodies: Body[];
@@ -102,9 +99,13 @@ interface TextSettings {
 
 
 // objects 
-export interface Button {
+export interface Instance {
+  index: number;
+}
+
+export interface Button extends Instance {
   body: Body;
-  config: Config;
+  config: TextConfig;
   text: string[];
   options: any;
   address: string;
@@ -118,7 +119,7 @@ export type Canvas = HTMLCanvasElement
 
 export type Image = p5.Image
 
-export interface Boundary {
+export interface Boundary extends Instance {
   body: Body;
   w: number;
   h: number;
@@ -126,26 +127,26 @@ export interface Boundary {
   remove: () => void;
 }
 
-export interface Spring {
+export interface Spring extends Instance {
   body: Constraint;
   show: () => void;
 }
 
-export interface TextBox {
-  config: Config;
+export interface TextBox extends Instance {
+  config: TextConfig;
   options: any;
   body: Body;
   show: () => void;
 }
 
-export interface ParagraphBox {
-  config: Config;
+export interface ParagraphBox extends Instance {
+  config: TextConfig;
   options: any;
   body: Body;
   show: () => void;
 }
 
-export interface ColorBall {
+export interface ColorBall extends Instance {
   r: number;
   options: any;
   body: Body;
@@ -155,7 +156,7 @@ export interface ColorBall {
   remove: () => void;
 }
 
-export interface Bubble {
+export interface Bubble extends Instance {
   config: BubbleConfig;
   options: any;
   body: Body;
@@ -167,7 +168,7 @@ export interface Bubble {
   remove: () => void;
 }
 
-export interface Project {
+export interface Project extends Instance {
   bodyConfig: any;
   description: ParagraphBox;
   webButton: Button;
@@ -177,6 +178,8 @@ export interface Project {
   show: () => void;
   checkMouseInBounds: (mousePosition: Position) => void;
 }
+
+
 
 export interface Environment {
   sketch: p5;
@@ -220,7 +223,6 @@ export type ColorRenderConfig = Sketch & HasShape & HasColor
 
 export type ImageConfig = Sketch & HasImage
 
-export type TextConfig = Sketch & HasText & HasShape 
+export type TextConfig = Sketch & HasText & HasShape & HasColor
 
 type BubbleConfig = TextConfig & ColorRenderConfig
-
