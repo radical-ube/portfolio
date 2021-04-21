@@ -11,11 +11,13 @@ import {
   WorldType,
   Canvas,
   Instance,
-  Config,
+  ColorRenderConfig,
+  ImageConfig,
+  TextConfig,
   Container
 } from '../../types'
 
-import { ColorBall, Bubble } from './constructors'
+import { ColorBallConstructor, BubbleConstructor } from './constructors'
 const { World, Mouse, MouseConstraint } = Matter
 
 const getRandomInt = (min: number, max: number): number => {
@@ -163,7 +165,7 @@ export const createColorParticles = (environment: Environment) => {
     color: randomColor()
   }
 
-  new ColorBall(environment, particleSettings)
+  new ColorBallConstructor(environment, particleSettings)
 }
 
 export const createBubbles = (environment: Environment, button: Button) => {
@@ -174,7 +176,7 @@ export const createBubbles = (environment: Environment, button: Button) => {
     let x = getRandomInt(position.x - 10, position.x + 10)
     let y = getRandomInt(position.y - 30, position.y - 50)
 
-    new Bubble(environment, {
+    new BubbleConstructor(environment, {
       x,
       y,
       options: {
@@ -199,7 +201,7 @@ export const transformBody = (sketch: p5, body: Body) => {
   sketch.rotate(angle)
 }
 
-export const setTextDimensions = (config: Config) => {
+export const setTextDimensions = (config: TextConfig) => {
   const { sketch, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   sketch.textSize(textSize || 18)
@@ -211,13 +213,13 @@ export const setTextDimensions = (config: Config) => {
   }
 }
 
-export const addToWorld = (world: WorldType, instance: Instance, container: Container) => {
+export const addToWorld = (world: WorldType, instance: Instance, container: any[]) => {
   World.add(world, instance.body)
   container.push(instance)
   instance.index = container.length - 1
 }
 
-export const renderText = (config: Config) => {
+export const renderText = (config: TextConfig) => {
   const { sketch, textSettings, color, alignment } = config
   const { textSize, text, boxWidth, boxHeight } = textSettings
   const { hue, saturation, lightness } = color
@@ -235,14 +237,14 @@ export const renderText = (config: Config) => {
   }
 }
 
-export const renderImage = (config: Config) => {
+export const renderImage = (config: ImageConfig) => {
   const { sketch, image, dimensions } = config
 
   sketch.imageMode('center')
   sketch.image(image, 0, 0, dimensions.w, dimensions.h)
 }
 
-export const renderOutline = (config: Config) => {
+export const renderOutline = (config: ColorRenderConfig) => {
   const { sketch, color, dimensions, shape } = config
   const { hue, saturation, lightness } = color
   sketch.colorMode('hsl')
@@ -258,7 +260,7 @@ export const renderOutline = (config: Config) => {
   }
 }
 
-export const renderHighlight = (config: Config) => {
+export const renderHighlight = (config: ColorRenderConfig) => {
   const { sketch, dimensions, shape } = config
   sketch.colorMode('hsl')
   sketch.noStroke()
@@ -274,7 +276,7 @@ export const renderHighlight = (config: Config) => {
   }
 }
 
-export const renderLowlight = (config: Config) => {
+export const renderLowlight = (config: ColorRenderConfig) => {
   const { sketch, dimensions, shape } = config
   sketch.colorMode('hsl')
   sketch.noStroke()
@@ -290,7 +292,7 @@ export const renderLowlight = (config: Config) => {
   }
 }
 
-export const checkMouseInBounds = (instance: Instance, mousePosition: Position, config: Config) => {
+export const checkMouseInBounds = (instance: Instance, mousePosition: Position, config: ColorRenderConfig) => {
   const { sketch, shape, dimensions } = config
   const { body } = instance
   switch (shape) {

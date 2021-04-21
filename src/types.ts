@@ -116,7 +116,7 @@ export interface Button {
 
 export type Canvas = HTMLCanvasElement
 
-export type Image = HTMLImageElement
+export type Image = p5.Image
 
 export interface Boundary {
   body: Body;
@@ -156,7 +156,7 @@ export interface ColorBall {
 }
 
 export interface Bubble {
-  config: Config;
+  config: BubbleConfig;
   options: any;
   body: Body;
   mouseInBounds: boolean | undefined;
@@ -183,22 +183,44 @@ export interface Environment {
   width: number;
   height: number;
   world: WorldType;
-  boundaries: Container;
-  bodies: Container;
-  projects: Container;
-  descriptions: Container;
-  buttons: Container;
-  constraints: Container;
-  particles: Container;
-  bubbles: Container;
+  boundaries: any[];
+  bodies: any[];
+  projects: any[];
+  descriptions: any[];
+  buttons: any[];
+  constraints: any[];
+  particles: any[];
+  bubbles: any[];
 }
 
-export interface Config {
+interface Sketch {
   sketch: p5;
-  textSettings: TextSettings;
-  color: Color;
-  alignment: Alignment;
-  image?: p5.Image;
-  dimensions?: Dimensions;
-  shape?: Shape;
 }
+
+interface HasText {
+  textSettings: TextSettings;
+  alignment: Alignment;
+}
+
+interface HasShape {
+  dimensions: Dimensions;
+  shape: Shape;
+}
+
+interface HasColor {
+  color: Color;
+}
+
+interface HasImage {
+  dimensions: Dimensions;
+  image: Image;
+}
+
+export type ColorRenderConfig = Sketch & HasShape & HasColor
+
+export type ImageConfig = Sketch & HasImage
+
+export type TextConfig = Sketch & HasText & HasShape 
+
+type BubbleConfig = TextConfig & ColorRenderConfig
+
