@@ -1,7 +1,18 @@
 import Matter from 'matter-js'
 import * as p5 from 'p5'
 import { ColorBall, Bubble } from './constructors'
-import { Environment, Color, Position, Vertex, Button, Body, EngineType, WorldType } from '../../types'
+import { 
+  Environment, 
+  Color, 
+  Position, 
+  Button, 
+  Body,
+  EngineType, 
+  WorldType,
+  Canvas,
+  Instance,
+  Config
+} from '../../types'
 
 const { World, Mouse, MouseConstraint } = Matter
 
@@ -95,7 +106,7 @@ export const desaturateColor = (environment: Environment, color: Color): Color =
   }
 }
 
-export const areaFromPoints = (position: Position, vertices: Vertex[], p5: p5): number => {
+export const areaFromPoints = (position: Position, vertices: Position[], p5: p5): number => {
   // find and sum the triangles created from position and vertices
   return vertices
     // find edges of triangles
@@ -126,8 +137,8 @@ export const areaFromPoints = (position: Position, vertices: Vertex[], p5: p5): 
     }, 0)
 }
 
-export const createMouseConstraint = (canvas: any, engine: EngineType, world: WorldType, p5: p5) => {
-  const mouse = Mouse.create(canvas.elt)
+export const createMouseConstraint = (canvas: Canvas, engine: EngineType, world: WorldType, p5: p5) => {
+  const mouse = Mouse.create(canvas)
   mouse.pixelRatio = p5.pixelDensity()
   const mouseOptions = {
     mouse
@@ -186,25 +197,25 @@ export const transformBody = (p5: p5, body: Body) => {
   p5.rotate(angle)
 }
 
-export const setTextDimensions = (config: any) => {
+export const setTextDimensions = (config: Config) => {
   const { p5, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   p5.textSize(textSize || 18)
   return {
     textSize: textSize,
     w: boxWidth || p5.textWidth(text),
-    h: boxHeight || p5.textAscent(text),
+    h: boxHeight || p5.textAscent(),
     padding: padding || 10
   }
 }
 
-export const addToWorld = (world: WorldType, instance: any, container: any[]) => {
+export const addToWorld = (world: WorldType, instance: Instance, container: any[]) => {
   World.add(world, instance.body)
   container.push(instance)
   instance.index = container.length - 1
 }
 
-export const renderText = (config: any) => {
+export const renderText = (config: Config) => {
   const { p5, textSettings, color, alignment } = config
   const { CENTER, HSL } = p5
   const { textSize, text, boxWidth, boxHeight } = textSettings
@@ -223,7 +234,7 @@ export const renderText = (config: any) => {
   }
 }
 
-export const renderImage = (config: any) => {
+export const renderImage = (config: Config) => {
   const { p5, image, dimensions } = config
   const { CENTER } = p5
 
@@ -231,7 +242,7 @@ export const renderImage = (config: any) => {
   p5.image(image, 0, 0, dimensions.w, dimensions.h)
 }
 
-export const renderOutline = (config: any) => {
+export const renderOutline = (config: Config) => {
   const { p5, color, dimensions, shape } = config
   const { hue, saturation, lightness } = color
   p5.colorMode(p5.HSL)
@@ -245,7 +256,7 @@ export const renderOutline = (config: any) => {
   }
 }
 
-export const renderHighlight = (config: any) => {
+export const renderHighlight = (config: Config) => {
   const { p5, dimensions, shape } = config
   p5.colorMode(p5.HSL)
   p5.noStroke()
@@ -259,7 +270,7 @@ export const renderHighlight = (config: any) => {
   }
 }
 
-export const renderLowlight = (config: any) => {
+export const renderLowlight = (config: Config) => {
   const { p5, dimensions, shape } = config
   p5.colorMode(p5.HSL)
   p5.noStroke()
@@ -273,8 +284,8 @@ export const renderLowlight = (config: any) => {
   }
 }
 
-export const checkMouseInBounds = (instance: any, mousePosition: Position, config: any) => {
-  const { p5, shape } = config
+export const checkMouseInBounds = (instance: Instance, mousePosition: Position, config: Config) => {
+  const { p5, shape, dimensions } = config
   const { body } = instance
   if (shape === 'rect') {
     const vertices = body.vertices
@@ -283,7 +294,7 @@ export const checkMouseInBounds = (instance: any, mousePosition: Position, confi
   }
   else if (shape === 'circle') {
     const distance = p5.dist(body.position.x, body.position.y, mousePosition.x, mousePosition.y)
-    return (distance < instance.config.dimensions.w / 2)
+    return (distance < dimensions.w / 2)
   }
 }
 

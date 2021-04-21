@@ -1,7 +1,11 @@
 import Matter from 'matter-js'
 import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, checkMouseInBounds, defaultColor } from './utils'
+// import {
+//   Environment,
+//   // BoundaryType
+// } from '../../types'
 
-const { World, Body, Bodies, Composite, Composites, Constraint } = Matter
+const { World, Bodies, Constraint } = Matter
 
 export function Boundary(x, y, w, h, label, environment) {
   const { world, boundaries } = environment
@@ -20,6 +24,10 @@ export function Boundary(x, y, w, h, label, environment) {
     World.remove(world, this.body)
   }
 }
+
+// type BoundaryConstructor = {
+//   new (x: number, y: number, w: number, h: number, label: string, environment: Environment): Boundary
+// }
 
 export function TextBox(environment, settings) {
   const { p5, world, bodies } = environment

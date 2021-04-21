@@ -28,7 +28,7 @@ const Home = props => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = p5.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas, engine, world, p5)
+      createMouseConstraint(canvas.elt, engine, world, p5)
       setupFrame(environment)
       setupHome(environment)
     }
