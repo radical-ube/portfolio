@@ -39,17 +39,25 @@ interface Springs {
   constraints: any[]
 }
 
-export type Container = Bodies | Boundaries | Projects | Descriptions | Buttons | Springs
+interface Particles {
+  particles: any[]
+}
+
+interface Bubbles {
+  bubbles: Bubble[]
+}
+
+export type Container = Bodies | Boundaries | Projects | Descriptions | Buttons | Springs | Particles | Bubbles
 
 
 // p5
-enum Horizontal {
+export enum Horizontal {
   Left = 'left',
   Right = 'right',
   Center = 'center' 
 }
 
-enum Vertical {
+export enum Vertical {
   Center = 'center',
   Top = 'top',
   Bottom = 'bottom',
@@ -79,7 +87,7 @@ interface Dimensions {
   padding: number;
 }
 
-enum Shape {
+export enum Shape {
   Circle = 'circle',
   Rectangle = 'rect'
 }
@@ -141,6 +149,7 @@ export interface ColorBall {
   r: number;
   options: any;
   body: Body;
+  color: Color;
   show: () => void;
   isBelowLine: () => void;
   remove: () => void;
@@ -180,6 +189,8 @@ export interface Environment {
   descriptions: Container;
   buttons: Container;
   constraints: Container;
+  particles: Container;
+  bubbles: Container;
 }
 
 export interface Config {
@@ -187,7 +198,7 @@ export interface Config {
   textSettings: TextSettings;
   color: Color;
   alignment: Alignment;
-  image: p5.Image;
-  dimensions: Dimensions;
-  shape: Shape;
+  image?: p5.Image;
+  dimensions?: Dimensions;
+  shape?: Shape;
 }

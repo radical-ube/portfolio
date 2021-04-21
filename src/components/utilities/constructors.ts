@@ -9,7 +9,10 @@ import {
   Spring,
   ColorBall,
   Button,
-  Bubble
+  Bubble,
+  Horizontal,
+  Vertical,
+  Shape
 } from '../../types'
 
 const { World, Bodies, Constraint } = Matter
@@ -42,10 +45,10 @@ export function TextBoxConstructor(this: TextBox, environment: Environment, sett
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: 'center',
-      vertical: 'center'
+      horizontal: Horizontal.Center,
+      vertical: Vertical.Center
     },
-    shape: 'rect'
+    shape: Shape.Rectangle
   }
   this.config.dimensions = setTextDimensions(this.config)
   this.options = options
@@ -71,8 +74,8 @@ export function ParagraphBoxConstructor(this: ParagraphBox, environment: Environ
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: 'left',
-      vertical: 'top'
+      horizontal: Horizontal.Left,
+      vertical: Vertical.Top
     }
   }
   this.config.dimensions = setTextDimensions(this.config)
@@ -228,10 +231,10 @@ export function ButtonConstructor(this: Button, environment: Environment, settin
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: 'center',
-      vertical: 'center'
+      horizontal: Horizontal.Center,
+      vertical: Vertical.Center
     },
-    shape: 'rect'
+    shape: Shape.Rectangle
   }
   this.config.dimensions = setTextDimensions(this.config)
   this.options = options
@@ -271,10 +274,10 @@ export function BubbleConstructor(this: Bubble, environment: Environment, settin
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: 'center',
-      vertical: 'center'
+      horizontal: Horizontal.Center,
+      vertical: Vertical.Center
     },
-    shape: 'circle'
+    shape: Shape.Circle
   }
   this.config.dimensions = setTextDimensions(this.config)
   this.options = options
