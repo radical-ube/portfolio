@@ -13,9 +13,9 @@ const Home = props => {
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = p5 => {
+  const Sketch = sketch => {
     const environment = {
-      p5,
+      sketch,
       engine,
       world,
       width: window.innerWidth,
@@ -24,22 +24,22 @@ const Home = props => {
       boundaries: []
     }
 
-    p5.setup = () => {
+    sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
-      const canvas = p5.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas.elt, engine, world, p5)
+      const canvas = sketch.createCanvas(environment.width, environment.height)
+      createMouseConstraint(canvas.elt, engine, world, sketch)
       setupFrame(environment)
       setupHome(environment)
     }
-    p5.draw = () => {
-      p5.background(bgColor)
+    sketch.draw = () => {
+      sketch.background(bgColor)
       Engine.update(engine)
       environment.bodies.forEach(body => {
         body.show()
       })
     }
-    p5.windowResized = () => {
+    sketch.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }

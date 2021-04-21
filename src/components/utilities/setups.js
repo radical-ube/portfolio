@@ -221,7 +221,7 @@ export const setupProjects = (environment) => {
   })
 
 
-  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how \"danceable\" your favorite songs are!'
+  let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how "danceable" your favorite songs are!'
   let ekopiqueAddress = 'https://ekopique.herokuapp.com'
   let ekopiqueGithub = 'https://github.com/2004-wdf-capstone-d/capstone-spotify'
 
@@ -246,35 +246,35 @@ export const setupExperience = (environment) => {
   const credentials = [
     {
       type: 'languages',
-      values: ['JavaScript', 'Python', 'C#']
+      text: ['JavaScript', 'Python', 'C#']
     },
     {
       type: 'front end',
-      values: ['React', 'Redux', 'HTML5', 'CSS', 'p5.js', 'Matter.js', 'd3.js']
+      text: ['React', 'Redux', 'HTML5', 'CSS', 'p5.js', 'Matter.js', 'd3.js']
     },
     {
       type: 'back end',
-      values: ['Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'MongoDB', 'Mongoose']
+      text: ['Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'MongoDB', 'Mongoose']
     },
     {
       type: 'platforms',
-      values: ['Github', 'Heroku', 'Netlify']
+      text: ['Github', 'Heroku', 'Netlify']
     },
     // {
     //   type: 'testing',
-    //   values: ['Mocha', 'Chai', 'Jasmine']
+    //   text: ['Mocha', 'Chai', 'Jasmine']
     // }
     {
       type: 'artistry',
-      values: ['improvise freely', 'share vulnerably', 'bold composition', 'play']
+      text: ['improvise freely', 'share vulnerably', 'bold composition', 'play']
     },
     {
       type: 'communication',
-      values: ['clarity', 'active listening', 'make space', 'don\'t assume']
+      text: ['clarity', 'active listening', 'make space', 'don\'t assume']
     },
     {
       type: 'learning',
-      values: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
+      text: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
     },
   ]
 
@@ -293,7 +293,7 @@ export const setupExperience = (environment) => {
         textSize: bubbleSize,
       },
     })
-    button.values = credential.values
+    button.text = credential.text
   })
 
 

@@ -13,9 +13,9 @@ const About = props => {
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = p5 => {
+  const Sketch = sketch => {
     const environment = {
-      p5,
+      sketch,
       engine,
       world,
       width: window.innerWidth,
@@ -25,17 +25,17 @@ const About = props => {
       particles: []
     }
 
-    p5.setup = () => {
+    sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
-      const canvas = p5.createCanvas(environment.width, environment.height)
+      const canvas = sketch.createCanvas(environment.width, environment.height)
       setupFrame(environment)
       setupAbout(environment)
     }
-    p5.draw = () => {
-      p5.background(bgColor)
+    sketch.draw = () => {
+      sketch.background(bgColor)
       Engine.update(engine)
-      if (p5.frameCount % 4 === 0) {
+      if (sketch.frameCount % 4 === 0) {
         createColorParticles(environment)
       }
       environment.bodies.forEach(body => {
@@ -43,7 +43,7 @@ const About = props => {
       })
       manageParticleRender(environment.particles)
     }
-    p5.windowResized = () => {
+    sketch.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }

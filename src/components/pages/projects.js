@@ -13,9 +13,9 @@ const Projects = props => {
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = p5 => {
+  const Sketch = sketch => {
     const environment = {
-      p5,
+      sketch,
       engine,
       world,
       width: window.innerWidth,
@@ -36,24 +36,24 @@ const Projects = props => {
       })
     }
 
-    p5.preload = () => {
-      environment.images.rainbow = p5.loadImage('images/rainbowonme.png')
-      environment.images.ekopique = p5.loadImage('images/ekopique.png')
+    sketch.preload = () => {
+      environment.images.rainbow = sketch.loadImage('images/rainbowonme.png')
+      environment.images.ekopique = sketch.loadImage('images/ekopique.png')
     }
-    p5.setup = () => {
+    sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
-      const canvas = p5.createCanvas(environment.width, environment.height)
+      const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupProjects(environment)
     }
-    p5.draw = () => {
-      p5.background(bgColor)
+    sketch.draw = () => {
+      sketch.background(bgColor)
       Engine.update(engine)
       const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
+        x: sketch.mouseX,
+        y: sketch.mouseY
       }
       environment.projects.forEach(project => {
         project.show()
@@ -70,7 +70,7 @@ const Projects = props => {
         button.checkMouseInBounds(mousePosition)
       })
     }
-    p5.windowResized = () => {
+    sketch.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }

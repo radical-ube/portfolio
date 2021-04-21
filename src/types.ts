@@ -55,23 +55,33 @@ export interface Position {
   y: number;
 }
 
-interface Rectangle {
-  type: 'rect';
-
+interface Dimensions {
+  w: number;
+  h: number;
+  padding: number;
 }
 
-interface Circle {
-  type: 'circle';
-}
+// interface Rectangle {
+//   shape: 'rect';
+// }
 
-export type Shape = Rectangle | Circle
+// interface Circle {
+//   shape: 'circle';
+// }
+
+// export type Shape = Rectangle | Circle
+
+enum Shape {
+  Circle = 'circle',
+  Rectangle = 'rect'
+}
 
 
 // objects 
 export interface Button {
   body: Body;
   config: Config;
-  values: any[];
+  text: string[];
 }
 
 export type Canvas = HTMLCanvasElement
@@ -87,7 +97,7 @@ interface TextSettings {
 }
 
 export interface Environment {
-  p5: p5;
+  sketch: p5;
   width: number;
   height: number;
   world: WorldType;
@@ -95,11 +105,11 @@ export interface Environment {
 }
 
 export interface Config {
-  p5: p5;
+  sketch: p5;
   textSettings: TextSettings;
   color: Color;
   alignment: Alignment;
   image: any;
-  dimensions: any;
-  shape: any;
+  dimensions: Dimensions;
+  shape: Shape;
 }

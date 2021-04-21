@@ -98,11 +98,11 @@ export const randomColor = (): Color => {
 }
 
 export const desaturateColor = (environment: Environment, color: Color): Color => {
-  const { p5 } = environment
+  const { sketch } = environment
   return {
     hue: color.hue,
-    saturation: p5.lerp(color.saturation, defaultColor.saturation, 0.4),
-    lightness: p5.lerp(color.lightness, defaultColor.lightness, 0.2)
+    saturation: sketch.lerp(color.saturation, defaultColor.saturation, 0.4),
+    lightness: sketch.lerp(color.lightness, defaultColor.lightness, 0.2)
   }
 }
 
@@ -137,9 +137,9 @@ export const areaFromPoints = (position: Position, vertices: Position[], p5: p5)
     }, 0)
 }
 
-export const createMouseConstraint = (canvas: Canvas, engine: EngineType, world: WorldType, p5: p5) => {
+export const createMouseConstraint = (canvas: Canvas, engine: EngineType, world: WorldType, sketch: p5) => {
   const mouse = Mouse.create(canvas)
-  mouse.pixelRatio = p5.pixelDensity()
+  mouse.pixelRatio = sketch.pixelDensity()
   const mouseOptions = {
     mouse
   }
@@ -168,7 +168,7 @@ export const createBubbles = (environment: Environment, button: Button) => {
   const position = button.body.position
   const textSize = button.config.textSettings.textSize
 
-  button.values.forEach(value => {
+  button.text.forEach(text => {
     let x = getRandomInt(position.x - 10, position.x + 10)
     let y = getRandomInt(position.y - 30, position.y - 50)
 
@@ -181,7 +181,7 @@ export const createBubbles = (environment: Environment, button: Button) => {
         isStatic: false
       },
       textSettings: {
-        text: value,
+        text: text,
         textSize
       },
       color: desaturateColor(environment, randomColor())
@@ -189,22 +189,22 @@ export const createBubbles = (environment: Environment, button: Button) => {
   })
 }
 
-export const transformBody = (p5: p5, body: Body) => {
+export const transformBody = (sketch: p5, body: Body) => {
   const position = body.position
   const angle = body.angle
 
-  p5.translate(position.x, position.y)
-  p5.rotate(angle)
+  sketch.translate(position.x, position.y)
+  sketch.rotate(angle)
 }
 
 export const setTextDimensions = (config: Config) => {
-  const { p5, textSettings } = config
+  const { sketch, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
-  p5.textSize(textSize || 18)
+  sketch.textSize(textSize || 18)
   return {
     textSize: textSize,
-    w: boxWidth || p5.textWidth(text),
-    h: boxHeight || p5.textAscent(),
+    w: boxWidth || sketch.textWidth(text),
+    h: boxHeight || sketch.textAscent(),
     padding: padding || 10
   }
 }
@@ -216,85 +216,89 @@ export const addToWorld = (world: WorldType, instance: Instance, container: any[
 }
 
 export const renderText = (config: Config) => {
-  const { p5, textSettings, color, alignment } = config
-  const { CENTER, HSL } = p5
+  const { sketch, textSettings, color, alignment } = config
   const { textSize, text, boxWidth, boxHeight } = textSettings
   const { hue, saturation, lightness } = color
 
-  p5.rectMode(CENTER)
-  p5.textAlign(alignment.horizontal, alignment.vertical)
-  p5.textSize(textSize)
-  p5.colorMode(HSL)
-  p5.fill(hue, saturation, lightness)
+  sketch.rectMode('center')
+  sketch.textAlign(alignment.horizontal, alignment.vertical)
+  sketch.textSize(textSize)
+  sketch.colorMode('hsl')
+  sketch.fill(hue, saturation, lightness)
   if (boxWidth && boxHeight) {
-    p5.text(text, 0, 0, boxWidth, boxHeight)
+    sketch.text(text, 0, 0, boxWidth, boxHeight)
   }
   else {
-    p5.text(text, 0, 0)
+    sketch.text(text, 0, 0)
   }
 }
 
 export const renderImage = (config: Config) => {
-  const { p5, image, dimensions } = config
-  const { CENTER } = p5
+  const { sketch, image, dimensions } = config
 
-  p5.imageMode(CENTER)
-  p5.image(image, 0, 0, dimensions.w, dimensions.h)
+  sketch.imageMode('center')
+  sketch.image(image, 0, 0, dimensions.w, dimensions.h)
 }
 
 export const renderOutline = (config: Config) => {
-  const { p5, color, dimensions, shape } = config
+  const { sketch, color, dimensions, shape } = config
   const { hue, saturation, lightness } = color
-  p5.colorMode(p5.HSL)
-  p5.noFill()
-  p5.stroke(hue, saturation, lightness)
-  if (shape === 'rect') {
-    p5.rect(0, 0, dimensions.w + dimensions.padding, dimensions.h + dimensions.padding)
-  }
-  else if (shape === 'circle') {
-    p5.ellipse(0, 0, dimensions.w + dimensions.padding)
+  sketch.colorMode('hsl')
+  sketch.noFill()
+  sketch.stroke(hue, saturation, lightness)
+  switch (shape) {
+    case 'rect':
+      sketch.rect(0, 0, dimensions.w + dimensions.padding, dimensions.h + dimensions.padding)
+      break
+    case 'circle':
+      sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
+      break
   }
 }
 
 export const renderHighlight = (config: Config) => {
-  const { p5, dimensions, shape } = config
-  p5.colorMode(p5.HSL)
-  p5.noStroke()
-  p5.fill(0, 0, 100, 0.1)
-  if (shape === 'rect') {
-    p5.rectMode(p5.CENTER)
-    p5.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
-  }
-  else if (shape === 'circle') {
-    p5.ellipse(0, 0, dimensions.w + dimensions.padding)
+  const { sketch, dimensions, shape } = config
+  sketch.colorMode('hsl')
+  sketch.noStroke()
+  sketch.fill(0, 0, 100, 0.1)
+  switch (shape) {
+    case 'rect':
+      sketch.rectMode('center')
+      sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
+      break
+    case 'circle':
+      sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
+      break
   }
 }
 
 export const renderLowlight = (config: Config) => {
-  const { p5, dimensions, shape } = config
-  p5.colorMode(p5.HSL)
-  p5.noStroke()
-  p5.fill(0, 0, 0, 0.8)
-  if (shape === 'rect') {
-    p5.rectMode(p5.CENTER)
-    p5.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
-  }
-  else if (shape === 'circle') {
-    p5.ellipse(0, 0, dimensions.w + dimensions.padding)
+  const { sketch, dimensions, shape } = config
+  sketch.colorMode('hsl')
+  sketch.noStroke()
+  sketch.fill(0, 0, 0, 0.8)
+  switch (shape) {
+    case 'rect':
+      sketch.rectMode('center')
+      sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
+      break
+    case 'circle':
+      sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
+      break
   }
 }
 
 export const checkMouseInBounds = (instance: Instance, mousePosition: Position, config: Config) => {
-  const { p5, shape, dimensions } = config
+  const { sketch, shape, dimensions } = config
   const { body } = instance
-  if (shape === 'rect') {
-    const vertices = body.vertices
-    const mouseArea = areaFromPoints(mousePosition, vertices, p5)
-    return (mouseArea < body.area + 1)
-  }
-  else if (shape === 'circle') {
-    const distance = p5.dist(body.position.x, body.position.y, mousePosition.x, mousePosition.y)
-    return (distance < dimensions.w / 2)
+  switch (shape) {
+    case 'rect':
+      const vertices = body.vertices
+      const mouseArea = areaFromPoints(mousePosition, vertices, sketch)
+      return (mouseArea < body.area + 1)
+    case 'circle':
+      const distance = sketch.dist(body.position.x, body.position.y, mousePosition.x, mousePosition.y)
+      return (distance < dimensions.w / 2)
   }
 }
 

@@ -14,10 +14,10 @@ const Navbar = props => {
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = p5 => {
+  const Sketch = sketch => {
 
     const environment = {
-      p5,
+      sketch,
       engine,
       world,
       width: window.innerWidth,
@@ -37,27 +37,27 @@ const Navbar = props => {
       })
     }
 
-    p5.setup = () => {
+    sketch.setup = () => {
       Engine.clear(engine)
       World.clear(world, false)
-      const canvas = p5.createCanvas(environment.width, environment.height)
+      const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupNav(environment)
     }
-    p5.draw = () => {
-      p5.background(bgColor)
+    sketch.draw = () => {
+      sketch.background(bgColor)
       Engine.update(engine)
       const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
+        x: sketch.mouseX,
+        y: sketch.mouseY
       }
       environment.buttons.forEach(button => {
         button.show()
         button.checkMouseInBounds(mousePosition)
       })
     }
-    p5.windowResized = () => {
+    sketch.windowResized = () => {
       resetNavFrame(environment)
       setupFrame(environment)
     }

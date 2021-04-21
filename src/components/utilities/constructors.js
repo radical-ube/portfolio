@@ -25,22 +25,18 @@ export function Boundary(x, y, w, h, label, environment) {
   }
 }
 
-// type BoundaryConstructor = {
-//   new (x: number, y: number, w: number, h: number, label: string, environment: Environment): Boundary
-// }
-
 export function TextBox(environment, settings) {
-  const { p5, world, bodies } = environment
+  const { sketch, world, bodies } = environment
   const { x, y, options, textSettings, color } = settings
 
   // class properties
   this.config = {
-    p5,
+    sketch,
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: p5.CENTER,
-      vertical: p5.CENTER
+      horizontal: 'center',
+      vertical: 'center'
     },
     shape: 'rect'
   }
@@ -51,25 +47,25 @@ export function TextBox(environment, settings) {
 
   // class methods
   this.show = () => {
-    p5.push()
-    transformBody(p5, this.body)
+    sketch.push()
+    transformBody(sketch, this.body)
     renderText(this.config)
-    p5.pop()
+    sketch.pop()
   }
 }
 
 export function ParagraphBox(environment, settings) {
-  const { p5, world, bodies } = environment
+  const { sketch, world, bodies } = environment
   const { x, y, options, textSettings, color } = settings
 
   // class properties
   this.config = {
-    p5,
+    sketch,
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: p5.LEFT,
-      vertical: p5.TOP
+      horizontal: 'left',
+      vertical: 'top'
     }
   }
   this.config.dimensions = setTextDimensions(this.config)
@@ -79,19 +75,19 @@ export function ParagraphBox(environment, settings) {
 
   // class methods
   this.show = () => {
-    p5.push()
-    transformBody(p5, this.body)
+    sketch.push()
+    transformBody(sketch, this.body)
     renderText(this.config)
-    p5.pop()
+    sketch.pop()
   }
 }
 
 export function Project(environment, settings) {
-  const { p5, world, projects, descriptions, buttons } = environment
+  const { sketch, world, projects, descriptions, buttons } = environment
   const { x, y, width, height, image, description, textSize, website, github, options } = settings
 
   this.bodyConfig = {
-    p5,
+    sketch,
     image,
     dimensions: {
       w: width,
@@ -142,8 +138,8 @@ export function Project(environment, settings) {
   addToWorld(world, this.githubButton, buttons)
 
   this.show = () => {
-    p5.push()
-    transformBody(p5, this.body)
+    sketch.push()
+    transformBody(sketch, this.body)
     renderImage(this.bodyConfig)
     if (this.mouseInBounds) {
       renderLowlight(this.bodyConfig)
@@ -152,7 +148,7 @@ export function Project(environment, settings) {
       this.webButton.remove()
       this.githubButton.remove()
     }
-    p5.pop()
+    sketch.pop()
   }
 
   this.checkMouseInBounds = (mousePosition) => {
@@ -161,7 +157,7 @@ export function Project(environment, settings) {
 }
 
 export function Spring(environment, settings) {
-  const { p5, world, constraints } = environment
+  const { sketch, world, constraints } = environment
   const { bodyA, bodyB, length, stiffness } = settings
 
   this.body = Constraint.create({
@@ -175,17 +171,17 @@ export function Spring(environment, settings) {
   this.show = () => {
     let a = this.body.bodyA.position
     let b = this.body.bodyB.position
-    p5.push()
-    p5.colorMode(p5.HSL)
-    p5.stroke(0, 0, 100, 0.1)
-    p5.line(a.x, a.y, b.x, b.y)
-    p5.pop()
+    sketch.push()
+    sketch.colorMode('hsl')
+    sketch.stroke(0, 0, 100, 0.1)
+    sketch.line(a.x, a.y, b.x, b.y)
+    sketch.pop()
   }
 }
 
 export function ColorBall(environment, settings) {
-  const { p5, world, particles, height } = environment
-  const { HSL } = p5
+  const { sketch, world, particles, height } = environment
+  // const { HSL } = sketch
   const { x, y, r, options, color } = settings
 
   this.r = r
@@ -199,13 +195,13 @@ export function ColorBall(environment, settings) {
   this.show = () => {
     const { hue, saturation, lightness } = this.color
 
-    p5.push()
-    transformBody(p5, this.body)
-    p5.noStroke()
-    p5.colorMode(HSL)
-    p5.fill(hue, saturation, lightness)
-    p5.ellipse(0, 0, this.r * 2)
-    p5.pop()
+    sketch.push()
+    transformBody(sketch, this.body)
+    sketch.noStroke()
+    sketch.colorMode('hsl')
+    sketch.fill(hue, saturation, lightness)
+    sketch.ellipse(0, 0, this.r * 2)
+    sketch.pop()
   }
 
   this.isBelowLine = () => {
@@ -217,17 +213,17 @@ export function ColorBall(environment, settings) {
 }
 
 export function Button(environment, settings) {
-  const { p5, world, buttons } = environment
+  const { sketch, world, buttons } = environment
   const { x, y, options, textSettings, color } = settings
 
   // class properties
   this.config = {
-    p5,
+    sketch,
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: p5.CENTER,
-      vertical: p5.CENTER
+      horizontal: 'center',
+      vertical: 'center'
     },
     shape: 'rect'
   }
@@ -240,14 +236,14 @@ export function Button(environment, settings) {
 
   // class methods
   this.show = () => {
-    p5.push()
-    transformBody(p5, this.body)
+    sketch.push()
+    transformBody(sketch, this.body)
     renderText(this.config)
     renderOutline(this.config)
     if (this.mouseInBounds) {
       renderHighlight(this.config)
     }
-    p5.pop()
+    sketch.pop()
   }
 
   this.checkMouseInBounds = (mousePosition) => {
@@ -260,17 +256,17 @@ export function Button(environment, settings) {
 }
 
 export function Bubble(environment, settings) {
-  const { p5, world, bubbles } = environment
+  const { sketch, world, bubbles } = environment
   const { x, y, options, textSettings, color } = settings
 
   // class properties
   this.config = {
-    p5,
+    sketch,
     textSettings,
     color: color || defaultColor,
     alignment: {
-      horizontal: p5.CENTER,
-      vertical: p5.CENTER
+      horizontal: 'center',
+      vertical: 'center'
     },
     shape: 'circle'
   }
@@ -283,14 +279,14 @@ export function Bubble(environment, settings) {
 
   // class methods
   this.show = () => {
-    p5.push()
-    transformBody(p5, this.body)
+    sketch.push()
+    transformBody(sketch, this.body)
     renderText(this.config)
     renderOutline(this.config)
     if (this.mouseInBounds) {
       renderHighlight(this.config)
     }
-    p5.pop()
+    sketch.pop()
   }
 
   this.checkMouseInBounds = (mousePosition) => {

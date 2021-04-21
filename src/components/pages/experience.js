@@ -13,9 +13,9 @@ const Experience = props => {
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = p5 => {
+  const Sketch = sketch => {
     const environment = {
-      p5,
+      sketch,
       engine,
       world,
       width: window.innerWidth,
@@ -28,7 +28,7 @@ const Experience = props => {
 
     const handleClick = () => {
       environment.buttons.forEach(button => {
-        if (button.mouseInBounds && button.values) {
+        if (button.mouseInBounds && button.text) {
           createBubbles(environment, button)
         }
         if (button.mouseInBounds && button.address) {
@@ -45,21 +45,21 @@ const Experience = props => {
       }
     }
 
-    p5.setup = () => {
+    sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
       world.gravity.y *= -1
-      const canvas = p5.createCanvas(environment.width, environment.height)
+      const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupExperience(environment)
     }
-    p5.draw = () => {
-      p5.background(bgColor)
+    sketch.draw = () => {
+      sketch.background(bgColor)
       Engine.update(engine)
       const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
+        x: sketch.mouseX,
+        y: sketch.mouseY
       }
       environment.bodies.forEach(body => {
         body.show()
@@ -70,7 +70,7 @@ const Experience = props => {
       })
       manageBubbleRender(environment.bubbles, mousePosition)
     }
-    p5.windowResized = () => {
+    sketch.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }

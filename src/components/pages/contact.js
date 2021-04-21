@@ -13,9 +13,9 @@ const Contact = props => {
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = p5 => {
+  const Sketch = sketch => {
     const environment = {
-      p5,
+      sketch,
       engine,
       world,
       width: window.innerWidth,
@@ -34,21 +34,21 @@ const Contact = props => {
       })
     }
 
-    p5.setup = () => {
+    sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
-      const canvas = p5.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas, engine, world, p5)
+      const canvas = sketch.createCanvas(environment.width, environment.height)
+      createMouseConstraint(canvas.elt, engine, world, sketch)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupContact(environment)
     }
-    p5.draw = () => {
-      p5.background(bgColor)
+    sketch.draw = () => {
+      sketch.background(bgColor)
       Engine.update(engine)
       const mousePosition = {
-        x: p5.mouseX,
-        y: p5.mouseY
+        x: sketch.mouseX,
+        y: sketch.mouseY
       }
       environment.bodies.forEach(body => {
         body.show()
@@ -61,7 +61,7 @@ const Contact = props => {
         button.checkMouseInBounds(mousePosition)
       })
     }
-    p5.windowResized = () => {
+    sketch.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }
