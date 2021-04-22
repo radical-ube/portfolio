@@ -2,7 +2,9 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 
 // matter-js
-export type Body = Matter.Body
+export type Body = Matter.Body | Matter.Bodies
+
+export type MatterBodies = Matter.Bodies
 
 export type Constraint = Matter.Constraint
 
@@ -71,6 +73,7 @@ export interface Color {
   lightness: number;
 }
 
+// export type Position = Matter.Vector
 export interface Position {
   x: number;
   y: number;
@@ -87,7 +90,7 @@ export enum Shape {
   Rectangle = 'rect'
 }
 
-interface TextSettings {
+export interface TextSettings {
   text: string;
   textSize: number;
   boxWidth: number;
@@ -105,13 +108,13 @@ export interface Instance {
 export interface Button extends Instance {
   body: Body;
   config: ButtonConfig;
-  text: string[];
+  text: string;
   options: any;
   address: string;
   mouseInBounds: boolean | undefined;
-  show: () => void;
-  checkMouseInBounds: (mousePosition: Position) => void;
-  remove: () => void;
+  show: (environment: Environment) => void;
+  // checkMouseInBounds: (mousePosition: Position) => void;
+  remove: (environment: Environment) => void;
 }
 
 export type Canvas = HTMLCanvasElement
@@ -178,8 +181,15 @@ export interface Project extends Instance {
   checkMouseInBounds: (mousePosition: Position) => void;
 }
 
+type Object = Button | Boundary | Spring | TextBox | ParagraphBox | ColorBall | Bubble | Project
+
+// constructors
+export type ObjectConstructor = {
+  new (environment: Environment, settings: any): Object;
+}
 
 
+// settings
 export interface Environment {
   sketch: p5;
   width: number;
@@ -195,8 +205,6 @@ export interface Environment {
   bubbles: any[];
 }
 
-
-// settings
 interface Sketch {
   sketch: p5;
 }

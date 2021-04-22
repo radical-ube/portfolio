@@ -15,9 +15,11 @@ import {
   ImageConfig,
   TextConfig,
   ParagraphConfig,
+  Constraint,
+  TextSettings
 } from '../../types'
 
-import { ColorBallConstructor, BubbleConstructor } from './constructors'
+// import { ColorBallConstructor, BubbleConstructor } from './constructors'
 const { World, Mouse, MouseConstraint } = Matter
 
 const getRandomInt = (min: number, max: number): number => {
@@ -151,49 +153,49 @@ export const createMouseConstraint = (canvas: Canvas, engine: EngineType, world:
   World.add(world, mouseConstraint)
 }
 
-export const createColorParticles = (environment: Environment) => {
-  const { width } = environment
-  const particleSettings = {
-    x: width * 0.3,
-    y: 10,
-    r: getRandomInt(4, 9),
-    options: {
-      friction: 0,
-      restitution: 0.4,
-      isStatic: false
-    },
-    color: randomColor()
-  }
+// export const createColorParticles = (environment: Environment) => {
+//   const { width } = environment
+//   const particleSettings = {
+//     x: width * 0.3,
+//     y: 10,
+//     r: getRandomInt(4, 9),
+//     options: {
+//       friction: 0,
+//       restitution: 0.4,
+//       isStatic: false
+//     },
+//     color: randomColor()
+//   }
 
-  new ColorBallConstructor(environment, particleSettings)
-}
+//   new ColorBallConstructor(environment, particleSettings)
+// }
 
-export const createBubbles = (environment: Environment, button: Button) => {
-  const position = button.body.position
-  const textSize = button.config.textSettings.textSize
+// export const createBubbles = (environment: Environment, button: Button) => {
+//   const position = button.body.position
+//   const textSize = button.config.textSettings.textSize
 
-  button.text.forEach(text => {
-    let x = getRandomInt(position.x - 10, position.x + 10)
-    let y = getRandomInt(position.y - 30, position.y - 50)
+//   button.text.forEach(text => {
+//     let x = getRandomInt(position.x - 10, position.x + 10)
+//     let y = getRandomInt(position.y - 30, position.y - 50)
 
-    new BubbleConstructor(environment, {
-      x,
-      y,
-      options: {
-        frictionAir: 0.25,
-        restitution: 0.8,
-        isStatic: false
-      },
-      textSettings: {
-        text: text,
-        textSize
-      },
-      color: desaturateColor(environment, randomColor())
-    })
-  })
-}
+//     new BubbleConstructor(environment, {
+//       x,
+//       y,
+//       options: {
+//         frictionAir: 0.25,
+//         restitution: 0.8,
+//         isStatic: false
+//       },
+//       textSettings: {
+//         text: text,
+//         textSize
+//       },
+//       color: desaturateColor(environment, randomColor())
+//     })
+//   })
+// }
 
-export const transformBody = (sketch: p5, body: Body) => {
+export const transformBody = (sketch: p5, body: any) => {
   const position = body.position
   const angle = body.angle
 
@@ -201,8 +203,8 @@ export const transformBody = (sketch: p5, body: Body) => {
   sketch.rotate(angle)
 }
 
-export const setTextDimensions = (config: TextConfig | ParagraphConfig) => {
-  const { sketch, textSettings } = config
+export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
+  // const { sketch, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   sketch.textSize(textSize || 18)
   return {
@@ -292,9 +294,10 @@ export const renderLowlight = (config: ColorRenderConfig) => {
   }
 }
 
-export const checkMouseInBounds = (instance: Instance, mousePosition: Position, config: ColorRenderConfig) => {
+export const checkMouseInBounds = (body: Matter.Body, mousePosition: Position, config: ColorRenderConfig) => {
   const { sketch, shape, dimensions } = config
-  const { body } = instance
+  // const { body } = instance
+  
   switch (shape) {
     case 'rect':
       const vertices = body.vertices
