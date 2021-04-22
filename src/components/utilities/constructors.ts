@@ -241,28 +241,59 @@ class TextBoxConstructor {
 //   }
 // }
 
-export function SpringConstructor(this: Spring, environment: Environment, settings: any) {
-  const { sketch, world, constraints } = environment
-  const { bodyA, bodyB, length, stiffness } = settings
+class SpringConstructor {
+  body: Matter.Constraint;
+  index: number;
 
-  this.body = Constraint.create({
-    bodyA,
-    bodyB,
-    length,
-    stiffness
-  })
-  addToWorld(world, this, constraints)
-
-  this.show = () => {
+  constructor (environment: Environment, settings: any) {
+    const { sketch, world, constraints } = environment
+    const { bodyA, bodyB, length, stiffness } = settings
+  
+    this.body = Constraint.create({
+      bodyA,
+      bodyB,
+      length,
+      stiffness
+    })
+    // addToWorld(world, this, constraints)
+    World.add(environment.world, this.body)
+    environment.buttons.push(this)
+    this.index = environment.buttons.length - 1
+  }
+  
+  show(environment: Environment) {
     let a = this.body.bodyA.position
     let b = this.body.bodyB.position
-    sketch.push()
-    sketch.colorMode('hsl')
-    sketch.stroke(0, 0, 100, 0.1)
-    sketch.line(a.x, a.y, b.x, b.y)
-    sketch.pop()
+    environment.sketch.push()
+    environment.sketch.colorMode('hsl')
+    environment.sketch.stroke(0, 0, 100, 0.1)
+    environment.sketch.line(a.x, a.y, b.x, b.y)
+    environment.sketch.pop()
   }
 }
+
+// export function SpringConstructor(this: Spring, environment: Environment, settings: any) {
+//   const { sketch, world, constraints } = environment
+//   const { bodyA, bodyB, length, stiffness } = settings
+
+//   this.body = Constraint.create({
+//     bodyA,
+//     bodyB,
+//     length,
+//     stiffness
+//   })
+//   addToWorld(world, this, constraints)
+
+//   this.show = () => {
+//     let a = this.body.bodyA.position
+//     let b = this.body.bodyB.position
+//     sketch.push()
+//     sketch.colorMode('hsl')
+//     sketch.stroke(0, 0, 100, 0.1)
+//     sketch.line(a.x, a.y, b.x, b.y)
+//     sketch.pop()
+//   }
+// }
 
 // export function ColorBallConstructor(this: ColorBall, environment: Environment, settings: any) {
 //   const { sketch, world, particles, height } = environment
