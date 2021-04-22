@@ -1,6 +1,8 @@
 import Matter from 'matter-js'
 import p5 from 'p5'
-import { setTextDimensions, transformBody, addToWorld, renderText, renderImage, renderOutline, renderHighlight, renderLowlight, checkMouseInBounds, defaultColor } from './utils'
+import { setTextDimensions, transformBody, 
+  // addToWorld, 
+  renderText, renderImage, renderOutline, renderHighlight, renderLowlight, checkMouseInBounds, defaultColor } from './utils'
 import {
   Environment,
   Boundary,
@@ -22,23 +24,52 @@ import {
 
 const { World, Bodies, Constraint } = Matter
 
-export function BoundaryConstructor(this: Boundary, x: number, y: number, w: number, h: number, label: string, environment: Environment) {
-  const { world, boundaries } = environment
-  const options = {
-    friction: 0.3,
-    restitution: 1,
-    isStatic: true,
-    label: label || 'boundary'
-  }
-  this.body = Bodies.rectangle(x, y, w, h, options)
-  this.w = w
-  this.h = h
-  addToWorld(world, this, boundaries)
+class BoundaryConstructor {
+  body: Matter.Body;
+  w: number;
+  h: number;
+  index: number;
 
-  this.remove = () => {
-    World.remove(world, this.body)
+  constructor(x: number, y: number, w: number, h: number, label: string, environment: Environment) {
+    const { world, boundaries } = environment
+    const options = {
+      friction: 0.3,
+      restitution: 1,
+      isStatic: true,
+      label: label || 'boundary'
+    }
+    this.body = Bodies.rectangle(x, y, w, h, options)
+    this.w = w
+    this.h = h
+    // addToWorld(world, this, boundaries)
+
+    World.add(environment.world, this.body)
+    environment.boundaries.push(this)
+    this.index = environment.boundaries.length - 1
+  }
+  
+  remove(environment: Environment) {
+    World.remove(environment.world, this.body)
   }
 }
+
+// export function BoundaryConstructor(this: Boundary, x: number, y: number, w: number, h: number, label: string, environment: Environment) {
+//   const { world, boundaries } = environment
+//   const options = {
+//     friction: 0.3,
+//     restitution: 1,
+//     isStatic: true,
+//     label: label || 'boundary'
+//   }
+//   this.body = Bodies.rectangle(x, y, w, h, options)
+//   this.w = w
+//   this.h = h
+//   addToWorld(world, this, boundaries)
+
+//   this.remove = () => {
+//     World.remove(world, this.body)
+//   }
+// }
 
 class TextBoxConstructor {
   config: TextConfig;

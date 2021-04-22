@@ -126,7 +126,7 @@ export interface Boundary extends Instance {
   w: number;
   h: number;
   index: number;
-  remove: () => void;
+  remove: (environment: Environment) => void;
 }
 
 export interface Spring extends Instance {
