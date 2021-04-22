@@ -3,7 +3,9 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetNavFrame, setupNav } from './utilities'
+import { setupFrame, resetNavFrame, 
+  // setupNav 
+} from './types'
 import { setCurrentPage } from '../store/page'
 
 const { Engine, World } = Matter
@@ -43,7 +45,7 @@ const Navbar = props => {
       const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      setupNav(environment)
+      // setupNav(environment)
     }
     sketch.draw = () => {
       sketch.background(bgColor)

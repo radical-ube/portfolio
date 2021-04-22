@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 
 import { setupFrame, resetPageFrame, setupAbout, 
   // createColorParticles, 
-  manageParticleRender } from '../utilities'
+  // manageParticleRender 
+} from '../types'
 
 const { Engine, World } = Matter
 
@@ -43,7 +44,7 @@ const About = props => {
       environment.bodies.forEach(body => {
         body.show()
       })
-      manageParticleRender(environment.particles)
+      // manageParticleRender(environment.particles)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)

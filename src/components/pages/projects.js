@@ -3,7 +3,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupProjects } from '../utilities'
+import { setupFrame, resetPageFrame, setupProjects } from '../types'
 
 const { Engine, World } = Matter
 

@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 
 import { setupFrame, resetPageFrame, setupExperience, 
   // createBubbles, 
-  manageBubbleRender } from '../utilities'
+  // manageBubbleRender 
+} from '../types'
 
 const { Engine, World } = Matter
 
@@ -70,7 +71,7 @@ const Experience = props => {
         button.show()
         button.checkMouseInBounds(mousePosition)
       })
-      manageBubbleRender(environment.bubbles, mousePosition)
+      // manageBubbleRender(environment.bubbles, mousePosition)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)

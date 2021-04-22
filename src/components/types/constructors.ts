@@ -1,30 +1,30 @@
 import Matter from 'matter-js'
 import p5 from 'p5'
-import { setTextDimensions, transformBody, 
+import { 
+  setTextDimensions, 
+  transformBody, 
   // addToWorld, 
-  renderText, renderImage, renderOutline, renderHighlight, renderLowlight, checkMouseInBounds, defaultColor } from './utils'
+  renderText, 
+  // renderImage, 
+  // renderOutline, 
+  // renderHighlight, 
+  // renderLowlight, 
+  // checkMouseInBounds, 
+  defaultColor 
+} from './utils'
+
 import {
   Environment,
-  Boundary,
-  TextBox,
-  ParagraphBox,
-  Project,
-  Spring,
-  ColorBall,
-  Button,
-  Bubble,
   Horizontal,
   Vertical,
   Shape,
-  // ObjectConstructor,
-  MatterBodies,
-  ButtonConfig,
-  TextConfig
-} from '../../types'
+  // ButtonConfig,
+  // TextConfig
+} from './types'
 
 const { World, Bodies, Constraint } = Matter
 
-export class BoundaryConstructor {
+export class Boundary {
   body: Matter.Body;
   w: number;
   h: number;
@@ -53,89 +53,42 @@ export class BoundaryConstructor {
   }
 }
 
-// export function BoundaryConstructor(this: Boundary, x: number, y: number, w: number, h: number, label: string, environment: Environment) {
-//   const { world, boundaries } = environment
-//   const options = {
-//     friction: 0.3,
-//     restitution: 1,
-//     isStatic: true,
-//     label: label || 'boundary'
+// export class TextBox {
+//   config: TextConfig;
+//   options: any;
+//   body: Matter.Body;
+//   index: number;
+
+//   constructor(environment: Environment, settings: any) {
+//     const { sketch, world, bodies } = environment
+//     const { x, y, options, textSettings, color } = settings
+
+//     this.config = {
+//       sketch,
+//       textSettings,
+//       color: color || defaultColor,
+//       alignment: {
+//         horizontal: Horizontal.Center,
+//         vertical: Vertical.Center
+//       },
+//       shape: Shape.Rectangle,
+//       dimensions: setTextDimensions(environment.sketch, settings.textSettings)
+//     }
+//     this.options = options
+//     this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
+//     // addToWorld(world, this, bodies)
+//     World.add(environment.world, this.body)
+//     environment.bodies.push(this)
+//     this.index = environment.bodies.length - 1
 //   }
-//   this.body = Bodies.rectangle(x, y, w, h, options)
-//   this.w = w
-//   this.h = h
-//   addToWorld(world, this, boundaries)
-
-//   this.remove = () => {
-//     World.remove(world, this.body)
-//   }
-// }
-
-export class TextBoxConstructor {
-  config: TextConfig;
-  options: any;
-  body: Matter.Body;
-  index: number;
-
-  constructor(environment: Environment, settings: any) {
-    const { sketch, world, bodies } = environment
-    const { x, y, options, textSettings, color } = settings
-
-    this.config = {
-      sketch,
-      textSettings,
-      color: color || defaultColor,
-      alignment: {
-        horizontal: Horizontal.Center,
-        vertical: Vertical.Center
-      },
-      shape: Shape.Rectangle,
-      dimensions: setTextDimensions(environment.sketch, settings.textSettings)
-    }
-    this.options = options
-    this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
-    // addToWorld(world, this, bodies)
-    World.add(environment.world, this.body)
-    environment.bodies.push(this)
-    this.index = environment.bodies.length - 1
-  }
   
 
-  // class methods
-  show(environment: Environment) {
-    environment.sketch.push()
-    transformBody(environment.sketch, this.body)
-    renderText(this.config)
-    environment.sketch.pop()
-  }
-}
-
-// export function TextBoxConstructor(this: TextBox, environment: Environment, settings: any) {
-//   const { sketch, world, bodies } = environment
-//   const { x, y, options, textSettings, color } = settings
-
-//   // class properties
-//   this.config = {
-//     sketch,
-//     textSettings,
-//     color: color || defaultColor,
-//     alignment: {
-//       horizontal: Horizontal.Center,
-//       vertical: Vertical.Center
-//     },
-//     shape: Shape.Rectangle,
-//     dimensions: setTextDimensions(this.config)
-//   }
-//   this.options = options
-//   this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
-//   addToWorld(world, this, bodies)
-
 //   // class methods
-//   this.show = () => {
-//     sketch.push()
-//     transformBody(sketch, this.body)
+//   show(environment: Environment) {
+//     environment.sketch.push()
+//     transformBody(environment.sketch, this.body)
 //     renderText(this.config)
-//     sketch.pop()
+//     environment.sketch.pop()
 //   }
 // }
 
@@ -331,59 +284,59 @@ export class SpringConstructor {
 //   return new buttonConstructor(environment, settings)
 // }
 
-export class ButtonConstructor {
-  config: ButtonConfig;
-  options: any;
-  body: Matter.Body;
-  address: string;
-  mouseInBounds: boolean | undefined;
-  index: number;
-  text: string;
+// export class ButtonConstructor {
+//   config: ButtonConfig;
+//   options: any;
+//   body: Matter.Body;
+//   address: string;
+//   mouseInBounds: boolean | undefined;
+//   index: number;
+//   text: string;
 
-  constructor(environment: Environment, settings: any) {
-    this.config = {
-      sketch: environment.sketch,
-      textSettings: settings.textSettings,
-      color: settings.color || defaultColor,
-      alignment: {
-        horizontal: Horizontal.Center,
-        vertical: Vertical.Center
-      },
-      shape: Shape.Rectangle,
-      dimensions: setTextDimensions(environment.sketch, settings.textSettings)
-    }
-    this.text = settings.textSettings.text
-    this.options = settings.options
-    this.body = Bodies.rectangle(settings.x, settings.y, this.config.dimensions.w + this.config.dimensions.padding, this.config.dimensions.h + this.config.dimensions.padding, this.options)
-    this.address = settings.textSettings.address
-    this.mouseInBounds = false
-    // addToWorld(environment.world, {body: this.body, index: 0}, environment.buttons)
+//   constructor(environment: Environment, settings: any) {
+//     this.config = {
+//       sketch: environment.sketch,
+//       textSettings: settings.textSettings,
+//       color: settings.color || defaultColor,
+//       alignment: {
+//         horizontal: Horizontal.Center,
+//         vertical: Vertical.Center
+//       },
+//       shape: Shape.Rectangle,
+//       dimensions: setTextDimensions(environment.sketch, settings.textSettings)
+//     }
+//     this.text = settings.textSettings.text
+//     this.options = settings.options
+//     this.body = Bodies.rectangle(settings.x, settings.y, this.config.dimensions.w + this.config.dimensions.padding, this.config.dimensions.h + this.config.dimensions.padding, this.options)
+//     this.address = settings.textSettings.address
+//     this.mouseInBounds = false
+//     // addToWorld(environment.world, {body: this.body, index: 0}, environment.buttons)
 
-    World.add(environment.world, this.body)
-    environment.buttons.push(this)
-    this.index = environment.buttons.length - 1
-  }
+//     World.add(environment.world, this.body)
+//     environment.buttons.push(this)
+//     this.index = environment.buttons.length - 1
+//   }
 
-  // class methods
-  show(environment: Environment) {
-    environment.sketch.push()
-    transformBody(environment.sketch, this.body)
-    renderText(this.config)
-    renderOutline(this.config)
-    if (this.mouseInBounds) {
-      renderHighlight(this.config)
-    }
-    environment.sketch.pop()
-  }
+//   // class methods
+//   show(environment: Environment) {
+//     environment.sketch.push()
+//     transformBody(environment.sketch, this.body)
+//     renderText(this.config)
+//     renderOutline(this.config)
+//     if (this.mouseInBounds) {
+//       renderHighlight(this.config)
+//     }
+//     environment.sketch.pop()
+//   }
 
-  // checkMouseInBounds(mousePosition: Position) {
-  //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.config)
-  // }
+//   // checkMouseInBounds(mousePosition: Position) {
+//   //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.config)
+//   // }
 
-  remove(environment: Environment) {
-    World.remove(environment.world, this.body)
-  }
-}
+//   remove(environment: Environment) {
+//     World.remove(environment.world, this.body)
+//   }
+// }
 
 // export function ButtonConstructor(this: Button, environment: Environment, settings: any) {
 //   const { sketch, world, buttons } = environment

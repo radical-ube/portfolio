@@ -1,20 +1,25 @@
-import { BoundaryConstructor, TextBoxConstructor,
+import { 
+  Boundary, 
+  // TextBox,
   //  ParagraphBox, 
   //  ImageBox, 
    SpringConstructor, 
-   ButtonConstructor, 
+  //  ButtonConstructor, 
   //  Project 
   } from './constructors'
+import {
+  TextBox
+} from './types'
 import { randomColor } from './utils'
 
 
 export const setupFrame = environment => {
   const { width, height } = environment
 
-  new BoundaryConstructor(width / 2, height * 2, width * 2, height * 2, 'ground', environment)
-  new BoundaryConstructor(width / 2, height * -1, width * 2, height * 2, 'ceiling', environment)
-  new BoundaryConstructor(width * -1, height / 2, width * 2, height, 'leftwall', environment)
-  new BoundaryConstructor(width * 2, height / 2, width * 2, height, 'rightwall', environment)
+  new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground', environment)
+  new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling', environment)
+  new Boundary(width * -1, height / 2, width * 2, height, 'leftwall', environment)
+  new Boundary(width * 2, height / 2, width * 2, height, 'rightwall', environment)
 }
 
 export const resetPageFrame = environment => {
@@ -39,65 +44,65 @@ export const resetNavFrame = environment => {
   environment.boundaries.splice(0, 1)
 }
 
-export const setupNav = (environment) => {
-  const { width, height, tabs, buttons } = environment
-  let textSize = width * 0.035
-  let x = width / (tabs.length + 1)
-  let y = height * 0.5
-  let stiffness = 0.6
+// export const setupNav = (environment) => {
+//   const { width, height, tabs, buttons } = environment
+//   let textSize = width * 0.035
+//   let x = width / (tabs.length + 1)
+//   let y = height * 0.5
+//   let stiffness = 0.6
 
-  let end1 = new TextBoxConstructor(environment, {
-    x: -15,
-    y,
-    options: {
-      isStatic: true
-    },
-    textSettings: {}
-  })
-  let prevElement = end1
+//   let end1 = new TextBox(environment, {
+//     x: -15,
+//     y,
+//     options: {
+//       isStatic: true
+//     },
+//     textSettings: {}
+//   })
+//   let prevElement = end1
 
-  for (let i = 0; i < tabs.length; i++) {
-    let buttonSettings = {
-      x: x + (40 * i),
-      y,
-      options: {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      },
-      textSettings: {
-        textSize,
-        text: tabs[i]
-      },
-      color: randomColor()
-    }
-    let button = new ButtonConstructor(environment, buttonSettings)
+//   for (let i = 0; i < tabs.length; i++) {
+//     let buttonSettings = {
+//       x: x + (40 * i),
+//       y,
+//       options: {
+//         friction: 0.4,
+//         restitution: 0.8,
+//         isStatic: false
+//       },
+//       textSettings: {
+//         textSize,
+//         text: tabs[i]
+//       },
+//       color: randomColor()
+//     }
+//     let button = new ButtonConstructor(environment, buttonSettings)
 
-    let constraintSettings = {
-      bodyA: prevElement.body,
-      bodyB: button.body,
-      length: x,
-      stiffness
-    }
-    new SpringConstructor(environment, constraintSettings)
-    prevElement = button
-  }
+//     let constraintSettings = {
+//       bodyA: prevElement.body,
+//       bodyB: button.body,
+//       length: x,
+//       stiffness
+//     }
+//     new SpringConstructor(environment, constraintSettings)
+//     prevElement = button
+//   }
 
-  let end2 = new TextBoxConstructor(environment, {
-    x: width + 15,
-    y,
-    options: {
-      isStatic: true
-    },
-    textSettings: {}
-  })
-  new SpringConstructor(environment, {
-    bodyA: buttons[buttons.length - 1].body,
-    bodyB: end2.body,
-    length: x,
-    stiffness
-  })
-}
+//   let end2 = new TextBox(environment, {
+//     x: width + 15,
+//     y,
+//     options: {
+//       isStatic: true
+//     },
+//     textSettings: {}
+//   })
+//   new SpringConstructor(environment, {
+//     bodyA: buttons[buttons.length - 1].body,
+//     bodyB: end2.body,
+//     length: x,
+//     stiffness
+//   })
+// }
 
 export const setupHome = (environment) => {
   const { width, height } = environment
@@ -128,7 +133,7 @@ export const setupHome = (environment) => {
         color: randomColor()
       }
 
-      new TextBoxConstructor(environment, settings)
+      new TextBox(environment, settings)
     })
 
   let homeText2 = 'i am a work in progress'
@@ -153,7 +158,7 @@ export const setupHome = (environment) => {
         color: randomColor()
       }
 
-      new TextBoxConstructor(environment, settings)
+      new TextBox(environment, settings)
     })
 }
 
