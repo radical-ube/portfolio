@@ -48,9 +48,9 @@ export function TextBoxConstructor(this: TextBox, environment: Environment, sett
       horizontal: Horizontal.Center,
       vertical: Vertical.Center
     },
-    shape: Shape.Rectangle
+    shape: Shape.Rectangle,
+    dimensions: setTextDimensions(this.config)
   }
-  this.config.dimensions = setTextDimensions(this.config)
   this.options = options
   this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
   addToWorld(world, this, bodies)
@@ -76,9 +76,9 @@ export function ParagraphBoxConstructor(this: ParagraphBox, environment: Environ
     alignment: {
       horizontal: Horizontal.Left,
       vertical: Vertical.Top
-    }
+    },
+    dimensions: setTextDimensions(this.config)
   }
-  this.config.dimensions = setTextDimensions(this.config)
   this.options = options
   this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
   addToWorld(world, this, bodies)
@@ -234,9 +234,9 @@ export function ButtonConstructor(this: Button, environment: Environment, settin
       horizontal: Horizontal.Center,
       vertical: Vertical.Center
     },
-    shape: Shape.Rectangle
+    shape: Shape.Rectangle,
+    dimensions: setTextDimensions(this.config)
   }
-  this.config.dimensions = setTextDimensions(this.config)
   this.options = options
   this.body = Bodies.rectangle(x, y, this.config.dimensions.w + this.config.dimensions.padding, this.config.dimensions.h + this.config.dimensions.padding, this.options)
   this.address = textSettings.address
@@ -277,9 +277,9 @@ export function BubbleConstructor(this: Bubble, environment: Environment, settin
       horizontal: Horizontal.Center,
       vertical: Vertical.Center
     },
-    shape: Shape.Circle
+    shape: Shape.Circle,
+    dimensions: setTextDimensions(this.config)
   }
-  this.config.dimensions = setTextDimensions(this.config)
   this.options = options
   this.body = Bodies.circle(x, y, this.config.dimensions.w / 2, this.options)
   this.mouseInBounds = false

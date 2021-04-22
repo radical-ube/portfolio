@@ -14,7 +14,7 @@ import {
   ColorRenderConfig,
   ImageConfig,
   TextConfig,
-  Container
+  ParagraphConfig,
 } from '../../types'
 
 import { ColorBallConstructor, BubbleConstructor } from './constructors'
@@ -201,7 +201,7 @@ export const transformBody = (sketch: p5, body: Body) => {
   sketch.rotate(angle)
 }
 
-export const setTextDimensions = (config: TextConfig) => {
+export const setTextDimensions = (config: TextConfig | ParagraphConfig) => {
   const { sketch, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   sketch.textSize(textSize || 18)
@@ -219,7 +219,7 @@ export const addToWorld = (world: WorldType, instance: Instance, container: any[
   instance.index = container.length - 1
 }
 
-export const renderText = (config: TextConfig) => {
+export const renderText = (config: TextConfig | ParagraphConfig) => {
   const { sketch, textSettings, color, alignment } = config
   const { textSize, text, boxWidth, boxHeight } = textSettings
   const { hue, saturation, lightness } = color

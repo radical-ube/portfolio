@@ -10,8 +10,6 @@ export type EngineType = Matter.Engine
 
 export type WorldType = Matter.World
 
-
-
 interface Bodies {
   bodies: Body[];
 }
@@ -100,12 +98,13 @@ interface TextSettings {
 
 // objects 
 export interface Instance {
+  body: Body | Constraint;
   index: number;
 }
 
 export interface Button extends Instance {
   body: Body;
-  config: TextConfig;
+  config: ButtonConfig;
   text: string[];
   options: any;
   address: string;
@@ -140,7 +139,7 @@ export interface TextBox extends Instance {
 }
 
 export interface ParagraphBox extends Instance {
-  config: TextConfig;
+  config: ParagraphConfig;
   options: any;
   body: Body;
   show: () => void;
@@ -196,6 +195,8 @@ export interface Environment {
   bubbles: any[];
 }
 
+
+// settings
 interface Sketch {
   sketch: p5;
 }
@@ -206,8 +207,11 @@ interface HasText {
 }
 
 interface HasShape {
-  dimensions: Dimensions;
   shape: Shape;
+}
+
+interface HasDimensions {
+  dimensions: Dimensions;
 }
 
 interface HasColor {
@@ -215,14 +219,23 @@ interface HasColor {
 }
 
 interface HasImage {
-  dimensions: Dimensions;
   image: Image;
 }
 
-export type ColorRenderConfig = Sketch & HasShape & HasColor
+export interface ColorRenderConfig extends Sketch, HasShape, HasColor, HasDimensions {
 
-export type ImageConfig = Sketch & HasImage
+}
 
-export type TextConfig = Sketch & HasText & HasShape & HasColor
+export interface ImageConfig extends Sketch, HasImage, HasDimensions {
 
-type BubbleConfig = TextConfig & ColorRenderConfig
+}
+
+export interface TextConfig extends Sketch, HasText, HasShape, HasColor, HasDimensions {
+
+}
+
+export interface ParagraphConfig extends Sketch, HasText, HasColor, HasDimensions {}
+
+export interface ButtonConfig extends ColorRenderConfig, HasText {}
+
+interface BubbleConfig extends ColorRenderConfig, HasText {}
