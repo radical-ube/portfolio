@@ -138,7 +138,7 @@ export interface TextBox extends Instance {
   config: TextConfig;
   options: any;
   body: Body;
-  show: () => void;
+  show: (environment: Environment) => void;
 }
 
 export interface ParagraphBox extends Instance {
@@ -181,12 +181,12 @@ export interface Project extends Instance {
   checkMouseInBounds: (mousePosition: Position) => void;
 }
 
-type Object = Button | Boundary | Spring | TextBox | ParagraphBox | ColorBall | Bubble | Project
+// type Object = Button | Boundary | Spring | TextBox | ParagraphBox | ColorBall | Bubble | Project
 
 // constructors
-export type ObjectConstructor = {
-  new (environment: Environment, settings: any): Object;
-}
+// export type ObjectConstructor = {
+//   new (environment: Environment, settings: any): Object;
+// }
 
 
 // settings

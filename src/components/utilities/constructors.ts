@@ -14,9 +14,10 @@ import {
   Horizontal,
   Vertical,
   Shape,
-  ObjectConstructor,
+  // ObjectConstructor,
   MatterBodies,
-  ButtonConfig
+  ButtonConfig,
+  TextConfig
 } from '../../types'
 
 const { World, Bodies, Constraint } = Matter
@@ -39,34 +40,73 @@ export function BoundaryConstructor(this: Boundary, x: number, y: number, w: num
   }
 }
 
-export function TextBoxConstructor(this: TextBox, environment: Environment, settings: any) {
-  const { sketch, world, bodies } = environment
-  const { x, y, options, textSettings, color } = settings
+class TextBoxConstructor {
+  config: TextConfig;
+  options: any;
+  body: Matter.Body;
+  index: number;
 
-  // class properties
-  this.config = {
-    sketch,
-    textSettings,
-    color: color || defaultColor,
-    alignment: {
-      horizontal: Horizontal.Center,
-      vertical: Vertical.Center
-    },
-    shape: Shape.Rectangle,
-    dimensions: setTextDimensions(this.config)
+  constructor(environment: Environment, settings: any) {
+    const { sketch, world, bodies } = environment
+    const { x, y, options, textSettings, color } = settings
+
+    this.config = {
+      sketch,
+      textSettings,
+      color: color || defaultColor,
+      alignment: {
+        horizontal: Horizontal.Center,
+        vertical: Vertical.Center
+      },
+      shape: Shape.Rectangle,
+      dimensions: setTextDimensions(environment.sketch, settings.textSettings)
+    }
+    this.options = options
+    this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
+    // addToWorld(world, this, bodies)
+    World.add(environment.world, this.body)
+    environment.bodies.push(this)
+    this.index = environment.bodies.length - 1
   }
-  this.options = options
-  this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
-  addToWorld(world, this, bodies)
+  
 
   // class methods
-  this.show = () => {
-    sketch.push()
-    transformBody(sketch, this.body)
+  show(environment: Environment) {
+    environment.sketch.push()
+    transformBody(environment.sketch, this.body)
     renderText(this.config)
-    sketch.pop()
+    environment.sketch.pop()
   }
 }
+
+// export function TextBoxConstructor(this: TextBox, environment: Environment, settings: any) {
+//   const { sketch, world, bodies } = environment
+//   const { x, y, options, textSettings, color } = settings
+
+//   // class properties
+//   this.config = {
+//     sketch,
+//     textSettings,
+//     color: color || defaultColor,
+//     alignment: {
+//       horizontal: Horizontal.Center,
+//       vertical: Vertical.Center
+//     },
+//     shape: Shape.Rectangle,
+//     dimensions: setTextDimensions(this.config)
+//   }
+//   this.options = options
+//   this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
+//   addToWorld(world, this, bodies)
+
+//   // class methods
+//   this.show = () => {
+//     sketch.push()
+//     transformBody(sketch, this.body)
+//     renderText(this.config)
+//     sketch.pop()
+//   }
+// }
 
 // export function ParagraphBoxConstructor(this: ParagraphBox, environment: Environment, settings: any) {
 //   const { sketch, world, bodies } = environment

@@ -215,11 +215,11 @@ export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
   }
 }
 
-export const addToWorld = (world: WorldType, instance: Instance, container: any[]) => {
-  World.add(world, instance.body)
-  container.push(instance)
-  instance.index = container.length - 1
-}
+// export const addToWorld = (world: WorldType, instance: Instance, container: any[]) => {
+//   World.add(world, instance.body)
+//   container.push(instance)
+//   instance.index = container.length - 1
+// }
 
 export const renderText = (config: TextConfig | ParagraphConfig) => {
   const { sketch, textSettings, color, alignment } = config
