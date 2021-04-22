@@ -3,7 +3,9 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupExperience, createBubbles, manageBubbleRender } from '../utilities'
+import { setupFrame, resetPageFrame, setupExperience, 
+  // createBubbles, 
+  manageBubbleRender } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -29,7 +31,7 @@ const Experience = props => {
     const handleClick = () => {
       environment.buttons.forEach(button => {
         if (button.mouseInBounds && button.text) {
-          createBubbles(environment, button)
+          // createBubbles(environment, button)
         }
         if (button.mouseInBounds && button.address) {
           document.location.assign(button.address)
@@ -52,7 +54,7 @@ const Experience = props => {
       const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      setupExperience(environment)
+      // setupExperience(environment)
     }
     sketch.draw = () => {
       sketch.background(bgColor)

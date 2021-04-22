@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Navbar bgColor={backgroundColor}/>
+        {/* <Navbar bgColor={backgroundColor}/> */}
         <Routes bgColor={backgroundColor}/>
       </header>
     </div>

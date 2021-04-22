@@ -24,7 +24,7 @@ import {
 
 const { World, Bodies, Constraint } = Matter
 
-class BoundaryConstructor {
+export class BoundaryConstructor {
   body: Matter.Body;
   w: number;
   h: number;
@@ -71,7 +71,7 @@ class BoundaryConstructor {
 //   }
 // }
 
-class TextBoxConstructor {
+export class TextBoxConstructor {
   config: TextConfig;
   options: any;
   body: Matter.Body;
@@ -241,7 +241,7 @@ class TextBoxConstructor {
 //   }
 // }
 
-class SpringConstructor {
+export class SpringConstructor {
   body: Matter.Constraint;
   index: number;
 
@@ -331,7 +331,7 @@ class SpringConstructor {
 //   return new buttonConstructor(environment, settings)
 // }
 
-class ButtonConstructor {
+export class ButtonConstructor {
   config: ButtonConfig;
   options: any;
   body: Matter.Body;

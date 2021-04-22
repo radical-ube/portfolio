@@ -3,7 +3,9 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupAbout, createColorParticles, manageParticleRender } from '../utilities'
+import { setupFrame, resetPageFrame, setupAbout, 
+  // createColorParticles, 
+  manageParticleRender } from '../utilities'
 
 const { Engine, World } = Matter
 
@@ -30,13 +32,13 @@ const About = props => {
       Engine.clear(engine)
       const canvas = sketch.createCanvas(environment.width, environment.height)
       setupFrame(environment)
-      setupAbout(environment)
+      // setupAbout(environment)
     }
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
       if (sketch.frameCount % 4 === 0) {
-        createColorParticles(environment)
+        // createColorParticles(environment)
       }
       environment.bodies.forEach(body => {
         body.show()

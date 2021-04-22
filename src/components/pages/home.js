@@ -36,7 +36,7 @@ const Home = props => {
       sketch.background(bgColor)
       Engine.update(engine)
       environment.bodies.forEach(body => {
-        body.show()
+        body.show(environment)
       })
     }
     sketch.windowResized = () => {

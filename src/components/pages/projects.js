@@ -46,7 +46,7 @@ const Projects = props => {
       const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      setupProjects(environment)
+      // setupProjects(environment)
     }
     sketch.draw = () => {
       sketch.background(bgColor)

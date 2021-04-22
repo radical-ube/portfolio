@@ -41,7 +41,7 @@ const Contact = props => {
       createMouseConstraint(canvas.elt, engine, world, sketch)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      setupContact(environment)
+      // setupContact(environment)
     }
     sketch.draw = () => {
       sketch.background(bgColor)

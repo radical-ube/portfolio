@@ -53,7 +53,7 @@ const Navbar = props => {
         y: sketch.mouseY
       }
       environment.buttons.forEach(button => {
-        button.show()
+        button.show(environment)
         button.checkMouseInBounds(mousePosition)
       })
     }
