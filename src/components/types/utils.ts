@@ -5,12 +5,12 @@ import {
   Color, 
   Position, 
   TextSettings,
+  PhysicalObject,
   Horizontal,
   Vertical,
   Alignment
 } from './types'
 
-// import { ColorBallConstructor, BubbleConstructor } from './constructors'
 const { World, Mouse, MouseConstraint } = Matter
 
 const getRandomInt = (min: number, max: number): number => {
@@ -20,7 +20,7 @@ const getRandomInt = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min)) + min
 }
 
-export const getRedColor = (): Color => {
+const getRedColor = (): Color => {
   return {
     hue: getRandomInt(347, 353),
     saturation: getRandomInt(150, 201),
@@ -28,7 +28,7 @@ export const getRedColor = (): Color => {
   }
 }
 
-export const getOrangeColor = (): Color => {
+const getOrangeColor = (): Color => {
   return {
     hue: getRandomInt(20, 28),
     saturation: getRandomInt(200, 256),
@@ -36,7 +36,7 @@ export const getOrangeColor = (): Color => {
   }
 }
 
-export const getYellowColor = (): Color => {
+const getYellowColor = (): Color => {
   return {
     hue: getRandomInt(47, 58),
     saturation: getRandomInt(200, 256),
@@ -44,7 +44,7 @@ export const getYellowColor = (): Color => {
   }
 }
 
-export const getGreenColor = (): Color => {
+const getGreenColor = (): Color => {
   return {
     hue: getRandomInt(112, 128),
     saturation: getRandomInt(210, 251),
@@ -52,7 +52,7 @@ export const getGreenColor = (): Color => {
   }
 }
 
-export const getBlueColor = (): Color => {
+const getBlueColor = (): Color => {
   return {
     hue: getRandomInt(223, 240),
     saturation: getRandomInt(210, 241),
@@ -60,7 +60,7 @@ export const getBlueColor = (): Color => {
   }
 }
 
-export const getPurpleColor = (): Color => {
+const getPurpleColor = (): Color => {
   return {
     hue: getRandomInt(277, 286),
     saturation: getRandomInt(210, 246),
@@ -185,6 +185,11 @@ export const renderText = (sketch: p5, textSettings: TextSettings) => {
   }
 }
 
+export function addToWorld (world: Matter.World, object: PhysicalObject, container: any[]): void {
+  World.add(world, object.body)
+  container.push(object)
+}
+
 // export const createColorParticles = (environment: Environment) => {
 //   const { width } = environment
 //   const particleSettings = {
@@ -236,10 +241,7 @@ export const renderText = (sketch: p5, textSettings: TextSettings) => {
 //   })
 // }
 
-// export function addToWorld (world: Matter.World, instance: Instance, container: any[]): void {
-//   World.add(world, instance.body)
-//   container.push(instance)
-// }
+
 
 // export const renderImage = (config: ImageConfig) => {
 //   const { sketch, image, dimensions } = config

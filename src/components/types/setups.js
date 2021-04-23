@@ -1,8 +1,6 @@
 import Matter from 'matter-js'
 
 import { 
-  Boundary, 
-  // TextBox,
   //  ParagraphBox, 
   //  ImageBox, 
    SpringConstructor, 
@@ -11,22 +9,52 @@ import {
   } from './constructors'
 import {
   TextBox,
+  Boundary,
   Horizontal,
   Vertical
 } from './types'
 import { 
   randomColor,
-  setTextDimensions
+  setTextDimensions,
+  addToWorld
 } from './utils'
 
 
 export const setupFrame = environment => {
-  const { width, height } = environment
+  const { width, height, world, boundaries } = environment
 
-  new Boundary(width / 2, height * 2, width * 2, height * 2, 'ground', environment)
-  new Boundary(width / 2, height * -1, width * 2, height * 2, 'ceiling', environment)
-  new Boundary(width * -1, height / 2, width * 2, height, 'leftwall', environment)
-  new Boundary(width * 2, height / 2, width * 2, height, 'rightwall', environment)
+  const ground = new Boundary({
+    x: width / 2, 
+    y: height * 2, 
+    w: width * 2, 
+    h: height * 2
+  })
+  addToWorld(world, ground, boundaries)
+  
+  const ceiling = new Boundary({
+    x: width / 2, 
+    y: height * -1, 
+    w: width * 2, 
+    h: height * 2
+  })
+  addToWorld(world, ceiling, boundaries)
+  
+  const leftWall = new Boundary({
+    x: width * -1, 
+    y: height / 2, 
+    w: width * 2, 
+    h: height
+  })
+  addToWorld(world, leftWall, boundaries)
+
+  const rightWall = new Boundary({
+    x: width * 2, 
+    y: height / 2, 
+    w: width * 2, 
+    h: height
+  })
+  addToWorld(world, rightWall, boundaries)
+
 }
 
 export const resetPageFrame = environment => {
@@ -150,9 +178,7 @@ export const setupHome = (environment) => {
       }
 
       const wordBox = new TextBox(environment.sketch, settings)
-      Matter.World.add(world, wordBox.body)
-      bodies.push(wordBox)
-      // wordBox.index = bodies.length - 1
+      addToWorld(world, wordBox, bodies)
     })
 
   let homeText2 = 'i am a work in progress'
@@ -172,7 +198,8 @@ export const setupHome = (environment) => {
           x,
           y,
           w: dimensions.w,
-          h: dimensions.h
+          h: dimensions.h,
+          index: bodies.length - 1
         },
         textSettings: {
           textSize,
@@ -186,10 +213,7 @@ export const setupHome = (environment) => {
       }
 
       const wordBox = new TextBox(environment.sketch, settings)
-
-      Matter.World.add(world, wordBox.body)
-      bodies.push(wordBox)
-      wordBox.index = bodies.length - 1
+      addToWorld(world, wordBox, bodies)
     })
 }
 

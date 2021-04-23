@@ -15,82 +15,9 @@ import {
 
 import {
   Environment,
-  Horizontal,
-  Vertical,
-  Shape,
-  // ButtonConfig,
-  // TextConfig
 } from './types'
 
-const { World, Bodies, Constraint } = Matter
-
-export class Boundary {
-  body: Matter.Body;
-  w: number;
-  h: number;
-  index: number;
-
-  constructor(x: number, y: number, w: number, h: number, label: string, environment: Environment) {
-    const { world, boundaries } = environment
-    const options = {
-      friction: 0.3,
-      restitution: 1,
-      isStatic: true,
-      label: label || 'boundary'
-    }
-    this.body = Bodies.rectangle(x, y, w, h, options)
-    this.w = w
-    this.h = h
-    // addToWorld(world, this, boundaries)
-
-    World.add(environment.world, this.body)
-    environment.boundaries.push(this)
-    this.index = environment.boundaries.length - 1
-  }
-  
-  remove(environment: Environment) {
-    World.remove(environment.world, this.body)
-  }
-}
-
-// export class TextBox {
-//   config: TextConfig;
-//   options: any;
-//   body: Matter.Body;
-//   index: number;
-
-//   constructor(environment: Environment, settings: any) {
-//     const { sketch, world, bodies } = environment
-//     const { x, y, options, textSettings, color } = settings
-
-//     this.config = {
-//       sketch,
-//       textSettings,
-//       color: color || defaultColor,
-//       alignment: {
-//         horizontal: Horizontal.Center,
-//         vertical: Vertical.Center
-//       },
-//       shape: Shape.Rectangle,
-//       dimensions: setTextDimensions(environment.sketch, settings.textSettings)
-//     }
-//     this.options = options
-//     this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
-//     // addToWorld(world, this, bodies)
-//     World.add(environment.world, this.body)
-//     environment.bodies.push(this)
-//     this.index = environment.bodies.length - 1
-//   }
-  
-
-//   // class methods
-//   show(environment: Environment) {
-//     environment.sketch.push()
-//     transformBody(environment.sketch, this.body)
-//     renderText(this.config)
-//     environment.sketch.pop()
-//   }
-// }
+const { World, Constraint } = Matter
 
 // export function ParagraphBoxConstructor(this: ParagraphBox, environment: Environment, settings: any) {
 //   const { sketch, world, bodies } = environment

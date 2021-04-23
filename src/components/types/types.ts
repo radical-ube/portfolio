@@ -34,12 +34,6 @@ export interface Position {
   y: number;
 }
 
-// interface Dimensions {
-//   w: number;
-//   h: number;
-//   padding: number;
-// }
-
 export enum Shape {
   Circle = 'circle',
   Rectangle = 'rect'
@@ -50,7 +44,7 @@ interface BodySettings {
   y: number,
   w: number,
   h: number,
-  index: number
+  index?: number
 }
 
 export interface TextSettings {
@@ -68,10 +62,6 @@ interface Renderable {
   sketch: p5;
 }
 
-interface Instanced {
-  index: number;
-}
-
 interface HasBody {
   bodySettings: BodySettings;
 }
@@ -80,37 +70,47 @@ interface HasText {
   textSettings: TextSettings;
 }
 
+interface TextBoxSettings extends HasBody, HasText {}
+
 interface HasShape {
   shape: Shape;
 }
-
-// interface HasDimensions {
-//   dimensions: Dimensions;
-// }
-
-// interface HasColor {
-//   color: Color;
-// }
-
-// interface HasImage {
-//   image: Image;
-// }
 
 interface TextRenderable extends Renderable, HasText {
   show(): void;
 }
 
-// interface Instance extends HasBody, Instanced {}
+interface Removable {
+  remove(world: Matter.World): void;
+}
 
 // objects
-interface TextBoxSettings extends HasBody, HasText {}
+export class Boundary implements Removable {
+  body: Matter.Body;
+  bodySettings: BodySettings;
+
+  constructor(bodySettings: BodySettings) {
+    const { x, y, w, h } = bodySettings
+    const options = {
+      friction: 0.3,
+      restitution: 1,
+      isStatic: true,
+      label: 'boundary'
+    }
+    this.bodySettings = bodySettings
+    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
+  }
+  
+  remove(world: Matter.World) {
+    Matter.World.remove(world, this.body)
+  }
+}
 
 export class TextBox implements TextRenderable {
   sketch: p5;
   bodySettings: BodySettings;
   textSettings: TextSettings;
   body: Matter.Body;
-  index: number;
 
   constructor(sketch: p5, settings: TextBoxSettings) {
     const { bodySettings, textSettings } = settings
@@ -119,7 +119,6 @@ export class TextBox implements TextRenderable {
     this.sketch = sketch
     this.bodySettings = bodySettings
     this.textSettings = textSettings
-    this.index = bodySettings.index
     
     this.body = Matter.Bodies.rectangle(x, y, w, h, {
       friction: 0.4,
@@ -137,18 +136,11 @@ export class TextBox implements TextRenderable {
   }
 }
 
-
+export type PhysicalObject = TextBox | Boundary
 
 
 
 // settings
-// export interface Instance {
-//   body: Matter.Body | Matter.Constraint;
-//   index: number;
-// }
-
-export type Image = p5.Image
-
 export interface Environment {
   sketch: p5;
   width: number;
