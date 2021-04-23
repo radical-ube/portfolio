@@ -4,12 +4,12 @@ import {
   TextSettings,
   PhysicalObject,
   Button
-} from './types'
+} from '../types'
 
 import {
   distanceBetweenTwoPoints,
   rectAreaFromVertices
-} from './utilities'
+} from '.'
 
 // export const defaultAlignment = {
 //   horizontal: Horizontal.Center,

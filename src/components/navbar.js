@@ -3,13 +3,13 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetNavFrame, 
-  setupNav, checkGroupForMouse
-} from './types'
 import {
   renderGroup,
-  // checkGroupForMouse
-} from './types/utilities'
+  checkGroupForMouse,
+  resetNavFrame,
+  setupFrame,
+  setupNav
+} from './utilities'
 import { setCurrentPage } from '../store/page'
 
 const { Engine, World } = Matter

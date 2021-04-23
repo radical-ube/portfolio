@@ -6,7 +6,7 @@ import {
 } from '../types'
 import {
   parseColor
-} from './'
+} from '.'
 
 export const renderText = (sketch: p5, textSettings: TextSettings) => {
   const { textSize, text, color, alignment, boxWidth, boxHeight } = textSettings

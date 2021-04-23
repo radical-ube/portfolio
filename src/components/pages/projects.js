@@ -3,7 +3,11 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupProjects } from '../types'
+import { 
+  // setupFrame, 
+  // resetPageFrame, 
+  // setupProjects 
+} from '../types'
 
 const { Engine, World } = Matter
 
@@ -45,7 +49,7 @@ const Projects = props => {
       Engine.clear(engine)
       const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
-      setupFrame(environment)
+      // setupFrame(environment)
       // setupProjects(environment)
     }
     sketch.draw = () => {
@@ -57,8 +61,8 @@ const Projects = props => {
       // checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
-      resetPageFrame(environment)
-      setupFrame(environment)
+      // resetPageFrame(environment)
+      // setupFrame(environment)
     }
   }
 

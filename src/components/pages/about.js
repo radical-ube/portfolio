@@ -3,7 +3,10 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupAbout, 
+import { 
+  // setupFrame, 
+  // resetPageFrame, 
+  // setupAbout, 
   // createColorParticles, 
   // manageParticleRender 
 } from '../types'
@@ -32,7 +35,7 @@ const About = props => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = sketch.createCanvas(environment.width, environment.height)
-      setupFrame(environment)
+      // setupFrame(environment)
       // setupAbout(environment)
     }
     sketch.draw = () => {
@@ -46,8 +49,8 @@ const About = props => {
       // checkGroupForRemoval(world, environment.particles)
     }
     sketch.windowResized = () => {
-      resetPageFrame(environment)
-      setupFrame(environment)
+      // resetPageFrame(environment)
+      // setupFrame(environment)
     }
   }
 

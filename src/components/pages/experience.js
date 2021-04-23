@@ -3,7 +3,10 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupExperience, 
+import { 
+  // setupFrame, 
+  // resetPageFrame, 
+  // setupExperience, 
   // createBubbles, 
   // manageBubbleRender 
 } from '../types'
@@ -54,7 +57,7 @@ const Experience = props => {
       world.gravity.y *= -1
       const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
-      setupFrame(environment)
+      // setupFrame(environment)
       // setupExperience(environment)
     }
     sketch.draw = () => {
@@ -68,8 +71,8 @@ const Experience = props => {
       // checkGroupForRemoval(world, environment.bubbles)
     }
     sketch.windowResized = () => {
-      resetPageFrame(environment)
-      setupFrame(environment)
+      // resetPageFrame(environment)
+      // setupFrame(environment)
     }
   }
 
