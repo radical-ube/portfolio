@@ -27,3 +27,45 @@ export function addToWorld (world: Matter.World, object: PhysicalObject, contain
   Matter.World.add(world, object.body)
   container.push(object)
 }
+
+// export const createColorParticles = (environment: Environment) => {
+//   const { width } = environment
+//   const particleSettings = {
+//     x: width * 0.3,
+//     y: 10,
+//     r: getRandomInt(4, 9),
+//     options: {
+//       friction: 0,
+//       restitution: 0.4,
+//       isStatic: false
+//     },
+//     color: randomColor()
+//   }
+
+//   new ColorBallConstructor(environment, particleSettings)
+// }
+
+// export const createBubbles = (environment: Environment, button: Button) => {
+//   const position = button.body.position
+//   const textSize = button.config.textSettings.textSize
+
+//   button.text.forEach(text => {
+//     let x = getRandomInt(position.x - 10, position.x + 10)
+//     let y = getRandomInt(position.y - 30, position.y - 50)
+
+//     new BubbleConstructor(environment, {
+//       x,
+//       y,
+//       options: {
+//         frictionAir: 0.25,
+//         restitution: 0.8,
+//         isStatic: false
+//       },
+//       textSettings: {
+//         text: text,
+//         textSize
+//       },
+//       color: desaturateColor(environment, randomColor())
+//     })
+//   })
+// }

@@ -2,6 +2,8 @@ import p5 from 'p5'
 
 import { 
   TextSettings,
+  PhysicalObject,
+  Button
 } from './types'
 
 import {
@@ -31,104 +33,45 @@ export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
 }
 
 
-// export const createColorParticles = (environment: Environment) => {
-//   const { width } = environment
-//   const particleSettings = {
-//     x: width * 0.3,
-//     y: 10,
-//     r: getRandomInt(4, 9),
-//     options: {
-//       friction: 0,
-//       restitution: 0.4,
-//       isStatic: false
-//     },
-//     color: randomColor()
-//   }
-
-//   new ColorBallConstructor(environment, particleSettings)
-// }
-
-// export const desaturateColor = (environment: Environment, color: Color): Color => {
-//   const { sketch } = environment
-//   return {
-//     hue: color.hue,
-//     saturation: sketch.lerp(color.saturation, defaultColor.saturation, 0.4),
-//     lightness: sketch.lerp(color.lightness, defaultColor.lightness, 0.2)
-//   }
-// }
-
-// export const createBubbles = (environment: Environment, button: Button) => {
-//   const position = button.body.position
-//   const textSize = button.config.textSettings.textSize
-
-//   button.text.forEach(text => {
-//     let x = getRandomInt(position.x - 10, position.x + 10)
-//     let y = getRandomInt(position.y - 30, position.y - 50)
-
-//     new BubbleConstructor(environment, {
-//       x,
-//       y,
-//       options: {
-//         frictionAir: 0.25,
-//         restitution: 0.8,
-//         isStatic: false
-//       },
-//       textSettings: {
-//         text: text,
-//         textSize
-//       },
-//       color: desaturateColor(environment, randomColor())
-//     })
-//   })
-// }
-
-
-
-// export const renderImage = (config: ImageConfig) => {
-//   const { sketch, image, dimensions } = config
-
-//   sketch.imageMode('center')
-//   sketch.image(image, 0, 0, dimensions.w, dimensions.h)
-// }
-
-
-
-// export const renderLowlight = (config: ColorRenderConfig) => {
-//   const { sketch, dimensions, shape } = config
-//   sketch.colorMode('hsl')
-//   sketch.noStroke()
-//   sketch.fill(0, 0, 0, 0.8)
-//   switch (shape) {
-//     case 'rect':
-//       sketch.rectMode('center')
-//       sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
-//       break
-//     case 'circle':
-//       sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
-//       break
-//   }
-// }
-
-export const checkMouseInBounds = (mousePosition: any, obj: any) => {
-  const { bodySettings, body } = obj
+export const checkMouseInBounds = (obj: Button) => {
+  const { bodySettings, body, sketch } = obj
   const { shape, w } = bodySettings
+  const mousePosition = {
+    x: sketch.mouseX,
+    y: sketch.mouseY
+  }
 
   switch (shape) {
     case 'rect':
       const vertices = body.vertices
       const mouseArea = rectAreaFromVertices(mousePosition, vertices)
       obj.mouseInBounds = (mouseArea < body.area + 1)
+      break
     case 'circle':
       const distance = distanceBetweenTwoPoints(body.position, mousePosition)
       obj.mouseInBounds = (distance < w / 2)
+      break
   }
 }
 
-export const checkGroupForMouse = (mousePosition: any, group: any[]) => {
+export const checkGroupForMouse = (group: any[]) => {
   group.forEach(instance => {
-    checkMouseInBounds(mousePosition, instance)
+    checkMouseInBounds(instance)
   })
 }
+
+// export const checkGroupForRemoval = (world, group) => {
+//   if (group.length) {
+//     for (let i = 0; i < group.length; i++) {
+//       const instance = group[i]
+//       if (instance.shouldBeRemoved()) {
+//         World.remove(world, instance.body)
+//         group.splice(i, 1)
+//         i--
+//       }
+//     }
+//   }
+// }
 
 // export const manageParticleRender = (array: any[]) => {
 //   for (let i = 0; i < array.length; i++) {

@@ -23,25 +23,25 @@ export enum Vertical {
 }
 
 export interface Alignment {
-  horizontal: Horizontal;
-  vertical: Vertical;
+  horizontal: Horizontal
+  vertical: Vertical
 }
 
 export interface Color {
-  hue: number;
-  saturation: number;
-  lightness: number;
+  hue: number
+  saturation: number
+  lightness: number
 }
 
 export interface Position {
-  x: number;
-  y: number;
+  x: number
+  y: number
 }
 
 export interface Triangle {
-  sideOne: number;
-  sideTwo: number;
-  sideThree: number;
+  sideOne: number
+  sideTwo: number
+  sideThree: number
 }
 
 export enum Shape {
@@ -50,57 +50,48 @@ export enum Shape {
 }
 
 export interface BodySettings {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  padding: number;
-  shape?: Shape;
-  index?: number;
+  x: number
+  y: number
+  w: number
+  h: number
+  padding: number
+  shape?: Shape
+  index?: number
 }
 
 export interface TextSettings {
-  text: string;
-  textSize: number;
-  color?: Color;
-  alignment: Alignment;
-  boxWidth?: number;
-  boxHeight?: number;
-  padding?: number;
-}
-
-// interfaces
-interface Renderable {
-  sketch: p5;
+  text: string
+  textSize: number
+  color?: Color
+  alignment: Alignment
+  boxWidth?: number
+  boxHeight?: number
+  padding?: number
 }
 
 interface HasBody {
-  bodySettings: BodySettings;
+  bodySettings: BodySettings
 }
 
 interface HasText {
-  textSettings: TextSettings;
+  textSettings: TextSettings
 }
 
 interface TextBoxSettings extends HasBody, HasText {}
-interface ButtonSettings extends HasBody, HasText {}
 
-interface HasShape {
-  shape: Shape;
-}
-
-interface TextRenderable extends Renderable, HasText {
-  show(): void;
+interface Renderable {
+  show(): void
 }
 
 interface Removable {
-  remove(world: Matter.World): void;
+  remove(world: Matter.World): void
 }
+
 
 // objects
 export class Boundary implements Removable {
-  body: Matter.Body;
-  bodySettings: BodySettings;
+  body: Matter.Body
+  bodySettings: BodySettings
 
   constructor(bodySettings: BodySettings) {
     const { x, y, w, h } = bodySettings
@@ -119,11 +110,11 @@ export class Boundary implements Removable {
   }
 }
 
-export class TextBox implements TextRenderable {
-  sketch: p5;
-  bodySettings: BodySettings;
-  textSettings: TextSettings;
-  body: Matter.Body;
+export class TextBox implements Renderable, HasText, HasBody {
+  sketch: p5
+  bodySettings: BodySettings
+  textSettings: TextSettings
+  body: Matter.Body
 
   constructor(sketch: p5, settings: TextBoxSettings) {
     const { bodySettings, textSettings } = settings
@@ -148,26 +139,24 @@ export class TextBox implements TextRenderable {
   }
 }
 
-export class Button {
-  body: Matter.Body;
-  // address: string;
-  mouseInBounds: boolean | undefined;
-  sketch: p5;
-  textSettings: TextSettings;
-  bodySettings: BodySettings;
+export class Button implements Renderable, Removable, HasText, HasBody {
+  body: Matter.Body
+  mouseInBounds: boolean
+  sketch: p5
+  textSettings: TextSettings
+  bodySettings: BodySettings
 
-  constructor(sketch: p5, settings: ButtonSettings) {
+  constructor(sketch: p5, settings: TextBoxSettings) {
     this.sketch = sketch
     this.bodySettings = settings.bodySettings
     this.textSettings = settings.textSettings
-    const { x, y, w, h, padding, shape } = this.bodySettings
+    const { x, y, w, h, padding } = this.bodySettings
 
     this.body = Matter.Bodies.rectangle(x, y, w + padding, h + padding, {
       friction: 0.4,
       restitution: 0.8,
       isStatic: false
     })
-    // this.address = settings.textSettings.address
     this.mouseInBounds = false
   }
 
@@ -188,8 +177,8 @@ export class Button {
 }
 
 export class Spring {
-  body: Matter.Constraint;
-  sketch: p5;
+  body: Matter.Constraint
+  sketch: p5
 
   constructor (sketch: p5, settings: any) {
     const { bodyA, bodyB, length, stiffness } = settings
@@ -214,23 +203,22 @@ export class Spring {
   }
 }
 
-export type PhysicalObject = TextBox | Boundary
-
+export type PhysicalObject = TextBox | Boundary | Button
 
 
 // settings
 export interface Environment {
-  sketch: p5;
-  width: number;
-  height: number;
-  world: Matter.World;
-  boundaries: any[];
-  bodies: any[];
-  projects: any[];
-  descriptions: any[];
-  buttons: any[];
-  constraints: any[];
-  particles: any[];
-  bubbles: any[];
+  sketch: p5
+  width: number
+  height: number
+  world: Matter.World
+  boundaries: any[]
+  bodies: any[]
+  projects: any[]
+  descriptions: any[]
+  buttons: any[]
+  constraints: any[]
+  particles: any[]
+  bubbles: any[]
 }
 

@@ -1,5 +1,3 @@
-import Matter from 'matter-js'
-
 import {
   TextBox,
   Boundary,

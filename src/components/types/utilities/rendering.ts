@@ -64,6 +64,13 @@ export const renderGroup = (array: any[]): void => {
   })
 }
 
+// export const renderImage = (config: ImageConfig) => {
+//   const { sketch, image, dimensions } = config
+
+//   sketch.imageMode('center')
+//   sketch.image(image, 0, 0, dimensions.w, dimensions.h)
+// }
+
 // export const renderProjectDescription = projects => {
 //   projects.forEach(project => {
 //     if (project.mouseInBounds) {
@@ -74,17 +81,21 @@ export const renderGroup = (array: any[]): void => {
 //   })
 // }
 
-
-
-// export const checkGroupForRemoval = (world, group) => {
-//   if (group.length) {
-//     for (let i = 0; i < group.length; i++) {
-//       const instance = group[i]
-//       if (instance.shouldBeRemoved()) {
-//         World.remove(world, instance.body)
-//         group.splice(i, 1)
-//         i--
-//       }
-//     }
+// export const renderLowlight = (config: ColorRenderConfig) => {
+//   const { sketch, dimensions, shape } = config
+//   sketch.colorMode('hsl')
+//   sketch.noStroke()
+//   sketch.fill(0, 0, 0, 0.8)
+//   switch (shape) {
+//     case 'rect':
+//       sketch.rectMode('center')
+//       sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
+//       break
+//     case 'circle':
+//       sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
+//       break
 //   }
 // }
+
+
+

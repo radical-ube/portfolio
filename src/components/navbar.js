@@ -4,7 +4,7 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { setupFrame, resetNavFrame, 
-  setupNav, checkGroupForMouse 
+  setupNav, checkGroupForMouse
 } from './types'
 import {
   renderGroup,
@@ -35,19 +35,19 @@ const Navbar = props => {
       buttons: []
     }
 
-    const handleClick = () => {
-      environment.buttons.forEach(button => {
-        if (button.mouseInBounds) {
-          setCurrentPage(button.config.textSettings.text)
-        }
-      })
-    }
+    // const handleClick = () => {
+    //   environment.buttons.forEach(button => {
+    //     if (button.mouseInBounds) {
+    //       setCurrentPage(button.config.textSettings.text)
+    //     }
+    //   })
+    // }
 
     sketch.setup = () => {
       Engine.clear(engine)
       World.clear(world, false)
       const canvas = sketch.createCanvas(environment.width, environment.height)
-      canvas.mouseClicked(handleClick)
+      // canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupNav(environment)
     }
@@ -55,10 +55,7 @@ const Navbar = props => {
       sketch.background(bgColor)
       Engine.update(engine)
       renderGroup(environment.buttons)
-      // environment.buttons.forEach(button => {
-      //   checkMouseInBounds({x: sketch.mouseX, y: sketch.mouseY}, button)
-      // })
-      checkGroupForMouse({x: sketch.mouseX, y: sketch.mouseY}, environment.buttons)
+      checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
       resetNavFrame(environment)
