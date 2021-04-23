@@ -60,24 +60,17 @@ const Experience = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      const mousePosition = {
-        x: sketch.mouseX,
-        y: sketch.mouseY
-      }
-      environment.bodies.forEach(body => {
-        body.show()
-      })
-      environment.buttons.forEach(button => {
-        button.show()
-        button.checkMouseInBounds(mousePosition)
-      })
-      // manageBubbleRender(environment.bubbles, mousePosition)
+      renderGroup(environment.bodies)
+      renderGroup(environment.buttons)
+      checkGroupForMouse(environment.buttons)
+      renderGroup(environment.bubbles)
+      checkGroupForMouse(environment.bubbles)
+      checkGroupForRemoval(world, environment.bubbles)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }
-
   }
 
   useEffect(() => {

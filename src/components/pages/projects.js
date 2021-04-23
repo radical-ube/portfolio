@@ -51,24 +51,10 @@ const Projects = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      const mousePosition = {
-        x: sketch.mouseX,
-        y: sketch.mouseY
-      }
-      environment.projects.forEach(project => {
-        project.show()
-        project.checkMouseInBounds(mousePosition)
-        if (project.mouseInBounds) {
-          project.description.show()
-          project.webButton.show()
-          project.githubButton.show()
-        }
-      })
-      environment.buttons.forEach(button => {
-
-        // button.show()
-        button.checkMouseInBounds(mousePosition)
-      })
+      renderGroup(environment.projects)
+      checkGroupForMouse(environment.projects)
+      renderProjectDescription(environment.projects)
+      checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)

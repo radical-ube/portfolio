@@ -35,9 +35,7 @@ const Home = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      environment.bodies.forEach(body => {
-        body.show(environment)
-      })
+      renderGroup(environment.bodies)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)

@@ -41,10 +41,9 @@ const About = props => {
       if (sketch.frameCount % 4 === 0) {
         // createColorParticles(environment)
       }
-      environment.bodies.forEach(body => {
-        body.show()
-      })
-      // manageParticleRender(environment.particles)
+      renderGroup(environment.bodies)
+      renderGroup(environment.particles)
+      checkGroupForRemoval(world, environment.particles)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)

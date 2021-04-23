@@ -46,26 +46,15 @@ const Contact = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      const mousePosition = {
-        x: sketch.mouseX,
-        y: sketch.mouseY
-      }
-      environment.bodies.forEach(body => {
-        body.show()
-      })
-      environment.constraints.forEach(constraint => {
-        constraint.show()
-      })
-      environment.buttons.forEach(button => {
-        button.show()
-        button.checkMouseInBounds(mousePosition)
-      })
+      renderGroup(environment.bodies)
+      renderGroup(environment.constraints)
+      renderGroup(environment.buttons)
+      checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)
       setupFrame(environment)
     }
-
   }
 
   useEffect(() => {

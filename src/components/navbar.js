@@ -50,14 +50,8 @@ const Navbar = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      const mousePosition = {
-        x: sketch.mouseX,
-        y: sketch.mouseY
-      }
-      environment.buttons.forEach(button => {
-        button.show()
-        // button.checkMouseInBounds(mousePosition)
-      })
+      renderGroup(environment.buttons)
+      checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
       resetNavFrame(environment)
