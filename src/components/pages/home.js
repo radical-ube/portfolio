@@ -3,7 +3,11 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupHome, createMouseConstraint, renderGroup } from '../types'
+import { setupFrame, resetPageFrame, setupHome } from '../types'
+import {
+  createMouseConstraint,
+  renderGroup
+} from '../types/utilities'
 
 const { Engine, World } = Matter
 

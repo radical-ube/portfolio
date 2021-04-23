@@ -3,7 +3,9 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { setupFrame, resetPageFrame, setupContact, createMouseConstraint } from '../types'
+import { setupFrame, resetPageFrame, setupContact, 
+  // createMouseConstraint
+ } from '../types'
 
 const { Engine, World } = Matter
 
@@ -38,7 +40,7 @@ const Contact = props => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = sketch.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas.elt, engine, world, sketch)
+      // createMouseConstraint(canvas.elt, engine, world, sketch)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
       // setupContact(environment)

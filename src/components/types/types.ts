@@ -1,9 +1,13 @@
 import p5 from 'p5'
 import Matter from 'matter-js'
+
 import {
+  parseColor,
   transformBody,
   renderText,
-} from './utils'
+  renderOutline,
+  renderHighlight
+} from './utilities'
 
 // properties
 export enum Horizontal {
@@ -45,7 +49,7 @@ export enum Shape {
   Rectangle = 'rect'
 }
 
-interface BodySettings {
+export interface BodySettings {
   x: number;
   y: number;
   w: number;
@@ -145,25 +149,19 @@ export class TextBox implements TextRenderable {
 }
 
 export class Button {
-  // options: any;
   body: Matter.Body;
   // address: string;
   mouseInBounds: boolean | undefined;
-  // index: number;
-  // text: string;
   sketch: p5;
   textSettings: TextSettings;
   bodySettings: BodySettings;
 
   constructor(sketch: p5, settings: ButtonSettings) {
-    
     this.sketch = sketch
     this.bodySettings = settings.bodySettings
     this.textSettings = settings.textSettings
     const { x, y, w, h, padding, shape } = this.bodySettings
 
-    // this.text = settings.textSettings.text
-    // this.options = settings.options
     this.body = Matter.Bodies.rectangle(x, y, w + padding, h + padding, {
       friction: 0.4,
       restitution: 0.8,
@@ -173,21 +171,16 @@ export class Button {
     this.mouseInBounds = false
   }
 
-  // class methods
   show() {
     this.sketch.push()
     transformBody(this.sketch, this.body)
     renderText(this.sketch, this.textSettings)
-    // renderOutline(this.config)
-    // if (this.mouseInBounds) {
-    //   renderHighlight(this.config)
-    // }
+    renderOutline(this.sketch, this.bodySettings, parseColor(this.textSettings.color))
+    if (this.mouseInBounds) {
+      renderHighlight(this.sketch, this.bodySettings)
+    }
     this.sketch.pop()
   }
-
-  // checkMouseInBounds(mousePosition: Position) {
-  //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.config)
-  // }
 
   remove(world: Matter.World) {
     Matter.World.remove(world, this.body)
@@ -196,11 +189,9 @@ export class Button {
 
 export class Spring {
   body: Matter.Constraint;
-  // index: number;
   sketch: p5;
 
   constructor (sketch: p5, settings: any) {
-    // const { sketch, world, constraints } = environment
     const { bodyA, bodyB, length, stiffness } = settings
   
     this.sketch = sketch

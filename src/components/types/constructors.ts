@@ -1,23 +1,4 @@
 import Matter from 'matter-js'
-import p5 from 'p5'
-import { 
-  setTextDimensions, 
-  transformBody, 
-  // addToWorld, 
-  renderText, 
-  // renderImage, 
-  // renderOutline, 
-  // renderHighlight, 
-  // renderLowlight, 
-  // checkMouseInBounds, 
-  // defaultColor 
-} from './utils'
-
-import {
-  Environment,
-} from './types'
-
-const { World, Constraint } = Matter
 
 // export function ParagraphBoxConstructor(this: ParagraphBox, environment: Environment, settings: any) {
 //   const { sketch, world, bodies } = environment

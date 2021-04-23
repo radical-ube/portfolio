@@ -11,10 +11,10 @@ import {
 } from './types'
 import { 
   setTextDimensions,
-  addToWorld
 } from './utils'
 import {
-  randomColor
+  randomColor,
+  addToWorld
 } from './utilities'
 
 

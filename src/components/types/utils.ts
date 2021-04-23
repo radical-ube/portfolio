@@ -1,19 +1,13 @@
 import p5 from 'p5'
-import Matter from 'matter-js'
 
 import { 
   TextSettings,
-  PhysicalObject,
-  Horizontal,
-  Vertical,
-  Alignment
 } from './types'
 
 import {
-  parseColor
+  distanceBetweenTwoPoints,
+  rectAreaFromVertices
 } from './utilities'
-
-const { World, Mouse, MouseConstraint } = Matter
 
 // export const defaultAlignment = {
 //   horizontal: Horizontal.Center,
@@ -26,24 +20,6 @@ const { World, Mouse, MouseConstraint } = Matter
 // }
 
 
-export const createMouseConstraint = (canvas: HTMLCanvasElement, engine: Matter.Engine, world: Matter.World, sketch: p5) => {
-  const mouse = Mouse.create(canvas)
-  mouse.pixelRatio = sketch.pixelDensity()
-  const mouseOptions = {
-    mouse
-  }
-  const mouseConstraint = MouseConstraint.create(engine, mouseOptions)
-  World.add(world, mouseConstraint)
-}
-
-export const transformBody = (sketch: p5, body: Matter.Body) => {
-  const position = body.position
-  const angle = body.angle
-
-  sketch.translate(position.x, position.y)
-  sketch.rotate(angle)
-}
-
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   sketch.textSize(textSize || 18)
@@ -54,28 +30,6 @@ export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
   }
 }
 
-export const renderText = (sketch: p5, textSettings: TextSettings) => {
-  const { textSize, text, color, alignment, boxWidth, boxHeight } = textSettings
-  const { hue, saturation, lightness } = parseColor(color)
-  const { horizontal, vertical } = alignment
-
-  sketch.rectMode('center')
-  sketch.textAlign(horizontal, vertical)
-  sketch.textSize(textSize)
-  sketch.colorMode('hsl')
-  sketch.fill(hue, saturation, lightness)
-  if (boxWidth && boxHeight) {
-    sketch.text(text, 0, 0, boxWidth, boxHeight)
-  }
-  else {
-    sketch.text(text, 0, 0)
-  }
-}
-
-export function addToWorld (world: Matter.World, object: PhysicalObject, container: any[]): void {
-  World.add(world, object.body)
-  container.push(object)
-}
 
 // export const createColorParticles = (environment: Environment) => {
 //   const { width } = environment
@@ -137,37 +91,7 @@ export function addToWorld (world: Matter.World, object: PhysicalObject, contain
 //   sketch.image(image, 0, 0, dimensions.w, dimensions.h)
 // }
 
-// export const renderOutline = (config: ColorRenderConfig) => {
-//   const { sketch, color, dimensions, shape } = config
-//   const { hue, saturation, lightness } = color
-//   sketch.colorMode('hsl')
-//   sketch.noFill()
-//   sketch.stroke(hue, saturation, lightness)
-//   switch (shape) {
-//     case 'rect':
-//       sketch.rect(0, 0, dimensions.w + dimensions.padding, dimensions.h + dimensions.padding)
-//       break
-//     case 'circle':
-//       sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
-//       break
-//   }
-// }
 
-// export const renderHighlight = (config: ColorRenderConfig) => {
-//   const { sketch, dimensions, shape } = config
-//   sketch.colorMode('hsl')
-//   sketch.noStroke()
-//   sketch.fill(0, 0, 100, 0.1)
-//   switch (shape) {
-//     case 'rect':
-//       sketch.rectMode('center')
-//       sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
-//       break
-//     case 'circle':
-//       sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
-//       break
-//   }
-// }
 
 // export const renderLowlight = (config: ColorRenderConfig) => {
 //   const { sketch, dimensions, shape } = config
@@ -185,20 +109,26 @@ export function addToWorld (world: Matter.World, object: PhysicalObject, contain
 //   }
 // }
 
-// export const checkMouseInBounds = (body: Matter.Body, mousePosition: Position, config: ColorRenderConfig) => {
-//   const { sketch, shape, dimensions } = config
-//   // const { body } = instance
-  
-//   switch (shape) {
-//     case 'rect':
-//       const vertices = body.vertices
-//       const mouseArea = areaFromPoints(mousePosition, vertices, sketch)
-//       return (mouseArea < body.area + 1)
-//     case 'circle':
-//       const distance = sketch.dist(body.position.x, body.position.y, mousePosition.x, mousePosition.y)
-//       return (distance < dimensions.w / 2)
-//   }
-// }
+export const checkMouseInBounds = (mousePosition: any, obj: any) => {
+  const { bodySettings, body } = obj
+  const { shape, w } = bodySettings
+
+  switch (shape) {
+    case 'rect':
+      const vertices = body.vertices
+      const mouseArea = rectAreaFromVertices(mousePosition, vertices)
+      obj.mouseInBounds = (mouseArea < body.area + 1)
+    case 'circle':
+      const distance = distanceBetweenTwoPoints(body.position, mousePosition)
+      obj.mouseInBounds = (distance < w / 2)
+  }
+}
+
+export const checkGroupForMouse = (mousePosition: any, group: any[]) => {
+  group.forEach(instance => {
+    checkMouseInBounds(mousePosition, instance)
+  })
+}
 
 // export const manageParticleRender = (array: any[]) => {
 //   for (let i = 0; i < array.length; i++) {
