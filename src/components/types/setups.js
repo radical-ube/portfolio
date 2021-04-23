@@ -3,6 +3,8 @@ import Matter from 'matter-js'
 import {
   TextBox,
   Boundary,
+  Button,
+  Spring,
   Horizontal,
   Vertical,
   Shape
@@ -74,76 +76,77 @@ export const resetNavFrame = environment => {
   environment.boundaries.splice(0, 1)
 }
 
-// export const setupNav = (environment) => {
-//   const { width, height, tabs, buttons } = environment
-//   let textSize = width * 0.035
-//   let x = width / (tabs.length + 1)
-//   let y = height * 0.5
-//   let stiffness = 0.6
+export const setupNav = (environment) => {
+  const { width, height, tabs, buttons, sketch, world, constraints, boundaries } = environment
+  let textSize = width * 0.035
+  let x = width / (tabs.length + 1)
+  let y = height * 0.5
+  let stiffness = 0.6
 
-//   let end1 = new TextBox(environment, {
-//     x: -15,
-//     y,
-//     options: {
-//       isStatic: true
-//     },
-//     textSettings: {}
-//   })
-//   let prevElement = end1
+  let end1 = new Boundary({
+    x: -15,
+    y,
+    w: 1,
+    h: 1,
+  })
+  addToWorld(world, end1, boundaries)
+  let prevElement = end1
 
-//   for (let i = 0; i < tabs.length; i++) {
-  // const dimensions = setTextDimensions(environment.sketch, {
-  //   textSize,
-  //   text: word,
-  // })
-  //   let buttonSettings = {
-  //     bodySettings: {
-  //       x: x + (40 * i),
-  //       y,
-  //       w: dimensions.w,
-  //       h: dimensions.h,
-  //       padding: dimensions.padding,
-  //       shape: Shape.Rectangle,
-  //     },
-      
-  //     textSettings: {
-  //       textSize,
-  //       text: tabs[i],
-  //       color: randomColor(),
-  //       alignment: {
-  //         horizontal: Horizontal.Center,
-  //         vertical: Vertical.Center
-  //       }
-  //     },
-      
-  //   }
-//     let button = new ButtonConstructor(environment, buttonSettings)
+  for (let i = 0; i < tabs.length; i++) {
+    const word = tabs[i]
+    const dimensions = setTextDimensions(environment.sketch, {
+      textSize,
+      text: word,
+    })
+    const buttonSettings = {
+      bodySettings: {
+        x: x + (40 * i),
+        y,
+        w: dimensions.w,
+        h: dimensions.h,
+        padding: dimensions.padding,
+        shape: Shape.Rectangle,
+      },
+      textSettings: {
+        textSize,
+        text: word,
+        color: randomColor(),
+        alignment: {
+          horizontal: Horizontal.Center,
+          vertical: Vertical.Center
+        }
+      },
+    }
+    const button = new Button(sketch, buttonSettings)
+    addToWorld(world, button, buttons)
 
-//     let constraintSettings = {
-//       bodyA: prevElement.body,
-//       bodyB: button.body,
-//       length: x,
-//       stiffness
-//     }
-//     new SpringConstructor(environment, constraintSettings)
-//     prevElement = button
-//   }
+    const constraintSettings = {
+      bodyA: prevElement.body,
+      bodyB: button.body,
+      length: x,
+      stiffness
+    }
+    const spring = new Spring(sketch, constraintSettings)
+    addToWorld(world, spring, constraints)
+    prevElement = button
+  }
 
-//   let end2 = new TextBox(environment, {
-//     x: width + 15,
-//     y,
-//     options: {
-//       isStatic: true
-//     },
-//     textSettings: {}
-//   })
-//   new SpringConstructor(environment, {
-//     bodyA: buttons[buttons.length - 1].body,
-//     bodyB: end2.body,
-//     length: x,
-//     stiffness
-//   })
-// }
+  let end2 = new Boundary({
+    x: width + 15,
+    y,
+    w: 1,
+    h: 1
+  })
+  addToWorld(world, end2, boundaries)
+
+  const lastSpring = new Spring(environment, {
+    bodyA: buttons[buttons.length - 1].body,
+    bodyB: end2.body,
+    length: x,
+    stiffness
+  })
+  addToWorld(world, lastSpring, constraints)
+}
 
 export const setupHome = (environment) => {
   const { width, height, world, bodies } = environment

@@ -193,8 +193,8 @@ export class Spring {
   // index: number;
   sketch: p5;
 
-  constructor (environment: Environment, settings: any) {
-    const { sketch, world, constraints } = environment
+  constructor (sketch: p5, settings: any) {
+    // const { sketch, world, constraints } = environment
     const { bodyA, bodyB, length, stiffness } = settings
   
     this.sketch = sketch
@@ -207,8 +207,8 @@ export class Spring {
   }
   
   show() {
-    let a = this.body.bodyA.position
-    let b = this.body.bodyB.position
+    const a = this.body.bodyA.position
+    const b = this.body.bodyB.position
     this.sketch.push()
     this.sketch.colorMode('hsl')
     this.sketch.stroke(0, 0, 100, 0.1)

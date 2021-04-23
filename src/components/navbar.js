@@ -4,7 +4,7 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { setupFrame, resetNavFrame, 
-  // setupNav 
+  setupNav 
 } from './types'
 import { setCurrentPage } from '../store/page'
 
@@ -45,7 +45,7 @@ const Navbar = props => {
       const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      // setupNav(environment)
+      setupNav(environment)
     }
     sketch.draw = () => {
       sketch.background(bgColor)
@@ -55,8 +55,8 @@ const Navbar = props => {
         y: sketch.mouseY
       }
       environment.buttons.forEach(button => {
-        button.show(environment)
-        button.checkMouseInBounds(mousePosition)
+        button.show()
+        // button.checkMouseInBounds(mousePosition)
       })
     }
     sketch.windowResized = () => {
