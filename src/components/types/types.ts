@@ -1,13 +1,11 @@
 import p5 from 'p5'
 import Matter from 'matter-js'
 import {
-  setTextDimensions,
   transformBody,
   renderText,
-  defaultColor
 } from './utils'
 
-// p5
+// properties
 export enum Horizontal {
   Left = 'left',
   Right = 'right',
@@ -25,7 +23,6 @@ interface Alignment {
   vertical: Vertical;
 }
 
-// object properties
 export interface Color {
   hue: number;
   saturation: number;
@@ -37,100 +34,113 @@ export interface Position {
   y: number;
 }
 
-interface Dimensions {
-  w: number;
-  h: number;
-  padding: number;
-}
+// interface Dimensions {
+//   w: number;
+//   h: number;
+//   padding: number;
+// }
 
 export enum Shape {
   Circle = 'circle',
   Rectangle = 'rect'
 }
 
+interface BodySettings {
+  x: number,
+  y: number,
+  w: number,
+  h: number
+}
+
+export interface TextSettings {
+  text: string;
+  textSize: number;
+  color: Color;
+  alignment: Alignment;
+  boxWidth?: number;
+  boxHeight?: number;
+  padding?: number;
+}
+
+// interfaces
 interface Renderable {
   sketch: p5;
 }
 
+interface HasBody {
+  bodySettings: BodySettings;
+}
+
 interface HasText {
   textSettings: TextSettings;
-  alignment: Alignment;
 }
 
 interface HasShape {
   shape: Shape;
 }
 
-interface HasDimensions {
-  dimensions: Dimensions;
-}
+// interface HasDimensions {
+//   dimensions: Dimensions;
+// }
 
-interface HasColor {
-  color: Color;
-}
+// interface HasColor {
+//   color: Color;
+// }
 
 // interface HasImage {
 //   image: Image;
 // }
 
-export interface TextSettings {
-  text: string;
-  textSize: number;
-  boxWidth: number;
-  boxHeight: number;
-  padding: number;
+interface TextRenderable extends Renderable, HasBody, HasText, HasShape {
+  show(): void;
 }
 
-// export interface TextConfig extends Sketch, HasText, HasShape, HasColor, HasDimensions {}
 
-export class TextBox implements Renderable, HasText, HasShape, HasDimensions, HasColor {
-  // config: TextConfig;
-  // options: any;
+// objects
+interface TextBoxSettings extends HasBody, HasText {}
+
+export class TextBox implements TextRenderable {
   sketch: p5;
+  bodySettings: BodySettings;
+  textSettings: TextSettings;
   body: Matter.Body;
   index: number;
-  textSettings: TextSettings;
-  alignment: Alignment;
   shape: Shape;
-  dimensions: Dimensions;
-  color: Color;
 
-  constructor(environment: Environment, settings: any) {
-    const { sketch, world, bodies } = environment
-    const { x, y, options, textSettings, color } = settings
+  constructor(env: Environment, settings: TextBoxSettings) {
+    const { sketch, world, bodies } = env
+    const { bodySettings, textSettings } = settings
+    const { x, y, w, h } = bodySettings
 
     this.sketch = sketch
-    this.textSettings = settings.textSettings
-    this.alignment = {
-      horizontal: Horizontal.Center,
-      vertical: Vertical.Center
-    }
+    this.bodySettings = bodySettings
+    this.textSettings = textSettings
     this.shape = Shape.Rectangle
-    this.dimensions = setTextDimensions(this.sketch, this.textSettings)
-    this.color = color || defaultColor
-    this.body = Matter.Bodies.rectangle(x, y, this.dimensions.w, this.dimensions.h, options)
-    // addToWorld(world, this, bodies)
-    Matter.World.add(environment.world, this.body)
-    environment.bodies.push(this)
-    this.index = environment.bodies.length - 1
+    
+    this.body = Matter.Bodies.rectangle(x, y, w, h, {
+      friction: 0.4,
+      restitution: 0.8,
+      isStatic: false
+    })
+    
+    Matter.World.add(world, this.body)
+    bodies.push(this)
+    this.index = bodies.length - 1
   }
   
-
-  // class methods
-  show(environment: Environment) {
-    environment.sketch.push()
-    transformBody(environment.sketch, this.body)
-    renderText({
-      sketch: environment.sketch,
-      textSettings: this.textSettings,
-      color: this.color,
-      alignment: this.alignment
-    })
-    environment.sketch.pop()
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderText(this.sketch, this.textSettings)
+    this.sketch.pop()
   }
 }
 
-// objects 
+
+
+
+
+// settings
 export interface Instance {
   body: Matter.Body | Matter.Constraint;
   index: number;
@@ -138,8 +148,6 @@ export interface Instance {
 
 export type Image = p5.Image
 
-
-// settings
 export interface Environment {
   sketch: p5;
   width: number;
@@ -155,20 +163,3 @@ export interface Environment {
   bubbles: any[];
 }
 
-
-
-// export interface ColorRenderConfig extends Sketch, HasShape, HasColor, HasDimensions {
-
-// }
-
-// export interface ImageConfig extends Sketch, HasImage, HasDimensions {
-
-// }
-
-
-
-// export interface ParagraphConfig extends Sketch, HasText, HasColor, HasDimensions {}
-
-// export interface ButtonConfig extends ColorRenderConfig, HasText {}
-
-// interface BubbleConfig extends ColorRenderConfig, HasText {}

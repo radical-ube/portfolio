@@ -8,9 +8,14 @@ import {
   //  Project 
   } from './constructors'
 import {
-  TextBox
+  TextBox,
+  Horizontal,
+  Vertical
 } from './types'
-import { randomColor } from './utils'
+import { 
+  randomColor,
+  setTextDimensions
+} from './utils'
 
 
 export const setupFrame = environment => {
@@ -118,19 +123,27 @@ export const setupHome = (environment) => {
         x = width * 0.41
       }
 
+      const dimensions = setTextDimensions(environment.sketch, {
+        textSize,
+        text: word,
+      })
+
       const settings = {
-        x,
-        y,
-        options: {
-          friction: 0.4,
-          restitution: 0.8,
-          isStatic: false
+        bodySettings: {
+          x,
+          y,
+          w: dimensions.w,
+          h: dimensions.h
         },
         textSettings: {
           textSize,
-          text: word
-        },
-        color: randomColor()
+          text: word,
+          color: randomColor(),
+          alignment: {
+            horizontal: Horizontal.Center,
+            vertical: Vertical.Center
+          }
+        }
       }
 
       new TextBox(environment, settings)
@@ -143,19 +156,27 @@ export const setupHome = (environment) => {
       let x = width * 0.65
       let y = height * 0.2 + (index * textSize)
 
+      const dimensions = setTextDimensions(environment.sketch, {
+        textSize,
+        text: word,
+      })
+
       const settings = {
-        x,
-        y,
-        options: {
-          friction: 0.4,
-          restitution: 0.8,
-          isStatic: false
+        bodySettings: {
+          x,
+          y,
+          w: dimensions.w,
+          h: dimensions.h
         },
         textSettings: {
           textSize,
-          text: word
+          text: word,
+          color: randomColor(),
+          alignment: {
+            horizontal: Horizontal.Center,
+            vertical: Vertical.Center
+          }
         },
-        color: randomColor()
       }
 
       new TextBox(environment, settings)

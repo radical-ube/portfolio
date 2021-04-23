@@ -132,7 +132,7 @@ export const createMouseConstraint = (canvas: HTMLCanvasElement, engine: Matter.
   World.add(world, mouseConstraint)
 }
 
-export const transformBody = (sketch: p5, body: any) => {
+export const transformBody = (sketch: p5, body: Matter.Body) => {
   const position = body.position
   const angle = body.angle
 
@@ -141,20 +141,17 @@ export const transformBody = (sketch: p5, body: any) => {
 }
 
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
-  // const { sketch, textSettings } = config
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   sketch.textSize(textSize || 18)
   return {
-    textSize: textSize,
     w: boxWidth || sketch.textWidth(text),
     h: boxHeight || sketch.textAscent(),
     padding: padding || 10
   }
 }
 
-export const renderText = (config: any) => {
-  const { sketch, textSettings, color, alignment } = config
-  const { textSize, text, boxWidth, boxHeight } = textSettings
+export const renderText = (sketch: p5, textSettings: TextSettings) => {
+  const { textSize, text, color, alignment, boxWidth, boxHeight } = textSettings
   const { hue, saturation, lightness } = color
 
   sketch.rectMode('center')
@@ -221,7 +218,7 @@ export const renderText = (config: any) => {
 //   })
 // }
 
-// export const addToWorld = (world: WorldType, instance: Instance, container: any[]) => {
+// export function addToWorld<Type> (world: Matter.World, instance: Type, container: any[]): void {
 //   World.add(world, instance.body)
 //   container.push(instance)
 //   instance.index = container.length - 1
