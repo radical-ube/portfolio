@@ -1,3 +1,5 @@
+import Matter from 'matter-js'
+
 import { 
   Boundary, 
   // TextBox,
@@ -110,7 +112,7 @@ export const resetNavFrame = environment => {
 // }
 
 export const setupHome = (environment) => {
-  const { width, height } = environment
+  const { width, height, world, bodies } = environment
 
   let homeText1 = 'hello world, my name is ube'
   homeText1.split(' ')
@@ -133,7 +135,8 @@ export const setupHome = (environment) => {
           x,
           y,
           w: dimensions.w,
-          h: dimensions.h
+          h: dimensions.h,
+          index: bodies.length - 1
         },
         textSettings: {
           textSize,
@@ -146,7 +149,10 @@ export const setupHome = (environment) => {
         }
       }
 
-      new TextBox(environment, settings)
+      const wordBox = new TextBox(environment.sketch, settings)
+      Matter.World.add(world, wordBox.body)
+      bodies.push(wordBox)
+      // wordBox.index = bodies.length - 1
     })
 
   let homeText2 = 'i am a work in progress'
@@ -179,7 +185,11 @@ export const setupHome = (environment) => {
         },
       }
 
-      new TextBox(environment, settings)
+      const wordBox = new TextBox(environment.sketch, settings)
+
+      Matter.World.add(world, wordBox.body)
+      bodies.push(wordBox)
+      wordBox.index = bodies.length - 1
     })
 }
 

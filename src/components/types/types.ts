@@ -18,7 +18,7 @@ export enum Vertical {
   Bottom = 'bottom',
 }
 
-interface Alignment {
+export interface Alignment {
   horizontal: Horizontal;
   vertical: Vertical;
 }
@@ -49,13 +49,14 @@ interface BodySettings {
   x: number,
   y: number,
   w: number,
-  h: number
+  h: number,
+  index: number
 }
 
 export interface TextSettings {
   text: string;
   textSize: number;
-  color: Color;
+  color?: Color;
   alignment: Alignment;
   boxWidth?: number;
   boxHeight?: number;
@@ -65,6 +66,10 @@ export interface TextSettings {
 // interfaces
 interface Renderable {
   sketch: p5;
+}
+
+interface Instanced {
+  index: number;
 }
 
 interface HasBody {
@@ -91,10 +96,11 @@ interface HasShape {
 //   image: Image;
 // }
 
-interface TextRenderable extends Renderable, HasBody, HasText, HasShape {
+interface TextRenderable extends Renderable, HasText {
   show(): void;
 }
 
+// interface Instance extends HasBody, Instanced {}
 
 // objects
 interface TextBoxSettings extends HasBody, HasText {}
@@ -105,17 +111,15 @@ export class TextBox implements TextRenderable {
   textSettings: TextSettings;
   body: Matter.Body;
   index: number;
-  shape: Shape;
 
-  constructor(env: Environment, settings: TextBoxSettings) {
-    const { sketch, world, bodies } = env
+  constructor(sketch: p5, settings: TextBoxSettings) {
     const { bodySettings, textSettings } = settings
     const { x, y, w, h } = bodySettings
 
     this.sketch = sketch
     this.bodySettings = bodySettings
     this.textSettings = textSettings
-    this.shape = Shape.Rectangle
+    this.index = bodySettings.index
     
     this.body = Matter.Bodies.rectangle(x, y, w, h, {
       friction: 0.4,
@@ -123,9 +127,6 @@ export class TextBox implements TextRenderable {
       isStatic: false
     })
     
-    Matter.World.add(world, this.body)
-    bodies.push(this)
-    this.index = bodies.length - 1
   }
   
   show() {
@@ -141,10 +142,10 @@ export class TextBox implements TextRenderable {
 
 
 // settings
-export interface Instance {
-  body: Matter.Body | Matter.Constraint;
-  index: number;
-}
+// export interface Instance {
+//   body: Matter.Body | Matter.Constraint;
+//   index: number;
+// }
 
 export type Image = p5.Image
 

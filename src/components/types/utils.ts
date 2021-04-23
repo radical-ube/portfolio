@@ -4,7 +4,10 @@ import Matter from 'matter-js'
 import { 
   Color, 
   Position, 
-  TextSettings
+  TextSettings,
+  Horizontal,
+  Vertical,
+  Alignment
 } from './types'
 
 // import { ColorBallConstructor, BubbleConstructor } from './constructors'
@@ -71,6 +74,11 @@ export const defaultColor: Color = {
   lightness: 94
 }
 
+// export const defaultAlignment = {
+//   horizontal: Horizontal.Center,
+//   vertical: Vertical.Center
+// }
+
 export const randomColor = (): Color => {
   let choice = getRandomInt(1, 7)
   switch (choice) {
@@ -90,6 +98,15 @@ export const randomColor = (): Color => {
       return defaultColor
   }
 }
+
+const parseColor = (color: Color | undefined = defaultColor): Color => {
+  return color
+}
+
+// const parseAlignment = (alignment: Alignment | undefined): Alignment => {
+//   if (alignment) return alignment
+//   else return defaultAlignment
+// }
 
 const areaFromPoints = (position: Position, vertices: Position[], sketch: p5): number => {
   // find and sum the triangles created from position and vertices
@@ -152,10 +169,11 @@ export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
 
 export const renderText = (sketch: p5, textSettings: TextSettings) => {
   const { textSize, text, color, alignment, boxWidth, boxHeight } = textSettings
-  const { hue, saturation, lightness } = color
+  const { hue, saturation, lightness } = parseColor(color)
+  const { horizontal, vertical } = alignment
 
   sketch.rectMode('center')
-  sketch.textAlign(alignment.horizontal, alignment.vertical)
+  sketch.textAlign(horizontal, vertical)
   sketch.textSize(textSize)
   sketch.colorMode('hsl')
   sketch.fill(hue, saturation, lightness)
@@ -218,10 +236,9 @@ export const renderText = (sketch: p5, textSettings: TextSettings) => {
 //   })
 // }
 
-// export function addToWorld<Type> (world: Matter.World, instance: Type, container: any[]): void {
+// export function addToWorld (world: Matter.World, instance: Instance, container: any[]): void {
 //   World.add(world, instance.body)
 //   container.push(instance)
-//   instance.index = container.length - 1
 // }
 
 // export const renderImage = (config: ImageConfig) => {
