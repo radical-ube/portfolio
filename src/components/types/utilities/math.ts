@@ -1,7 +1,6 @@
-import p5 from 'p5'
-
 import {
-  Position
+  Position,
+  Triangle
 } from '../types'
 
 export const getRandomInt = (min: number, max: number): number => {
@@ -11,30 +10,44 @@ export const getRandomInt = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min)) + min
 }
 
-const areaFromPoints = (position: Position, vertices: Position[], sketch: p5): number => {
+export const distanceBetweenTwoPoints = (pointOne: Position, pointTwo: Position): number => {
+  let sideOne = pointOne.x - pointTwo.x
+  let sideTwo = pointOne.y - pointTwo.y
+
+  return Math.sqrt( sideOne*sideOne + sideTwo*sideTwo )
+}
+
+const triangleFromVertices = (vertexOne: Position, vertexTwo: Position, vertexThree: Position): Triangle => {
+  const sideOne = distanceBetweenTwoPoints(vertexOne, vertexTwo)
+  const sideTwo = distanceBetweenTwoPoints(vertexOne, vertexThree)
+  const sideThree = distanceBetweenTwoPoints(vertexTwo, vertexThree)
+
+  return {
+    sideOne,
+    sideTwo,
+    sideThree
+  }
+}
+
+const areaOfTriangle = (triangle: Triangle): number => {
+  const { sideOne, sideTwo, sideThree } = triangle
+  const semiPerimeter = (sideOne + sideTwo + sideThree) / 2
+
+  return Math.sqrt(semiPerimeter * (semiPerimeter - sideOne) * (semiPerimeter - sideTwo) * (semiPerimeter - sideThree))
+}
+
+export const rectAreaFromVertices = (position: Position, vertices: Position[]): number => {
   // find and sum the triangles created from position and vertices
   return vertices
-    // find edges of triangles
+    // find sides of triangles
     .map((vertex, index, array) => {
       let nextPointIdx = index + 1
       if (index === array.length - 1) nextPointIdx = 0
-
-      const edgeOne = sketch.dist(position.x, position.y, vertex.x, vertex.y)
-      const edgeTwo = sketch.dist(position.x, position.y, array[nextPointIdx].x, array[nextPointIdx].y)
-      const edgeThree = sketch.dist(vertex.x, vertex.y, array[nextPointIdx].x, array[nextPointIdx].y)
-
-      return {
-        edgeOne,
-        edgeTwo,
-        edgeThree
-      }
+      return triangleFromVertices(position, vertex, array[nextPointIdx])
     })
     // find areas of triangles
-    .map((edges) => {
-      const { edgeOne, edgeTwo, edgeThree } = edges
-      const semiPerimeter = (edgeOne + edgeTwo + edgeThree) / 2
-
-      return sketch.sqrt(semiPerimeter * (semiPerimeter - edgeOne) * (semiPerimeter - edgeTwo) * (semiPerimeter - edgeThree))
+    .map(triangle => {
+      return areaOfTriangle(triangle)
     })
     // sum all the triangles
     .reduce((sum, curVal) => {

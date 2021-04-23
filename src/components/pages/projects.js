@@ -51,10 +51,10 @@ const Projects = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      renderGroup(environment.projects)
-      checkGroupForMouse(environment.projects)
-      renderProjectDescription(environment.projects)
-      checkGroupForMouse(environment.buttons)
+      // renderGroup(environment.projects)
+      // checkGroupForMouse(environment.projects)
+      // renderProjectDescription(environment.projects)
+      // checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)

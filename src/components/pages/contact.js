@@ -46,10 +46,10 @@ const Contact = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      renderGroup(environment.bodies)
-      renderGroup(environment.constraints)
-      renderGroup(environment.buttons)
-      checkGroupForMouse(environment.buttons)
+      // renderGroup(environment.bodies)
+      // renderGroup(environment.constraints)
+      // renderGroup(environment.buttons)
+      // checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)

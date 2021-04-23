@@ -34,6 +34,12 @@ export interface Position {
   y: number;
 }
 
+export interface Triangle {
+  sideOne: number;
+  sideTwo: number;
+  sideThree: number;
+}
+
 export enum Shape {
   Circle = 'circle',
   Rectangle = 'rect'

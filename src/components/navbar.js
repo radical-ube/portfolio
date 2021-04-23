@@ -4,7 +4,7 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { setupFrame, resetNavFrame, 
-  setupNav 
+  setupNav, renderGroup 
 } from './types'
 import { setCurrentPage } from '../store/page'
 
@@ -51,7 +51,7 @@ const Navbar = props => {
       sketch.background(bgColor)
       Engine.update(engine)
       renderGroup(environment.buttons)
-      checkGroupForMouse(environment.buttons)
+      // checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
       resetNavFrame(environment)

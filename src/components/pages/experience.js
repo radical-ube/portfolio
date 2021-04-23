@@ -60,12 +60,12 @@ const Experience = props => {
     sketch.draw = () => {
       sketch.background(bgColor)
       Engine.update(engine)
-      renderGroup(environment.bodies)
-      renderGroup(environment.buttons)
-      checkGroupForMouse(environment.buttons)
-      renderGroup(environment.bubbles)
-      checkGroupForMouse(environment.bubbles)
-      checkGroupForRemoval(world, environment.bubbles)
+      // renderGroup(environment.bodies)
+      // renderGroup(environment.buttons)
+      // checkGroupForMouse(environment.buttons)
+      // renderGroup(environment.bubbles)
+      // checkGroupForMouse(environment.bubbles)
+      // checkGroupForRemoval(world, environment.bubbles)
     }
     sketch.windowResized = () => {
       resetPageFrame(environment)
