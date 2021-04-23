@@ -54,7 +54,7 @@ const getPurpleColor = (): Color => {
   }
 }
 
-export const defaultColor: Color = {
+const defaultColor: Color = {
   hue: 0,
   saturation: 0,
   lightness: 94
@@ -78,4 +78,8 @@ export const randomColor = (): Color => {
     default:
       return defaultColor
   }
+}
+
+export const parseColor = (color: Color | undefined = defaultColor): Color => {
+  return color
 }

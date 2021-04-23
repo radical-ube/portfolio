@@ -1,23 +1,19 @@
 import Matter from 'matter-js'
 
-import { 
-  //  ParagraphBox, 
-  //  ImageBox, 
-   SpringConstructor, 
-  //  ButtonConstructor, 
-  //  Project 
-  } from './constructors'
 import {
   TextBox,
   Boundary,
   Horizontal,
-  Vertical
+  Vertical,
+  Shape
 } from './types'
 import { 
-  randomColor,
   setTextDimensions,
   addToWorld
 } from './utils'
+import {
+  randomColor
+} from './utilities'
 
 
 export const setupFrame = environment => {
@@ -54,7 +50,6 @@ export const setupFrame = environment => {
     h: height
   })
   addToWorld(world, rightWall, boundaries)
-
 }
 
 export const resetPageFrame = environment => {
@@ -97,20 +92,31 @@ export const resetNavFrame = environment => {
 //   let prevElement = end1
 
 //   for (let i = 0; i < tabs.length; i++) {
-//     let buttonSettings = {
-//       x: x + (40 * i),
-//       y,
-//       options: {
-//         friction: 0.4,
-//         restitution: 0.8,
-//         isStatic: false
-//       },
-//       textSettings: {
-//         textSize,
-//         text: tabs[i]
-//       },
-//       color: randomColor()
-//     }
+  // const dimensions = setTextDimensions(environment.sketch, {
+  //   textSize,
+  //   text: word,
+  // })
+  //   let buttonSettings = {
+  //     bodySettings: {
+  //       x: x + (40 * i),
+  //       y,
+  //       w: dimensions.w,
+  //       h: dimensions.h,
+  //       padding: dimensions.padding,
+  //       shape: Shape.Rectangle,
+  //     },
+      
+  //     textSettings: {
+  //       textSize,
+  //       text: tabs[i],
+  //       color: randomColor(),
+  //       alignment: {
+  //         horizontal: Horizontal.Center,
+  //         vertical: Vertical.Center
+  //       }
+  //     },
+      
+  //   }
 //     let button = new ButtonConstructor(environment, buttonSettings)
 
 //     let constraintSettings = {

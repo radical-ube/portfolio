@@ -40,11 +40,13 @@ export enum Shape {
 }
 
 interface BodySettings {
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  index?: number
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  padding: number;
+  shape?: Shape;
+  index?: number;
 }
 
 export interface TextSettings {
@@ -71,6 +73,7 @@ interface HasText {
 }
 
 interface TextBoxSettings extends HasBody, HasText {}
+interface ButtonSettings extends HasBody, HasText {}
 
 interface HasShape {
   shape: Shape;
@@ -125,13 +128,91 @@ export class TextBox implements TextRenderable {
       restitution: 0.8,
       isStatic: false
     })
-    
   }
   
   show() {
     this.sketch.push()
     transformBody(this.sketch, this.body)
     renderText(this.sketch, this.textSettings)
+    this.sketch.pop()
+  }
+}
+
+export class Button {
+  // options: any;
+  body: Matter.Body;
+  // address: string;
+  mouseInBounds: boolean | undefined;
+  // index: number;
+  // text: string;
+  sketch: p5;
+  textSettings: TextSettings;
+  bodySettings: BodySettings;
+
+  constructor(sketch: p5, settings: ButtonSettings) {
+    
+    this.sketch = sketch
+    this.bodySettings = settings.bodySettings
+    this.textSettings = settings.textSettings
+    const { x, y, w, h, padding, shape } = this.bodySettings
+
+    // this.text = settings.textSettings.text
+    // this.options = settings.options
+    this.body = Matter.Bodies.rectangle(x, y, w + padding, h + padding, {
+      friction: 0.4,
+      restitution: 0.8,
+      isStatic: false
+    })
+    // this.address = settings.textSettings.address
+    this.mouseInBounds = false
+  }
+
+  // class methods
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderText(this.sketch, this.textSettings)
+    // renderOutline(this.config)
+    // if (this.mouseInBounds) {
+    //   renderHighlight(this.config)
+    // }
+    this.sketch.pop()
+  }
+
+  // checkMouseInBounds(mousePosition: Position) {
+  //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.config)
+  // }
+
+  remove(world: Matter.World) {
+    Matter.World.remove(world, this.body)
+  }
+}
+
+export class Spring {
+  body: Matter.Constraint;
+  // index: number;
+  sketch: p5;
+
+  constructor (environment: Environment, settings: any) {
+    const { sketch, world, constraints } = environment
+    const { bodyA, bodyB, length, stiffness } = settings
+  
+    this.sketch = sketch
+    this.body = Matter.Constraint.create({
+      bodyA,
+      bodyB,
+      length,
+      stiffness
+    })
+  }
+  
+  show() {
+    let a = this.body.bodyA.position
+    let b = this.body.bodyB.position
+    this.sketch.push()
+    this.sketch.colorMode('hsl')
+    this.sketch.stroke(0, 0, 100, 0.1)
+    this.sketch.line(a.x, a.y, b.x, b.y)
     this.sketch.pop()
   }
 }
