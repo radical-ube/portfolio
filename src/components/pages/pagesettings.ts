@@ -22,22 +22,23 @@ export const environment = {
   boundaries: []
 }
 
-export const sketchSetup = (sketch: p5, environment: any) => {
+const sketchSetup = (sketch: p5, environment: any) => {
+  const { width, height, engine, world } = environment
   Matter.World.clear(world, false)
   Matter.Engine.clear(engine)
-  const canvas = sketch.createCanvas(environment.width, environment.height)
+  const canvas = sketch.createCanvas(width, height)
   createMouseConstraint(canvas.elt, engine, world, sketch)
   setupFrame(environment)
   setupHome(sketch, environment)
 }
 
-export const sketchDraw = (sketch: p5, environment: any) => {
+const sketchDraw = (sketch: p5, environment: any) => {
   sketch.background(environment.bgColor)
   Matter.Engine.update(engine)
   renderGroup(environment.bodies)
 }
 
-export const sketchWindowResized = (environment: any) => {
+const sketchWindowResized = (environment: any) => {
   resetPageFrame(environment)
   setupFrame(environment)
 }

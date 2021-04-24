@@ -36,11 +36,13 @@ const Navbar = (props: any) => {
     }
 
     // const handleClick = () => {
-    //   environment.buttons.forEach(button => {
-    //     if (button.mouseInBounds) {
-    //       setCurrentPage(button.config.textSettings.text)
-    //     }
-    //   })
+    //   if (ref && ref.current) {
+    //     environment.buttons.forEach(button => {
+    //       if (button.mouseInBounds) {
+    //         setCurrentPage(button.config.textSettings.text)
+    //       }
+    //     })
+    //   }
     // }
 
     sketch.setup = () => {

@@ -3,27 +3,26 @@ import { connect } from 'react-redux'
 
 import { About, Contact, Projects, Experience, Home } from './pages'
 
-import {
-  environment,
-  sketchFns
-} from './pages/pagesettings'
-
 const Routes = (props: any) => {
-  const { currentPage, bgColor } = props
+  const { currentPage } = props
   return (
     <div>
       {currentPage === 'home' ? (
-        <Home environment={environment} sketchFns={sketchFns} />
+        <Home />
       ) : currentPage === 'about' ? (
-        <About bgColor={bgColor} />
+        // <About />
+        <Home />
       ) : currentPage === 'projects' ? (
-        <Projects bgColor={bgColor} />
+        // <Projects />
+        <Home />
       ) : currentPage === 'experience' ? (
-        <Experience bgColor={bgColor} />
+        // <Experience />
+        <Home />
       ) : currentPage === 'contact' ? (
-        <Contact bgColor={bgColor} />
+        // <Contact />
+        <Home />
       ) : (
-        <Home bgColor={bgColor} />
+        <Home />
       )}
     </div>
   )
