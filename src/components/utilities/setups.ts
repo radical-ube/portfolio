@@ -1,3 +1,5 @@
+import p5 from 'p5'
+
 import {
   TextBox,
   Boundary,
@@ -144,7 +146,7 @@ export const setupNav = (environment: any) => {
   addToWorld(world, lastSpring, constraints)
 }
 
-export const setupHome = (environment: any) => {
+export const setupHome = (sketch: p5, environment: any) => {
   const { width, height, world, bodies } = environment
 
   let homeText1 = 'hello world, my name is ube'
@@ -158,7 +160,7 @@ export const setupHome = (environment: any) => {
         x = width * 0.41
       }
 
-      const dimensions = setTextDimensions(environment.sketch, {
+      const dimensions = setTextDimensions(sketch, {
         textSize,
         text: word,
       })
@@ -179,7 +181,7 @@ export const setupHome = (environment: any) => {
         }
       }
 
-      const wordBox = new TextBox(environment.sketch, settings)
+      const wordBox = new TextBox(sketch, settings)
       addToWorld(world, wordBox, bodies)
     })
 
@@ -190,7 +192,7 @@ export const setupHome = (environment: any) => {
       let x = width * 0.65
       let y = height * 0.2 + (index * textSize)
 
-      const dimensions = setTextDimensions(environment.sketch, {
+      const dimensions = setTextDimensions(sketch, {
         textSize,
         text: word,
       })
@@ -211,7 +213,7 @@ export const setupHome = (environment: any) => {
         },
       }
 
-      const wordBox = new TextBox(environment.sketch, settings)
+      const wordBox = new TextBox(sketch, settings)
       addToWorld(world, wordBox, bodies)
     })
 }

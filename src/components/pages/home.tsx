@@ -3,49 +3,22 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import {
-  createMouseConstraint,
-  renderGroup,
-  setupFrame, 
-  resetPageFrame, 
-  setupHome
-} from '../utilities'
-
-const { Engine, World } = Matter
 
 const Home = (props: any) => {
-  const { currentPage, bgColor } = props
+  const { currentPage, environment, sketchFns } = props
   const ref = React.useRef<HTMLDivElement>(null!)
-  const engine = Engine.create()
-  const world = engine.world
+
+  const { sketchDraw, sketchSetup, sketchWindowResized } = sketchFns
 
   const Sketch = (sketch: p5) => {
-    const environment = {
-      sketch,
-      engine,
-      world,
-      width: window.innerWidth,
-      height: window.innerHeight * 0.85,
-      bodies: [],
-      boundaries: []
-    }
-
     sketch.setup = () => {
-      World.clear(world, false)
-      Engine.clear(engine)
-      const canvas = sketch.createCanvas(environment.width, environment.height)
-      createMouseConstraint(canvas.elt, engine, world, sketch)
-      setupFrame(environment)
-      setupHome(environment)
+      sketchSetup(sketch, environment)
     }
     sketch.draw = () => {
-      sketch.background(bgColor)
-      Engine.update(engine)
-      renderGroup(environment.bodies)
+      sketchDraw(sketch, environment)
     }
     sketch.windowResized = () => {
-      resetPageFrame(environment)
-      setupFrame(environment)
+      sketchWindowResized(environment)
     }
   }
 
