@@ -4,12 +4,16 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { 
-  // setupFrame, 
+  setupFrame, 
   // resetPageFrame, 
   // setupAbout, 
   // createColorParticles, 
   // manageParticleRender 
-} from '../types'
+} from '../utilities'
+
+import {
+  environment
+} from './pagesettings'
 
 const { Engine, World } = Matter
 
@@ -20,26 +24,27 @@ const About = (props: any) => {
   const world = engine.world
 
   const Sketch = (sketch: p5) => {
-    const environment = {
-      sketch,
-      engine,
-      world,
-      width: window.innerWidth,
-      height: window.innerHeight * 0.85,
-      bodies: [],
-      boundaries: [],
-      particles: []
-    }
+    // const environment = {
+    //   sketch,
+    //   engine,
+    //   world,
+    //   bgColor: '#282c34',
+    //   width: window.innerWidth,
+    //   height: window.innerHeight * 0.85,
+    //   bodies: [],
+    //   boundaries: [],
+    //   particles: []
+    // }
 
     sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = sketch.createCanvas(environment.width, environment.height)
-      // setupFrame(environment)
+      setupFrame(environment)
       // setupAbout(environment)
     }
     sketch.draw = () => {
-      sketch.background(bgColor)
+      sketch.background(environment.bgColor)
       Engine.update(engine)
       if (sketch.frameCount % 4 === 0) {
         // createColorParticles(environment)

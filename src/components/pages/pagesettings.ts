@@ -9,17 +9,22 @@ import {
   resetPageFrame
 } from '../utilities'
 
+import {
+  Environment
+} from '../types'
+
 const engine = Matter.Engine.create()
 const world = engine.world
 
-export const environment = {
+export const environment: Environment = {
   engine,
   world,
   bgColor: '#282c34',
   width: window.innerWidth,
   height: window.innerHeight * 0.85,
   bodies: [],
-  boundaries: []
+  boundaries: [],
+  buttons: []
 }
 
 const sketchSetup = (sketch: p5, environment: any) => {

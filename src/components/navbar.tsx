@@ -10,6 +10,10 @@ import {
   setupFrame,
   setupNav
 } from './utilities'
+import {
+  Environment
+} from './types'
+
 import { setCurrentPage } from '../store/page'
 
 const { Engine, World } = Matter
@@ -21,11 +25,11 @@ const Navbar = (props: any) => {
   const world = engine.world
 
   const Sketch = (sketch: p5) => {
-
-    const environment = {
+    const environment: Environment = {
       sketch,
       engine,
       world,
+      bgColor: '#282c34',
       width: window.innerWidth,
       height: window.innerHeight * 0.15,
       bodies: [],
@@ -35,21 +39,21 @@ const Navbar = (props: any) => {
       buttons: []
     }
 
-    // const handleClick = () => {
-    //   if (ref && ref.current) {
-    //     environment.buttons.forEach(button => {
-    //       if (button.mouseInBounds) {
-    //         setCurrentPage(button.config.textSettings.text)
-    //       }
-    //     })
-    //   }
-    // }
+    const handleClick = () => {
+      if (ref && ref.current) {
+        environment.buttons.forEach(button => {
+          if (button.mouseInBounds) {
+            setCurrentPage(button.textSettings.text)
+          }
+        })
+      }
+    }
 
     sketch.setup = () => {
       Engine.clear(engine)
       World.clear(world, false)
       const canvas = sketch.createCanvas(environment.width, environment.height)
-      // canvas.mouseClicked(handleClick)
+      canvas.mouseClicked(handleClick)
       setupFrame(environment)
       setupNav(environment)
     }

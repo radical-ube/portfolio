@@ -200,17 +200,20 @@ export type PhysicalObject = TextBox | Boundary | Button | Spring
 
 // settings
 export interface Environment {
-  sketch: p5
+  sketch?: p5
+  engine: Matter.Engine
+  world: Matter.World
+  bgColor: string
   width: number
   height: number
-  world: Matter.World
   boundaries: any[]
   bodies: any[]
-  projects: any[]
-  descriptions: any[]
+  projects?: any[]
+  descriptions?: any[]
   buttons: any[]
-  constraints: any[]
-  particles: any[]
-  bubbles: any[]
+  constraints?: any[]
+  particles?: any[]
+  bubbles?: any[]
+  tabs?: string[]
 }
 

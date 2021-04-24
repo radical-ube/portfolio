@@ -10,8 +10,8 @@ const Routes = (props: any) => {
       {currentPage === 'home' ? (
         <Home />
       ) : currentPage === 'about' ? (
-        // <About />
-        <Home />
+        <About />
+        // <Home />
       ) : currentPage === 'projects' ? (
         // <Projects />
         <Home />
