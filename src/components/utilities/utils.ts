@@ -3,7 +3,8 @@ import p5 from 'p5'
 import { 
   TextSettings,
   PhysicalObject,
-  Button
+  Button,
+  Alignment
 } from '../types'
 
 import {
@@ -11,15 +12,15 @@ import {
   rectAreaFromVertices
 } from '.'
 
-// export const defaultAlignment = {
-//   horizontal: Horizontal.Center,
-//   vertical: Vertical.Center
-// }
+export const defaultAlignment: Alignment = {
+  horizontal: 'center',
+  vertical: 'center'
+}
 
-// const parseAlignment = (alignment: Alignment | undefined): Alignment => {
-//   if (alignment) return alignment
-//   else return defaultAlignment
-// }
+export const parseAlignment = (alignment: Alignment | undefined): Alignment => {
+  if (alignment) return alignment
+  else return defaultAlignment
+}
 
 
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {

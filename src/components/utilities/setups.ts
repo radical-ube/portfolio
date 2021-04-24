@@ -3,8 +3,8 @@ import {
   Boundary,
   Button,
   Spring,
-  Horizontal,
-  Vertical,
+  // Horizontal,
+  // Vertical,
   Shape
 } from '../types'
 import { 
@@ -12,18 +12,19 @@ import {
 } from './utils'
 import {
   randomColor,
-  addToWorld
+  addToWorld,
+  defaultAlignment
 } from '.'
 
 
-export const setupFrame = environment => {
+export const setupFrame = (environment: any) => {
   const { width, height, world, boundaries } = environment
 
   const ground = new Boundary({
     x: width / 2, 
     y: height * 2, 
     w: width * 2, 
-    h: height * 2
+    h: height * 2,
   })
   addToWorld(world, ground, boundaries)
   
@@ -31,7 +32,7 @@ export const setupFrame = environment => {
     x: width / 2, 
     y: height * -1, 
     w: width * 2, 
-    h: height * 2
+    h: height * 2,
   })
   addToWorld(world, ceiling, boundaries)
   
@@ -39,7 +40,7 @@ export const setupFrame = environment => {
     x: width * -1, 
     y: height / 2, 
     w: width * 2, 
-    h: height
+    h: height,
   })
   addToWorld(world, leftWall, boundaries)
 
@@ -47,34 +48,34 @@ export const setupFrame = environment => {
     x: width * 2, 
     y: height / 2, 
     w: width * 2, 
-    h: height
+    h: height,
   })
   addToWorld(world, rightWall, boundaries)
 }
 
-export const resetPageFrame = environment => {
-  const {sketch} = environment
+export const resetPageFrame = (environment: any) => {
+  const {sketch, world} = environment
   environment.width = window.innerWidth
   environment.height = window.innerHeight * 0.85
   sketch.resizeCanvas(environment.width, environment.height)
-  environment.boundaries.forEach(boundary => {
-    boundary.remove()
+  environment.boundaries.forEach((boundary: Boundary) => {
+    boundary.remove(world)
   })
   environment.boundaries.splice(0, 1)
 }
 
-export const resetNavFrame = environment => {
-  const {sketch} = environment
+export const resetNavFrame = (environment: any) => {
+  const {sketch, world} = environment
   environment.width = window.innerWidth
   environment.height = window.innerHeight * 0.15
   sketch.resizeCanvas(environment.width, environment.height)
-  environment.boundaries.forEach(boundary => {
-    boundary.remove()
+  environment.boundaries.forEach((boundary: Boundary) => {
+    boundary.remove(world)
   })
   environment.boundaries.splice(0, 1)
 }
 
-export const setupNav = (environment) => {
+export const setupNav = (environment: any) => {
   const { width, height, tabs, buttons, sketch, world, constraints, boundaries } = environment
   let textSize = width * 0.035
   let x = width / (tabs.length + 1)
@@ -109,10 +110,7 @@ export const setupNav = (environment) => {
         textSize,
         text: word,
         color: randomColor(),
-        alignment: {
-          horizontal: Horizontal.Center,
-          vertical: Vertical.Center
-        }
+        alignment: defaultAlignment
       },
     }
     const button = new Button(sketch, buttonSettings)
@@ -146,7 +144,7 @@ export const setupNav = (environment) => {
   addToWorld(world, lastSpring, constraints)
 }
 
-export const setupHome = (environment) => {
+export const setupHome = (environment: any) => {
   const { width, height, world, bodies } = environment
 
   let homeText1 = 'hello world, my name is ube'
@@ -177,10 +175,7 @@ export const setupHome = (environment) => {
           textSize,
           text: word,
           color: randomColor(),
-          alignment: {
-            horizontal: Horizontal.Center,
-            vertical: Vertical.Center
-          }
+          alignment: defaultAlignment
         }
       }
 
@@ -212,10 +207,7 @@ export const setupHome = (environment) => {
           textSize,
           text: word,
           color: randomColor(),
-          alignment: {
-            horizontal: Horizontal.Center,
-            vertical: Vertical.Center
-          }
+          alignment: defaultAlignment
         },
       }
 

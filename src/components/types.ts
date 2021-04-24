@@ -10,17 +10,9 @@ import {
 } from './utilities'
 
 // properties
-export enum Horizontal {
-  Left = 'left',
-  Right = 'right',
-  Center = 'center' 
-}
+export type Horizontal = p5.LEFT | p5.RIGHT | p5.CENTER
 
-export enum Vertical {
-  Center = 'center',
-  Top = 'top',
-  Bottom = 'bottom',
-}
+export type Vertical = p5.CENTER | p5.TOP | p5.BOTTOM
 
 export interface Alignment {
   horizontal: Horizontal
@@ -54,7 +46,7 @@ export interface BodySettings {
   y: number
   w: number
   h: number
-  padding: number
+  padding?: number
   shape?: Shape
   index?: number
 }
@@ -63,7 +55,7 @@ export interface TextSettings {
   text: string
   textSize: number
   color?: Color
-  alignment: Alignment
+  alignment?: Alignment
   boxWidth?: number
   boxHeight?: number
   padding?: number
@@ -150,7 +142,7 @@ export class Button implements Renderable, Removable, HasText, HasBody {
     this.sketch = sketch
     this.bodySettings = settings.bodySettings
     this.textSettings = settings.textSettings
-    const { x, y, w, h, padding } = this.bodySettings
+    const { x, y, w, h, padding = 0 } = this.bodySettings
 
     this.body = Matter.Bodies.rectangle(x, y, w + padding, h + padding, {
       friction: 0.4,
@@ -203,7 +195,7 @@ export class Spring {
   }
 }
 
-export type PhysicalObject = TextBox | Boundary | Button
+export type PhysicalObject = TextBox | Boundary | Button | Spring
 
 
 // settings

@@ -5,13 +5,14 @@ import {
   Color
 } from '../types'
 import {
-  parseColor
+  parseColor,
+  parseAlignment
 } from '.'
 
 export const renderText = (sketch: p5, textSettings: TextSettings) => {
   const { textSize, text, color, alignment, boxWidth, boxHeight } = textSettings
   const { hue, saturation, lightness } = parseColor(color)
-  const { horizontal, vertical } = alignment
+  const { horizontal, vertical } = parseAlignment(alignment)
 
   sketch.rectMode('center')
   sketch.textAlign(horizontal, vertical)
@@ -27,7 +28,7 @@ export const renderText = (sketch: p5, textSettings: TextSettings) => {
 }
 
 export const renderOutline = (sketch: p5, bodySettings: BodySettings, color: Color) => {
-  const { w, h, shape, padding } = bodySettings
+  const { w, h, shape, padding = 0 } = bodySettings
   const { hue, saturation, lightness } = color
   sketch.colorMode('hsl')
   sketch.noFill()
@@ -43,7 +44,7 @@ export const renderOutline = (sketch: p5, bodySettings: BodySettings, color: Col
 }
 
 export const renderHighlight = (sketch: p5, bodySettings: BodySettings) => {
-  const { w, h, padding, shape } = bodySettings
+  const { w, h, padding = 0, shape } = bodySettings
   sketch.colorMode('hsl')
   sketch.noStroke()
   sketch.fill(0, 0, 100, 0.1)
