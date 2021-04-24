@@ -1,28 +1,28 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { About, Contact, Projects, Experience, Home } from './pages'
+import { About, Contact, Projects, Experience, Page } from './pages'
 
 const Routes = (props: any) => {
   const { currentPage } = props
   return (
     <div>
       {currentPage === 'home' ? (
-        <Home />
+        <Page />
       ) : currentPage === 'about' ? (
         <About />
-        // <Home />
+        // <Page />
       ) : currentPage === 'projects' ? (
         // <Projects />
-        <Home />
+        <Page />
       ) : currentPage === 'experience' ? (
         // <Experience />
-        <Home />
+        <Page />
       ) : currentPage === 'contact' ? (
         // <Contact />
-        <Home />
+        <Page />
       ) : (
-        <Home />
+        <Page />
       )}
     </div>
   )

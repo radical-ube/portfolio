@@ -210,10 +210,19 @@ export interface Environment {
   bodies: any[]
   projects?: any[]
   descriptions?: any[]
-  buttons: any[]
+  // buttons: any[]
   constraints?: any[]
-  particles?: any[]
+  // particles?: any[]
   bubbles?: any[]
-  tabs?: string[]
+  // tabs?: string[]
+}
+
+export interface NavEnv extends Environment {
+  buttons: any[],
+  tabs: string[]
+}
+
+export interface AboutEnv extends Environment {
+  particles: any[]
 }
 

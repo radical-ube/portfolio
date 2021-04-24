@@ -11,7 +11,7 @@ import {
   setupNav
 } from './utilities'
 import {
-  Environment
+  NavEnv
 } from './types'
 
 import { setCurrentPage } from '../store/page'
@@ -19,13 +19,13 @@ import { setCurrentPage } from '../store/page'
 const { Engine, World } = Matter
 
 const Navbar = (props: any) => {
-  const { setCurrentPage, bgColor } = props
+  const { setCurrentPage } = props
   const ref = React.useRef<HTMLDivElement>(null!)
   const engine = Engine.create()
   const world = engine.world
 
   const Sketch = (sketch: p5) => {
-    const environment: Environment = {
+    const environment: NavEnv = {
       sketch,
       engine,
       world,
@@ -40,13 +40,11 @@ const Navbar = (props: any) => {
     }
 
     const handleClick = () => {
-      if (ref && ref.current) {
         environment.buttons.forEach(button => {
           if (button.mouseInBounds) {
             setCurrentPage(button.textSettings.text)
           }
         })
-      }
     }
 
     sketch.setup = () => {
@@ -58,7 +56,7 @@ const Navbar = (props: any) => {
       setupNav(environment)
     }
     sketch.draw = () => {
-      sketch.background(bgColor)
+      sketch.background(environment.bgColor)
       Engine.update(engine)
       renderGroup(environment.buttons)
       checkGroupForMouse(environment.buttons)
@@ -81,7 +79,7 @@ const Navbar = (props: any) => {
 
 const mapDispatch = (dispatch: any) => {
   return {
-    setCurrentPage: (page: any) => dispatch(setCurrentPage(page))
+    setCurrentPage: (page: string) => dispatch(setCurrentPage(page))
   }
 }
 

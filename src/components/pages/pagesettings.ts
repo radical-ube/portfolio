@@ -24,7 +24,6 @@ export const environment: Environment = {
   height: window.innerHeight * 0.85,
   bodies: [],
   boundaries: [],
-  buttons: []
 }
 
 const sketchSetup = (sketch: p5, environment: any) => {

@@ -5,10 +5,6 @@ import { connect } from 'react-redux'
 
 import { 
   setupFrame, 
-  // resetPageFrame, 
-  // setupAbout, 
-  // createColorParticles, 
-  // manageParticleRender 
 } from '../utilities'
 
 import {
@@ -18,24 +14,12 @@ import {
 const { Engine, World } = Matter
 
 const About = (props: any) => {
-  const { currentPage, bgColor } = props
+  const { currentPage } = props
   const ref = React.useRef<HTMLDivElement>(null!)
   const engine = Engine.create()
   const world = engine.world
 
   const Sketch = (sketch: p5) => {
-    // const environment = {
-    //   sketch,
-    //   engine,
-    //   world,
-    //   bgColor: '#282c34',
-    //   width: window.innerWidth,
-    //   height: window.innerHeight * 0.85,
-    //   bodies: [],
-    //   boundaries: [],
-    //   particles: []
-    // }
-
     sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
