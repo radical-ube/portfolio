@@ -11,13 +11,13 @@ import {
 
 const { Engine, World } = Matter
 
-const Projects = props => {
+const Projects = (props: any) => {
   const { currentPage, bgColor } = props
-  const ref = React.createRef()
+  const ref = React.useRef<HTMLDivElement>(null!)
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = sketch => {
+  const Sketch = (sketch: p5) => {
     const environment = {
       sketch,
       engine,
@@ -34,15 +34,15 @@ const Projects = props => {
 
     const handleClick = () => {
       environment.buttons.forEach(button => {
-        if (button.mouseInBounds && button.address) {
-          document.location.assign(button.address)
-        }
+        // if (button.mouseInBounds && button.address) {
+        //   document.location.assign(button.address)
+        // }
       })
     }
 
     sketch.preload = () => {
-      environment.images.rainbow = sketch.loadImage('images/rainbowonme.png')
-      environment.images.ekopique = sketch.loadImage('images/ekopique.png')
+      // environment.images.rainbow = sketch.loadImage('images/rainbowonme.png')
+      // environment.images.ekopique = sketch.loadImage('images/ekopique.png')
     }
     sketch.setup = () => {
       World.clear(world, false)
@@ -76,7 +76,7 @@ const Projects = props => {
   return <div ref={ref} />
 }
 
-const mapState = state => {
+const mapState = (state: any) => {
   return {
     currentPage: state.currentPage
   }

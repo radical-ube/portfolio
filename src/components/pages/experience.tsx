@@ -13,13 +13,13 @@ import {
 
 const { Engine, World } = Matter
 
-const Experience = props => {
+const Experience = (props: any) => {
   const { currentPage, bgColor } = props
-  const ref = React.createRef()
+  const ref = React.useRef<HTMLDivElement>(null!)
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = sketch => {
+  const Sketch = (sketch: p5) => {
     const environment = {
       sketch,
       engine,
@@ -34,20 +34,20 @@ const Experience = props => {
 
     const handleClick = () => {
       environment.buttons.forEach(button => {
-        if (button.mouseInBounds && button.text) {
-          // createBubbles(environment, button)
-        }
-        if (button.mouseInBounds && button.address) {
-          document.location.assign(button.address)
-        }
+        // if (button.mouseInBounds && button.text) {
+        //   // createBubbles(environment, button)
+        // }
+        // if (button.mouseInBounds && button.address) {
+        //   document.location.assign(button.address)
+        // }
       })
       for (let i = 0; i < environment.bubbles.length; i++) {
-        let bubble = environment.bubbles[i]
-        if (bubble.mouseInBounds) {
-          World.remove(world, bubble.body)
-          environment.bubbles.splice(i, 1)
-          i--
-        }
+        // let bubble = environment.bubbles[i]
+        // if (bubble.mouseInBounds) {
+        //   World.remove(world, bubble.body)
+        //   environment.bubbles.splice(i, 1)
+        //   i--
+        // }
       }
     }
 
@@ -86,7 +86,7 @@ const Experience = props => {
   return <div ref={ref} />
 }
 
-const mapState = state => {
+const mapState = (state: any) => {
   return {
     currentPage: state.currentPage
   }

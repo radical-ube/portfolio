@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { About, Contact, Projects, Experience, Home } from './pages'
 
-const Routes = props => {
+const Routes = (props: any) => {
   const { currentPage, bgColor } = props
   return (
     <div>
@@ -24,7 +24,7 @@ const Routes = props => {
   )
 }
 
-const mapState = state => {
+const mapState = (state: any) => {
   return {
     currentPage: state.currentPage
   }

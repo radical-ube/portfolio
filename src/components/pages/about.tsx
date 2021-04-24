@@ -13,13 +13,13 @@ import {
 
 const { Engine, World } = Matter
 
-const About = props => {
+const About = (props: any) => {
   const { currentPage, bgColor } = props
-  const ref = React.createRef()
+  const ref = React.useRef<HTMLDivElement>(null!)
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = sketch => {
+  const Sketch = (sketch: p5) => {
     const environment = {
       sketch,
       engine,
@@ -64,7 +64,7 @@ const About = props => {
   return <div ref={ref} />
 }
 
-const mapState = state => {
+const mapState = (state: any) => {
   return {
     currentPage: state.currentPage
   }

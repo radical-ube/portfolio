@@ -14,13 +14,13 @@ import { setCurrentPage } from '../store/page'
 
 const { Engine, World } = Matter
 
-const Navbar = props => {
+const Navbar = (props: any) => {
   const { setCurrentPage, bgColor } = props
-  const ref = React.createRef()
+  const ref = React.useRef<HTMLDivElement>(null!)
   const engine = Engine.create()
   const world = engine.world
 
-  const Sketch = sketch => {
+  const Sketch = (sketch: p5) => {
 
     const environment = {
       sketch,
@@ -73,9 +73,9 @@ const Navbar = props => {
   return <div ref={ref} />
 }
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch: any) => {
   return {
-    setCurrentPage: (page) => dispatch(setCurrentPage(page))
+    setCurrentPage: (page: any) => dispatch(setCurrentPage(page))
   }
 }
 
