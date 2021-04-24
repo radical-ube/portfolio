@@ -26,7 +26,6 @@ const Navbar = (props: any) => {
 
   const Sketch = (sketch: p5) => {
     const environment: NavEnv = {
-      sketch,
       engine,
       world,
       bgColor: '#282c34',
@@ -53,7 +52,7 @@ const Navbar = (props: any) => {
       const canvas = sketch.createCanvas(environment.width, environment.height)
       canvas.mouseClicked(handleClick)
       setupFrame(environment)
-      setupNav(environment)
+      setupNav(sketch, environment)
     }
     sketch.draw = () => {
       sketch.background(environment.bgColor)
@@ -62,7 +61,7 @@ const Navbar = (props: any) => {
       checkGroupForMouse(environment.buttons)
     }
     sketch.windowResized = () => {
-      resetNavFrame(environment)
+      resetNavFrame(sketch, environment)
       setupFrame(environment)
     }
   }

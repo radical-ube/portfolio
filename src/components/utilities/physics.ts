@@ -2,7 +2,9 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 
 import {
-  PhysicalObject
+  PhysicalObject,
+  Container,
+  HasBody
 } from '../types'
 
 export const createMouseConstraint = (canvas: HTMLCanvasElement, engine: Matter.Engine, world: Matter.World, sketch: p5) => {
@@ -23,7 +25,7 @@ export const transformBody = (sketch: p5, body: Matter.Body) => {
   sketch.rotate(angle)
 }
 
-export function addToWorld (world: Matter.World, object: PhysicalObject, container: any[]): void {
+export function addToWorld (world: Matter.World, object: HasBody, container: any[]): void {
   Matter.World.add(world, object.body)
   container.push(object)
 }

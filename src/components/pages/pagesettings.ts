@@ -10,13 +10,13 @@ import {
 } from '../utilities'
 
 import {
-  Environment
+  PhysicalEnv
 } from '../types'
 
 const engine = Matter.Engine.create()
 const world = engine.world
 
-export const environment: Environment = {
+export const environment: PhysicalEnv = {
   engine,
   world,
   bgColor: '#282c34',
@@ -26,7 +26,7 @@ export const environment: Environment = {
   boundaries: [],
 }
 
-const sketchSetup = (sketch: p5, environment: any) => {
+const sketchSetup = (sketch: p5, environment: PhysicalEnv) => {
   const { width, height, engine, world } = environment
   Matter.World.clear(world, false)
   Matter.Engine.clear(engine)
@@ -42,8 +42,8 @@ const sketchDraw = (sketch: p5, environment: any) => {
   renderGroup(environment.bodies)
 }
 
-const sketchWindowResized = (environment: any) => {
-  resetPageFrame(environment)
+const sketchWindowResized = (sketch: p5, environment: any) => {
+  resetPageFrame(sketch, environment)
   setupFrame(environment)
 }
 

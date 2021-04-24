@@ -36,10 +36,7 @@ export interface Triangle {
   sideThree: number
 }
 
-export enum Shape {
-  Circle = 'circle',
-  Rectangle = 'rect'
-}
+export type Shape = 'circle' | 'rect'
 
 export interface BodySettings {
   x: number
@@ -47,8 +44,12 @@ export interface BodySettings {
   w: number
   h: number
   padding?: number
-  shape?: Shape
+  // shape?: Shape
   index?: number
+}
+
+export interface ButtonBodySettings extends BodySettings {
+  shape: Shape
 }
 
 export interface TextSettings {
@@ -61,7 +62,11 @@ export interface TextSettings {
   padding?: number
 }
 
-interface HasBody {
+export interface HasBody {
+  body: Matter.Body | Matter.Constraint
+}
+
+interface HasBodySettings {
   bodySettings: BodySettings
 }
 
@@ -69,9 +74,13 @@ interface HasText {
   textSettings: TextSettings
 }
 
-interface TextBoxSettings extends HasBody, HasText {}
+interface TextBoxSettings extends HasBodySettings, HasText {}
+export interface ButtonSettings {
+  bodySettings: ButtonBodySettings
+  textSettings: TextSettings
+}
 
-interface Renderable {
+export interface Renderable {
   show(): void
 }
 
@@ -102,7 +111,7 @@ export class Boundary implements Removable {
   }
 }
 
-export class TextBox implements Renderable, HasText, HasBody {
+export class TextBox implements Renderable, HasText, HasBodySettings {
   sketch: p5
   bodySettings: BodySettings
   textSettings: TextSettings
@@ -131,14 +140,14 @@ export class TextBox implements Renderable, HasText, HasBody {
   }
 }
 
-export class Button implements Renderable, Removable, HasText, HasBody {
+export class Button implements Renderable, Removable, HasText, HasBodySettings {
   body: Matter.Body
   mouseInBounds: boolean
   sketch: p5
   textSettings: TextSettings
-  bodySettings: BodySettings
+  bodySettings: ButtonBodySettings
 
-  constructor(sketch: p5, settings: TextBoxSettings) {
+  constructor(sketch: p5, settings: ButtonSettings) {
     this.sketch = sketch
     this.bodySettings = settings.bodySettings
     this.textSettings = settings.textSettings
@@ -197,32 +206,51 @@ export class Spring {
 
 export type PhysicalObject = TextBox | Boundary | Button | Spring
 
+export type Container = Button[] | Boundary[] | Spring[] | TextBox[]
 
-// settings
+// env settings
 export interface Environment {
-  sketch?: p5
   engine: Matter.Engine
   world: Matter.World
   bgColor: string
   width: number
   height: number
-  boundaries: any[]
-  bodies: any[]
-  projects?: any[]
-  descriptions?: any[]
-  // buttons: any[]
-  constraints?: any[]
-  // particles?: any[]
-  bubbles?: any[]
-  // tabs?: string[]
 }
 
-export interface NavEnv extends Environment {
-  buttons: any[],
-  tabs: string[]
+interface HasBoundaryGroup {
+  boundaries: Boundary[]
 }
 
-export interface AboutEnv extends Environment {
+interface HasBodyGroup {
+  bodies: Matter.Body[]
+}
+
+interface HasButtonGroup {
+  buttons: Button[]
+}
+
+interface HasSpringGroup {
+  constraints: Spring[]
+}
+
+export interface FramedEnv extends Environment, HasBoundaryGroup {}
+
+export interface PhysicalEnv extends FramedEnv, HasBodyGroup {}
+
+export interface NavEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {
+  tabs: string[],
+}
+
+export interface AboutEnv extends PhysicalEnv {
   particles: any[]
+}
+
+export interface ProjectEnv extends PhysicalEnv {
+  projects: any[]
+  descriptions: any[]
+}
+
+export interface ExperienceEnv extends PhysicalEnv {
+  bubbles: any[]
 }
 

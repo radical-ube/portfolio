@@ -5,9 +5,10 @@ import {
   Boundary,
   Button,
   Spring,
-  // Horizontal,
-  // Vertical,
-  Shape
+  ButtonSettings,
+  FramedEnv,
+  PhysicalEnv,
+  NavEnv,
 } from '../types'
 import { 
   setTextDimensions,
@@ -19,7 +20,7 @@ import {
 } from '.'
 
 
-export const setupFrame = (environment: any) => {
+export const setupFrame = (environment: FramedEnv) => {
   const { width, height, world, boundaries } = environment
 
   const ground = new Boundary({
@@ -55,8 +56,8 @@ export const setupFrame = (environment: any) => {
   addToWorld(world, rightWall, boundaries)
 }
 
-export const resetPageFrame = (environment: any) => {
-  const {sketch, world} = environment
+export const resetPageFrame = (sketch: p5, environment: FramedEnv) => {
+  const {world} = environment
   environment.width = window.innerWidth
   environment.height = window.innerHeight * 0.85
   sketch.resizeCanvas(environment.width, environment.height)
@@ -66,8 +67,8 @@ export const resetPageFrame = (environment: any) => {
   environment.boundaries.splice(0, 1)
 }
 
-export const resetNavFrame = (environment: any) => {
-  const {sketch, world} = environment
+export const resetNavFrame = (sketch: p5, environment: FramedEnv) => {
+  const {world} = environment
   environment.width = window.innerWidth
   environment.height = window.innerHeight * 0.15
   sketch.resizeCanvas(environment.width, environment.height)
@@ -77,8 +78,8 @@ export const resetNavFrame = (environment: any) => {
   environment.boundaries.splice(0, 1)
 }
 
-export const setupNav = (environment: any) => {
-  const { width, height, tabs, buttons, sketch, world, constraints, boundaries } = environment
+export const setupNav = (sketch: p5, environment: NavEnv) => {
+  const { width, height, tabs, buttons, world, constraints, boundaries } = environment
   let textSize = width * 0.035
   let x = width / (tabs.length + 1)
   let y = height * 0.5
@@ -95,18 +96,18 @@ export const setupNav = (environment: any) => {
 
   for (let i = 0; i < tabs.length; i++) {
     const word = tabs[i]
-    const dimensions = setTextDimensions(environment.sketch, {
+    const dimensions = setTextDimensions(sketch, {
       textSize,
       text: word,
     })
-    const buttonSettings = {
+    const buttonSettings: ButtonSettings = {
       bodySettings: {
         x: x + (40 * i),
         y,
         w: dimensions.w,
         h: dimensions.h,
         padding: dimensions.padding,
-        shape: Shape.Rectangle,
+        shape: 'rect',
       },
       textSettings: {
         textSize,
@@ -137,7 +138,7 @@ export const setupNav = (environment: any) => {
   })
   addToWorld(world, end2, boundaries)
 
-  const lastSpring = new Spring(environment, {
+  const lastSpring = new Spring(sketch, {
     bodyA: buttons[buttons.length - 1].body,
     bodyB: end2.body,
     length: x,
@@ -146,7 +147,7 @@ export const setupNav = (environment: any) => {
   addToWorld(world, lastSpring, constraints)
 }
 
-export const setupHome = (sketch: p5, environment: any) => {
+export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
   const { width, height, world, bodies } = environment
 
   let homeText1 = 'hello world, my name is ube'

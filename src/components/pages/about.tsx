@@ -24,7 +24,7 @@ const About = (props: any) => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = sketch.createCanvas(environment.width, environment.height)
-      setupFrame(environment)
+      // setupFrame(environment)
       // setupAbout(environment)
     }
     sketch.draw = () => {

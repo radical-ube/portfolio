@@ -16,7 +16,7 @@ const Page = (props: any) => {
       sketchDraw(sketch, currentEnv)
     }
     sketch.windowResized = () => {
-      sketchWindowResized(currentEnv)
+      sketchWindowResized(sketch, currentEnv)
     }
   }
 

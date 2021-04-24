@@ -2,7 +2,9 @@ import p5 from 'p5'
 import {
   TextSettings,
   BodySettings,
-  Color
+  Color,
+  ButtonBodySettings,
+  Renderable
 } from '../types'
 import {
   parseColor,
@@ -27,7 +29,7 @@ export const renderText = (sketch: p5, textSettings: TextSettings) => {
   }
 }
 
-export const renderOutline = (sketch: p5, bodySettings: BodySettings, color: Color) => {
+export const renderOutline = (sketch: p5, bodySettings: ButtonBodySettings, color: Color) => {
   const { w, h, shape, padding = 0 } = bodySettings
   const { hue, saturation, lightness } = color
   sketch.colorMode('hsl')
@@ -43,7 +45,7 @@ export const renderOutline = (sketch: p5, bodySettings: BodySettings, color: Col
   }
 }
 
-export const renderHighlight = (sketch: p5, bodySettings: BodySettings) => {
+export const renderHighlight = (sketch: p5, bodySettings: ButtonBodySettings) => {
   const { w, h, padding = 0, shape } = bodySettings
   sketch.colorMode('hsl')
   sketch.noStroke()
@@ -59,7 +61,7 @@ export const renderHighlight = (sketch: p5, bodySettings: BodySettings) => {
   }
 }
 
-export const renderGroup = (array: any[]): void => {
+export const renderGroup = (array: Renderable[]): void => {
   array.forEach(obj => {
     obj.show()
   })
