@@ -175,10 +175,10 @@ const experienceDraw = (sketch: p5, environment: any) => {
   Matter.Engine.update(environment.engine)
   renderGroup(environment.bodies)
   renderGroup(environment.buttons)
-  // checkGroupForMouse(environment.buttons)
-  // renderGroup(environment.bubbles)
-  // checkGroupForMouse(environment.bubbles)
-  // checkGroupForRemoval(world, environment.bubbles)
+  checkGroupForMouse(environment.buttons)
+  renderGroup(environment.bubbles)
+  checkGroupForMouse(environment.bubbles)
+  checkGroupForRemoval(world, environment.bubbles)
 }
 
 export const experienceFns = {

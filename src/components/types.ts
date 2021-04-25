@@ -48,7 +48,6 @@ export interface BodySettings {
   h: number
   padding?: number
   color?: Color
-  // shape?: Shape
   index?: number
   options: any
 }
@@ -93,6 +92,10 @@ interface TextBoxSettings extends HasBodySettings, HasText {}
 export interface ButtonSettings {
   bodySettings: ButtonBodySettings
   textSettings: TextSettings
+}
+
+export interface BubbleButtonSettings extends ButtonSettings {
+  bubbleText: string[]
 }
 
 export interface ProjectSettings extends HasBodySettings {
@@ -184,6 +187,19 @@ export class Button implements Renderable, Removable, HasText, HasBodySettings {
 
   remove(world: Matter.World) {
     Matter.World.remove(world, this.body)
+  }
+}
+
+export class BubbleButton extends Button {
+  text: string[]
+
+  constructor (sketch: p5, settings: BubbleButtonSettings) {
+    super(sketch, {
+      bodySettings: settings.bodySettings,
+      textSettings: settings.textSettings
+    })
+
+    this.text = settings.bubbleText
   }
 }
 
@@ -406,7 +422,6 @@ export class Bubble {
     
   }
 
-  // class methods
   show() {
     this.sketch.push()
     transformBody(this.sketch, this.body)
@@ -418,17 +433,9 @@ export class Bubble {
     this.sketch.pop()
   }
 
-  // checkMouseInBounds (mousePosition) {
-  //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.config)
-  // }
-
-  // this.checkBubblePop = () => {
-  //   this.bubbleShouldPop = (this.body.position.y - (this.config.dimensions.w / 2) < 1)
-  // }
-
-  // this.remove = () => {
-  //   World.remove(world, this.body)
-  // }
+  shouldBeRemoved(): boolean {
+    return (this.body.position.y - (this.bodySettings.w / 2) < 1)
+  }
 }
 
 export type PhysicalObject = TextBox | Boundary | Button | Spring

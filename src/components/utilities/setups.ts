@@ -7,6 +7,7 @@ import {
   Spring,
   ParagraphBox,
   Project,
+  BubbleButton,
   ButtonSettings,
   FramedEnv,
   PhysicalEnv,
@@ -425,12 +426,13 @@ export const setupExperience = (sketch: p5, environment: any) => {
       textSize: bubbleSize,
       text: credential.type
     })
-    const button = new Button(sketch, {
+    const button = new BubbleButton(sketch, {
       bodySettings: {
         x: xCreds + (xCreds * index),
         y: height * 0.8,
         w: dimensions.w,
         h: dimensions.h,
+        padding: 10,
         options: {
           isStatic: true
         },
@@ -440,9 +442,9 @@ export const setupExperience = (sketch: p5, environment: any) => {
         text: credential.type,
         textSize: bubbleSize,
       },
+      bubbleText: credential.text
     })
     addToWorld(world, button, buttons)
-    // button.text = credential.text
   })
 
 
