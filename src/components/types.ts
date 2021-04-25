@@ -6,7 +6,9 @@ import {
   transformBody,
   renderText,
   renderOutline,
-  renderHighlight
+  renderHighlight,
+  setTextDimensions,
+  renderImage
 } from './utilities'
 
 // properties
@@ -70,6 +72,7 @@ export interface TextSettings {
   boxWidth?: number
   boxHeight?: number
   padding?: number
+  address?: string
 }
 
 export interface HasBody {
@@ -89,6 +92,14 @@ interface TextBoxSettings extends HasBodySettings, HasText {}
 export interface ButtonSettings {
   bodySettings: ButtonBodySettings
   textSettings: TextSettings
+}
+
+export interface ProjectSettings extends HasBodySettings {
+  image: any
+  description: string
+  textSize: number
+  website: string
+  github: string
 }
 
 export interface Renderable {
@@ -260,6 +271,117 @@ export class ColorBall {
   }
 }
 
+export class Project {
+  sketch: p5
+  body: Matter.Body
+  mouseInBounds: boolean
+  description: ParagraphBox
+  webButton: Button
+  githubButton: Button
+  settings: any
+
+  constructor (sketch: p5, settings: any) {
+    const { x, y, w, h, options, image, description, textSize, website, github } = settings
+  
+    this.sketch = sketch
+    this.settings = settings
+
+    const paraDimensions = setTextDimensions(sketch, {
+      textSize,
+      text: description
+    })
+
+    const webButtonDimensions = setTextDimensions(sketch, {
+      textSize,
+      text: website
+    })
+
+    const githubButtonDimensions = setTextDimensions(sketch, {
+      textSize,
+      text: github
+    })
+  
+    this.description = new ParagraphBox(sketch, {
+      bodySettings: {
+        x,
+        y,
+        w: paraDimensions.w,
+        h: paraDimensions.h
+      },
+      textSettings: {
+        text: description,
+        textSize,
+        boxWidth: w / 2,
+        boxHeight: h / 2
+      },
+      options
+    })
+  
+    this.webButton = new Button(sketch, {
+      bodySettings: {
+        x: x - 50,
+        y: y + 50,
+        w: webButtonDimensions.w,
+        h: webButtonDimensions.h,
+        options,
+        shape: 'rect'
+      },
+      
+      textSettings: {
+        text: 'Website',
+        textSize,
+        address: website
+      }
+      
+    })
+  
+    this.githubButton = new Button(sketch, {
+      bodySettings: {
+        x: x + 50,
+        y: y + 50,
+        w: githubButtonDimensions.w,
+        h: githubButtonDimensions.h,
+        options,
+        shape: 'rect'
+      },
+      textSettings: {
+        text: 'Github',
+        textSize,
+        address: github
+      },
+    })
+    
+    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
+    this.mouseInBounds = false
+    
+  }
+  
+
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderImage(this.sketch, {
+      image: this.settings.image,
+      dimensions: {
+        w: this.settings.w,
+        h: this.settings.h
+      }
+    })
+    // if (this.mouseInBounds) {
+    //   renderLowlight(this.bodyConfig)
+    // }
+    // else {
+    //   this.webButton.remove()
+    //   this.githubButton.remove()
+    // }
+    this.sketch.pop()
+  }
+
+  // checkMouseInBounds(mousePosition) => {
+  //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)
+  // }
+}
+
 export type PhysicalObject = TextBox | Boundary | Button | Spring
 
 export type Container = Button[] | Boundary[] | Spring[] | TextBox[]
@@ -301,9 +423,10 @@ export interface AboutEnv extends PhysicalEnv {
   particles: any[]
 }
 
-export interface ProjectEnv extends PhysicalEnv {
+export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
   projects: any[]
   descriptions: any[]
+  images: any
 }
 
 export interface ExperienceEnv extends PhysicalEnv {

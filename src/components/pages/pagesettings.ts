@@ -6,6 +6,7 @@ import {
   setupFrame,
   setupHome,
   setupAbout,
+  setupProjects,
   renderGroup,
   resetPageFrame,
   createColorParticles,
@@ -13,7 +14,8 @@ import {
 } from '../utilities'
 
 import {
-  PhysicalEnv
+  PhysicalEnv,
+  Button
 } from '../types'
 
 const engine = Matter.Engine.create()
@@ -95,3 +97,52 @@ export const aboutFns = {
   sketchDraw: aboutDraw,
   sketchWindowResized
 }
+
+
+// Project page
+export const projectEnv = {
+  engine,
+  world,
+  bgColor: '#282c34',
+  width: window.innerWidth,
+  height: window.innerHeight * 0.85 * 2,
+  bodies: [],
+  boundaries: [],
+  images: {},
+  buttons: [],
+  descriptions: [],
+  projects: []
+}
+
+const projectHandleClick = (environment: any) => {
+  environment.buttons.forEach((button: Button) => {
+    if (button.mouseInBounds && button.textSettings.address) {
+      document.location.assign(button.textSettings.address)
+    }
+  })
+}
+
+const projectSetup = (sketch: p5, environment: any) => {
+  Matter.World.clear(world, false)
+  Matter.Engine.clear(engine)
+  const canvas = sketch.createCanvas(environment.w, environment.h)
+  canvas.mouseClicked(projectHandleClick)
+  setupFrame(environment)
+  setupProjects(sketch, environment)
+}
+
+const projectDraw = (sketch: p5, environment: any) => {
+  sketch.background(environment.bgColor)
+  Matter.Engine.update(engine)
+  renderGroup(environment.projects)
+  // checkGroupForMouse(environment.projects)
+  // renderProjectDescription(environment.projects)
+  // checkGroupForMouse(environment.buttons)
+}
+
+export const projectFns = {
+  sketchSetup: projectSetup,
+  sketchDraw: projectDraw,
+  sketchWindowResized
+}
+

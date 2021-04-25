@@ -1,68 +1,27 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
-import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-import { 
-  // setupFrame, 
-  // resetPageFrame, 
-  // setupProjects 
-} from '../types'
-
-const { Engine, World } = Matter
-
-const Projects = (props: any) => {
-  const { currentPage, bgColor } = props
+const Project = (props: any) => {
+  const { currentPage } = props
+  const { env, sketch } = currentPage
   const ref = React.useRef<HTMLDivElement>(null!)
-  const engine = Engine.create()
-  const world = engine.world
+
+  const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
   const Sketch = (sketch: p5) => {
-    const environment = {
-      sketch,
-      engine,
-      world,
-      width: window.innerWidth,
-      height: window.innerHeight * 0.85 * 2,
-      bodies: [],
-      boundaries: [],
-      images: {},
-      buttons: [],
-      descriptions: [],
-      projects: []
-    }
-
-    const handleClick = () => {
-      environment.buttons.forEach(button => {
-        // if (button.mouseInBounds && button.address) {
-        //   document.location.assign(button.address)
-        // }
-      })
-    }
-
     sketch.preload = () => {
-      // environment.images.rainbow = sketch.loadImage('images/rainbowonme.png')
-      // environment.images.ekopique = sketch.loadImage('images/ekopique.png')
+      env.images.rainbow = sketch.loadImage('images/rainbowonme.png')
+      env.images.ekopique = sketch.loadImage('images/ekopique.png')
     }
     sketch.setup = () => {
-      World.clear(world, false)
-      Engine.clear(engine)
-      const canvas = sketch.createCanvas(environment.width, environment.height)
-      canvas.mouseClicked(handleClick)
-      // setupFrame(environment)
-      // setupProjects(environment)
+      sketchSetup(sketch, env)
     }
     sketch.draw = () => {
-      sketch.background(bgColor)
-      Engine.update(engine)
-      // renderGroup(environment.projects)
-      // checkGroupForMouse(environment.projects)
-      // renderProjectDescription(environment.projects)
-      // checkGroupForMouse(environment.buttons)
+      sketchDraw(sketch, env)
     }
     sketch.windowResized = () => {
-      // resetPageFrame(environment)
-      // setupFrame(environment)
+      sketchWindowResized(sketch, env)
     }
   }
 
@@ -71,15 +30,17 @@ const Projects = (props: any) => {
     return function cleanup() {
       p5canvas.remove()
     }
-  }, [currentPage])
+  }, [])
 
   return <div ref={ref} />
 }
 
 const mapState = (state: any) => {
   return {
-    currentPage: state.currentPage
+    currentPage: state.currentPage,
+    // currentEnv: state.currentEnv,
+    // currentSketch: state.currentSketch
   }
 }
 
-export default connect(mapState)(Projects)
+export default connect(mapState)(Project)

@@ -67,22 +67,22 @@ export const renderGroup = (array: any[]): void => {
   })
 }
 
-// export const renderImage = (config: ImageConfig) => {
-//   const { sketch, image, dimensions } = config
+export const renderImage = (sketch: p5, imageSettings: any) => {
+  const { image, dimensions } = imageSettings
 
-//   sketch.imageMode('center')
-//   sketch.image(image, 0, 0, dimensions.w, dimensions.h)
-// }
+  sketch.imageMode('center')
+  sketch.image(image, 0, 0, dimensions.w, dimensions.h)
+}
 
-// export const renderProjectDescription = projects => {
-//   projects.forEach(project => {
-//     if (project.mouseInBounds) {
-//       project.description.show()
-//       project.webButton.show()
-//       project.githubButton.show()
-//     }
-//   })
-// }
+export const renderProjectDescription = (projects: any[]) => {
+  projects.forEach(project => {
+    if (project.mouseInBounds) {
+      project.description.show()
+      project.webButton.show()
+      project.githubButton.show()
+    }
+  })
+}
 
 // export const renderLowlight = (config: ColorRenderConfig) => {
 //   const { sketch, dimensions, shape } = config

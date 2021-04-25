@@ -2,7 +2,9 @@ import {
   environment,
   sketchFns,
   aboutEnv,
-  aboutFns
+  aboutFns,
+  projectEnv,
+  projectFns
 } from '../components/pages/pagesettings'
 
 const initialState = {
@@ -34,6 +36,13 @@ export const setCurrentPage = (tab: string) => (dispatch: any) => {
         tab: 'about',
         env: aboutEnv,
         sketch: aboutFns
+      }))
+      break
+    case 'projects':
+      dispatch(setPage({
+        tab: 'projects',
+        env: projectEnv,
+        sketch: projectFns
       }))
       break
     default:
