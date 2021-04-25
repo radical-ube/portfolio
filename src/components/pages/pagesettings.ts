@@ -19,6 +19,8 @@ import {
 const engine = Matter.Engine.create()
 const world = engine.world
 
+
+// Home page
 export const environment: PhysicalEnv = {
   engine,
   world,
@@ -57,6 +59,7 @@ export const sketchFns = {
 }
 
 
+// About page
 export const aboutEnv = {
   engine,
   world,

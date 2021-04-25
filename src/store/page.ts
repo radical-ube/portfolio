@@ -13,12 +13,12 @@ const initialState = {
 
 const SET_PAGE = 'SET_PAGE'
 
-const setPage = page => ({
+const setPage = (page: any) => ({
   type: SET_PAGE,
   page
 })
 
-export const setCurrentPage = tab => dispatch => {
+export const setCurrentPage = (tab: string) => (dispatch: any) => {
   const page = initialState
 
   switch (tab) {
@@ -43,7 +43,7 @@ export const setCurrentPage = tab => dispatch => {
 }
 
 
-const currentPageReducer = (state = initialState, action) => {
+const currentPageReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SET_PAGE:
       return action.page

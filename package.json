@@ -6,6 +6,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@types/matter-js": "^0.14.11",
     "@types/react-router-dom": "^5.1.7",
+    "@types/redux-logger": "^3.0.8",
     "matter-js": "^0.14.2",
     "p5": "^1.1.9",
     "react": "^16.13.1",
