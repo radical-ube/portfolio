@@ -5,6 +5,7 @@ import {
   Boundary,
   Button,
   Spring,
+  ParagraphBox,
   ButtonSettings,
   FramedEnv,
   PhysicalEnv,
@@ -16,18 +17,27 @@ import {
 import {
   randomColor,
   addToWorld,
-  defaultAlignment
+  defaultAlignment,
+  defaultColor
 } from '.'
 
 
 export const setupFrame = (environment: FramedEnv) => {
   const { width, height, world, boundaries } = environment
 
+  const options = {
+    friction: 0.3,
+    restitution: 1,
+    isStatic: true,
+    label: 'boundary'
+  }
+
   const ground = new Boundary({
     x: width / 2, 
     y: height * 2, 
     w: width * 2, 
     h: height * 2,
+    options
   })
   addToWorld(world, ground, boundaries)
   
@@ -36,6 +46,7 @@ export const setupFrame = (environment: FramedEnv) => {
     y: height * -1, 
     w: width * 2, 
     h: height * 2,
+    options
   })
   addToWorld(world, ceiling, boundaries)
   
@@ -44,6 +55,7 @@ export const setupFrame = (environment: FramedEnv) => {
     y: height / 2, 
     w: width * 2, 
     h: height,
+    options
   })
   addToWorld(world, leftWall, boundaries)
 
@@ -52,6 +64,7 @@ export const setupFrame = (environment: FramedEnv) => {
     y: height / 2, 
     w: width * 2, 
     h: height,
+    options
   })
   addToWorld(world, rightWall, boundaries)
 }
@@ -85,11 +98,19 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
   let y = height * 0.5
   let stiffness = 0.6
 
+  const boundaryOptions = {
+    friction: 0.3,
+    restitution: 1,
+    isStatic: true,
+    label: 'boundary'
+  }
+
   let end1 = new Boundary({
     x: -15,
     y,
     w: 1,
     h: 1,
+    options: boundaryOptions
   })
   addToWorld(world, end1, boundaries)
   let prevElement = end1
@@ -106,6 +127,11 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
         y,
         w: dimensions.w,
         h: dimensions.h,
+        options: {
+          friction: 0.4,
+          restitution: 0.8,
+          isStatic: false
+        },
         padding: dimensions.padding,
         shape: 'rect',
       },
@@ -134,7 +160,8 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
     x: width + 15,
     y,
     w: 1,
-    h: 1
+    h: 1,
+    options: boundaryOptions
   })
   addToWorld(world, end2, boundaries)
 
@@ -166,12 +193,18 @@ export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
         text: word,
       })
 
+      const options = {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      }
       const settings = {
         bodySettings: {
           x,
           y,
           w: dimensions.w,
           h: dimensions.h,
+          options,
           index: bodies.length - 1
         },
         textSettings: {
@@ -198,12 +231,19 @@ export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
         text: word,
       })
 
+      const options = {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      }
+
       const settings = {
         bodySettings: {
           x,
           y,
           w: dimensions.w,
           h: dimensions.h,
+          options,
           index: bodies.length - 1
         },
         textSettings: {
@@ -219,49 +259,68 @@ export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
     })
 }
 
-// export const setupAbout = (environment) => {
-//   const { width, height } = environment
+export const setupAbout = (sketch: p5, environment: any) => {
+  const { world, width, height, bodies } = environment
 
-//   const texts = [
-//     'i am a colorful, non-binary, queer performing artist turned software engineer. i dance, i write, i do drag, and i code.',
-//     'i think about illusion and reality and how to confuse the two. i believe in making fantasy come to life.',
-//     'as an engineer, coding feels like magic and i want to always remember the joy that technology can bring.',
-//     'as an artist, i think stories can be told with stillness as much as movement, and with color as much as grayscale.',
-//     'have you tried moving around the words on the home page?'
-//   ]
+  const texts = [
+    'i am a colorful, non-binary, queer performing artist turned software engineer. i dance, i write, i do drag, and i code.',
+    'i think about illusion and reality and how to confuse the two. i believe in making fantasy come to life.',
+    'as an engineer, coding feels like magic and i want to always remember the joy that technology can bring.',
+    'as an artist, i think stories can be told with stillness as much as movement, and with color as much as grayscale.',
+    'have you tried moving around the words on the home page?'
+  ]
 
-//   texts.forEach((text, index) => {
-//     let textSize = width * 0.015
-//     let x = width * 0.35
-//     let y = (height * 0.15) + (index * 110)
-//     let angle = 0.1
-//     let boxWidth = width * 0.45
-//     let boxHeight = height * 0.08
+  texts.forEach((text, index) => {
+    let textSize = width * 0.015
+    let x = width * 0.35
+    let y = (height * 0.15) + (index * 110)
+    let angle = 0.1
+    let boxWidth = width * 0.45
+    let boxHeight = height * 0.08
 
-//     if (index % 2 === 1) {
-//       x = width * 0.65
-//       angle *= -1
-//     }
+    if (index % 2 === 1) {
+      x = width * 0.65
+      angle *= -1
+    }
 
-//     new ParagraphBox(environment, {
-//       x,
-//       y,
-//       options: {
-//         friction: 0,
-//         restitution: 0.7,
-//         isStatic: true,
-//         angle
-//       },
-//       textSettings: {
-//         textSize,
-//         text,
-//         boxWidth,
-//         boxHeight
-//       }
-//     })
-//   })
+    const dimensions = setTextDimensions(sketch, {
+      textSize,
+      text
+    })
 
-// }
+    const options = {
+      friction: 0,
+      restitution: 0.7,
+      isStatic: true,
+      angle
+    }
+
+    const bodySettings = {
+      x,
+      y,
+      w: dimensions.w,
+      h: dimensions.h,
+      options
+    }
+
+    const para = new ParagraphBox(sketch, {
+      bodySettings,
+      textSettings: {
+        textSize,
+        text,
+        boxWidth,
+        boxHeight,
+        color: defaultColor,
+        alignment: {
+          horizontal: 'left',
+          vertical: 'top'
+        }
+      }
+    })
+    addToWorld(world, para, bodies)
+  })
+
+}
 
 // export const setupProjects = (environment) => {
 //   const { width, height, images } = environment

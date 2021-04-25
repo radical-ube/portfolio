@@ -46,6 +46,7 @@ export interface BodySettings {
   padding?: number
   // shape?: Shape
   index?: number
+  options: any
 }
 
 export interface ButtonBodySettings extends BodySettings {
@@ -75,6 +76,7 @@ interface HasText {
 }
 
 interface TextBoxSettings extends HasBodySettings, HasText {}
+
 export interface ButtonSettings {
   bodySettings: ButtonBodySettings
   textSettings: TextSettings
@@ -95,13 +97,8 @@ export class Boundary implements Removable {
   bodySettings: BodySettings
 
   constructor(bodySettings: BodySettings) {
-    const { x, y, w, h } = bodySettings
-    const options = {
-      friction: 0.3,
-      restitution: 1,
-      isStatic: true,
-      label: 'boundary'
-    }
+    const { x, y, w, h, options } = bodySettings
+    
     this.bodySettings = bodySettings
     this.body = Matter.Bodies.rectangle(x, y, w, h, options)
   }
@@ -119,17 +116,13 @@ export class TextBox implements Renderable, HasText, HasBodySettings {
 
   constructor(sketch: p5, settings: TextBoxSettings) {
     const { bodySettings, textSettings } = settings
-    const { x, y, w, h } = bodySettings
+    const { x, y, w, h, options } = bodySettings
 
     this.sketch = sketch
     this.bodySettings = bodySettings
     this.textSettings = textSettings
     
-    this.body = Matter.Bodies.rectangle(x, y, w, h, {
-      friction: 0.4,
-      restitution: 0.8,
-      isStatic: false
-    })
+    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
   }
   
   show() {
@@ -151,13 +144,9 @@ export class Button implements Renderable, Removable, HasText, HasBodySettings {
     this.sketch = sketch
     this.bodySettings = settings.bodySettings
     this.textSettings = settings.textSettings
-    const { x, y, w, h, padding = 0 } = this.bodySettings
+    const { x, y, w, h, padding = 0, options } = this.bodySettings
 
-    this.body = Matter.Bodies.rectangle(x, y, w + padding, h + padding, {
-      friction: 0.4,
-      restitution: 0.8,
-      isStatic: false
-    })
+    this.body = Matter.Bodies.rectangle(x, y, w + padding, h + padding, options)
     this.mouseInBounds = false
   }
 
@@ -200,6 +189,30 @@ export class Spring {
     this.sketch.colorMode('hsl')
     this.sketch.stroke(0, 0, 100, 0.1)
     this.sketch.line(a.x, a.y, b.x, b.y)
+    this.sketch.pop()
+  }
+}
+
+export class ParagraphBox implements Renderable, HasBodySettings, HasText {
+  body: Matter.Body
+  sketch: p5
+  bodySettings: BodySettings
+  textSettings: TextSettings
+
+  constructor (sketch: p5, settings: any) {
+    const { bodySettings, textSettings } = settings
+    const { x, y, w, h, options } = bodySettings
+    this.sketch = sketch
+    this.bodySettings = bodySettings
+    this.textSettings = textSettings
+    
+    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
+  }
+
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderText(this.sketch, this.textSettings)
     this.sketch.pop()
   }
 }

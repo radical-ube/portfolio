@@ -61,7 +61,7 @@ export const renderHighlight = (sketch: p5, bodySettings: ButtonBodySettings) =>
   }
 }
 
-export const renderGroup = (array: Renderable[]): void => {
+export const renderGroup = (array: any[]): void => {
   array.forEach(obj => {
     obj.show()
   })

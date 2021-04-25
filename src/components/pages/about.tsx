@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 
 import { 
   setupFrame, 
+  setupAbout,
+  renderGroup
 } from '../utilities'
 
 import {
@@ -24,8 +26,8 @@ const About = (props: any) => {
       World.clear(world, false)
       Engine.clear(engine)
       const canvas = sketch.createCanvas(environment.width, environment.height)
-      // setupFrame(environment)
-      // setupAbout(environment)
+      setupFrame(environment)
+      setupAbout(sketch, environment)
     }
     sketch.draw = () => {
       sketch.background(environment.bgColor)
@@ -33,13 +35,13 @@ const About = (props: any) => {
       if (sketch.frameCount % 4 === 0) {
         // createColorParticles(environment)
       }
-      // renderGroup(environment.bodies)
+      renderGroup(environment.bodies)
       // renderGroup(environment.particles)
       // checkGroupForRemoval(world, environment.particles)
     }
     sketch.windowResized = () => {
       // resetPageFrame(environment)
-      // setupFrame(environment)
+      setupFrame(environment)
     }
   }
 

@@ -1,32 +1,5 @@
 import Matter from 'matter-js'
 
-// export function ParagraphBoxConstructor(this: ParagraphBox, environment: Environment, settings: any) {
-//   const { sketch, world, bodies } = environment
-//   const { x, y, options, textSettings, color } = settings
-
-//   // class properties
-//   this.config = {
-//     sketch,
-//     textSettings,
-//     color: color || defaultColor,
-//     alignment: {
-//       horizontal: Horizontal.Left,
-//       vertical: Vertical.Top
-//     },
-//     dimensions: setTextDimensions(this.config)
-//   }
-//   this.options = options
-//   this.body = Bodies.rectangle(x, y, this.config.dimensions.w, this.config.dimensions.h, this.options)
-//   addToWorld(world, this, bodies)
-
-//   // class methods
-//   this.show = () => {
-//     sketch.push()
-//     transformBody(sketch, this.body)
-//     renderText(this.config)
-//     sketch.pop()
-//   }
-// }
 
 // export function ProjectConstructor(this: Project, environment: Environment, settings: any) {
 //   const { sketch, world, projects, descriptions, buttons } = environment

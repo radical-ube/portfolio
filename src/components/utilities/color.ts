@@ -54,7 +54,7 @@ const getPurpleColor = (): Color => {
   }
 }
 
-const defaultColor: Color = {
+export const defaultColor: Color = {
   hue: 0,
   saturation: 0,
   lightness: 94
