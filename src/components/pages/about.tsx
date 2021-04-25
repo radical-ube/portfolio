@@ -8,7 +8,8 @@ import {
   setupAbout,
   renderGroup,
   createColorParticles,
-  resetPageFrame
+  resetPageFrame,
+  checkGroupForRemoval
 } from '../utilities'
 
 
@@ -47,7 +48,7 @@ const About = (props: any) => {
       }
       renderGroup(environment.bodies)
       renderGroup(environment.particles)
-      // checkGroupForRemoval(world, environment.particles)
+      checkGroupForRemoval(world, environment.particles)
     }
     sketch.windowResized = () => {
       resetPageFrame(sketch, environment)

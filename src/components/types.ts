@@ -251,8 +251,8 @@ export class ColorBall {
     this.sketch.pop()
   }
 
-  isBelowLine(height: number): boolean {
-    return (this.body.position.y > (height * 0.95))
+  shouldBeRemoved(): boolean {
+    return (this.body.position.y > (window.innerHeight * 0.85 * 0.95))
   }
 
   remove(world: Matter.World) {

@@ -120,6 +120,7 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
     const dimensions = setTextDimensions(sketch, {
       textSize,
       text: word,
+      alignment: defaultAlignment
     })
     const buttonSettings: ButtonSettings = {
       bodySettings: {
@@ -191,6 +192,7 @@ export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
       const dimensions = setTextDimensions(sketch, {
         textSize,
         text: word,
+        alignment: defaultAlignment
       })
 
       const options = {
@@ -229,6 +231,7 @@ export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
       const dimensions = setTextDimensions(sketch, {
         textSize,
         text: word,
+        alignment: defaultAlignment
       })
 
       const options = {
@@ -285,7 +288,9 @@ export const setupAbout = (sketch: p5, environment: any) => {
 
     const dimensions = setTextDimensions(sketch, {
       textSize,
-      text
+      text,
+      boxWidth,
+      boxHeight
     })
 
     const options = {
@@ -300,7 +305,8 @@ export const setupAbout = (sketch: p5, environment: any) => {
       y,
       w: dimensions.w,
       h: dimensions.h,
-      options
+      options,
+      padding: 10
     }
 
     const para = new ParagraphBox(sketch, {
