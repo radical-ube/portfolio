@@ -16,8 +16,8 @@ const Routes = (props: any) => {
         <Projects />
         // <Page />
       ) : tab === 'experience' ? (
-        // <Experience />
-        <Page />
+        <Experience />
+        // <Page />
       ) : tab === 'contact' ? (
         // <Contact />
         <Page />

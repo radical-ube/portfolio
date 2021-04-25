@@ -7,16 +7,23 @@ import {
   setupHome,
   setupAbout,
   setupProjects,
+  setupExperience,
   renderGroup,
+  renderProjectDescription,
   resetPageFrame,
   createColorParticles,
-  checkGroupForRemoval
+  checkGroupForRemoval,
+  checkGroupForMouse
 } from '../utilities'
 
 import {
   PhysicalEnv,
   Button
 } from '../types'
+
+// import {
+//   projectHandleClick
+// } from '../pages/projects'
 
 const engine = Matter.Engine.create()
 const world = engine.world
@@ -74,9 +81,10 @@ export const aboutEnv = {
 }
 
 const aboutSetup = (sketch: p5, environment: any) => {
+  const { width, height, engine, world } = environment
   Matter.World.clear(world, false)
   Matter.Engine.clear(engine)
-  sketch.createCanvas(environment.width, environment.height)
+  sketch.createCanvas(width, height)
   setupFrame(environment)
   setupAbout(sketch, environment)
 }
@@ -114,19 +122,12 @@ export const projectEnv = {
   projects: []
 }
 
-const projectHandleClick = (environment: any) => {
-  environment.buttons.forEach((button: Button) => {
-    if (button.mouseInBounds && button.textSettings.address) {
-      document.location.assign(button.textSettings.address)
-    }
-  })
-}
-
 const projectSetup = (sketch: p5, environment: any) => {
+  const { engine, world } = environment
   Matter.World.clear(world, false)
   Matter.Engine.clear(engine)
-  const canvas = sketch.createCanvas(environment.w, environment.h)
-  canvas.mouseClicked(projectHandleClick)
+  // const canvas = sketch.createCanvas(environment.w, environment.h)
+  // canvas.mouseClicked(projectHandleClick)
   setupFrame(environment)
   setupProjects(sketch, environment)
 }
@@ -135,9 +136,9 @@ const projectDraw = (sketch: p5, environment: any) => {
   sketch.background(environment.bgColor)
   Matter.Engine.update(engine)
   renderGroup(environment.projects)
-  // checkGroupForMouse(environment.projects)
-  // renderProjectDescription(environment.projects)
-  // checkGroupForMouse(environment.buttons)
+  checkGroupForMouse(environment.projects)
+  renderProjectDescription(environment.projects)
+  checkGroupForMouse(environment.buttons)
 }
 
 export const projectFns = {
@@ -146,3 +147,42 @@ export const projectFns = {
   sketchWindowResized
 }
 
+
+// Experience page
+export const experienceEnv = {
+  engine,
+  world,
+  bgColor: '#282c34',
+  width: window.innerWidth,
+  height: window.innerHeight * 0.85,
+  bodies: [],
+  boundaries: [],
+  buttons: [],
+  bubbles: []
+}
+
+const experienceSetup = (sketch: p5, environment: any) => {
+  const { engine, world } = environment
+  Matter.World.clear(world, false)
+  Matter.Engine.clear(engine)
+  world.gravity.y *= -1
+  setupFrame(environment)
+  setupExperience(sketch, environment)
+}
+
+const experienceDraw = (sketch: p5, environment: any) => {
+  sketch.background(environment.bgColor)
+  Matter.Engine.update(environment.engine)
+  renderGroup(environment.bodies)
+  renderGroup(environment.buttons)
+  // checkGroupForMouse(environment.buttons)
+  // renderGroup(environment.bubbles)
+  // checkGroupForMouse(environment.bubbles)
+  // checkGroupForRemoval(world, environment.bubbles)
+}
+
+export const experienceFns = {
+  sketchSetup: experienceSetup,
+  sketchDraw: experienceDraw,
+  sketchWindowResized
+}

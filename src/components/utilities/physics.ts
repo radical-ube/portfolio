@@ -2,15 +2,16 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 
 import {
-  PhysicalObject,
-  Container,
   HasBody,
-  ColorBall
+  ColorBall,
+  Bubble
 } from '../types'
 import {
   getRandomInt,
-  randomColor
+  randomColor,
+  desaturateColor
 } from './'
+import { setTextDimensions } from './utils'
 
 export const createMouseConstraint = (canvas: HTMLCanvasElement, engine: Matter.Engine, world: Matter.World, sketch: p5) => {
   const mouse = Matter.Mouse.create(canvas)
@@ -56,27 +57,39 @@ export const createColorParticles = (sketch: p5, environment: any) => {
   }
 }
 
-// export const createBubbles = (environment: Environment, button: Button) => {
-//   const position = button.body.position
-//   const textSize = button.config.textSettings.textSize
+export const createBubbles = (sketch: p5, environment: any, bubbleButton: any) => {
+  const position = bubbleButton.body.position
+  const textSize = bubbleButton.textSettings.textSize
 
-//   button.text.forEach(text => {
-//     let x = getRandomInt(position.x - 10, position.x + 10)
-//     let y = getRandomInt(position.y - 30, position.y - 50)
+  bubbleButton.text.forEach((text: string) => {
+    let x = getRandomInt(position.x - 10, position.x + 10)
+    let y = getRandomInt(position.y - 30, position.y - 50)
 
-//     new BubbleConstructor(environment, {
-//       x,
-//       y,
-//       options: {
-//         frictionAir: 0.25,
-//         restitution: 0.8,
-//         isStatic: false
-//       },
-//       textSettings: {
-//         text: text,
-//         textSize
-//       },
-//       color: desaturateColor(environment, randomColor())
-//     })
-//   })
-// }
+    const dimensions = setTextDimensions(sketch, {
+      textSize,
+      text
+    })
+
+    const bubble = new Bubble(sketch, {
+      bodySettings: {
+        x,
+        y,
+        w: dimensions.w,
+        h: dimensions.h,
+        padding: dimensions.padding,
+        options: {
+          frictionAir: 0.25,
+          restitution: 0.8,
+          isStatic: false
+        },
+        shape: 'circle'
+      },
+      textSettings: {
+        text: text,
+        textSize,
+        color: desaturateColor(sketch, randomColor())
+      },
+    })
+    addToWorld(environment.world, bubble, environment.bubbles)
+  })
+}

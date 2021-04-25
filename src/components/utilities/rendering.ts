@@ -84,21 +84,21 @@ export const renderProjectDescription = (projects: any[]) => {
   })
 }
 
-// export const renderLowlight = (config: ColorRenderConfig) => {
-//   const { sketch, dimensions, shape } = config
-//   sketch.colorMode('hsl')
-//   sketch.noStroke()
-//   sketch.fill(0, 0, 0, 0.8)
-//   switch (shape) {
-//     case 'rect':
-//       sketch.rectMode('center')
-//       sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
-//       break
-//     case 'circle':
-//       sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
-//       break
-//   }
-// }
+export const renderLowlight = (sketch: p5, bodySettings: any) => {
+  const { dimensions, shape } = bodySettings
+  sketch.colorMode('hsl')
+  sketch.noStroke()
+  sketch.fill(0, 0, 0, 0.8)
+  switch (shape) {
+    case 'rect':
+      sketch.rectMode('center')
+      sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
+      break
+    case 'circle':
+      sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
+      break
+  }
+}
 
 
 

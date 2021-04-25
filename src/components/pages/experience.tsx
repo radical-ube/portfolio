@@ -4,75 +4,74 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { 
-  // setupFrame, 
-  // resetPageFrame, 
-  // setupExperience, 
+  setupFrame, 
+  resetPageFrame, 
+  setupExperience, 
   // createBubbles, 
-  // manageBubbleRender 
+  // manageBubbleRender ,
+  renderGroup
+} from '../utilities'
+
+import {
+  ExperienceEnv
 } from '../types'
 
 const { Engine, World } = Matter
 
 const Experience = (props: any) => {
-  const { currentPage, bgColor } = props
+  const { currentPage } = props
+  const { env, sketch } = currentPage
   const ref = React.useRef<HTMLDivElement>(null!)
-  const engine = Engine.create()
-  const world = engine.world
+  // const engine = Engine.create()
+  // const world = engine.world
+  const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
   const Sketch = (sketch: p5) => {
-    const environment = {
-      sketch,
-      engine,
-      world,
-      width: window.innerWidth,
-      height: window.innerHeight * 0.85,
-      bodies: [],
-      boundaries: [],
-      buttons: [],
-      bubbles: []
-    }
+    // const environment: ExperienceEnv = {
+    //   engine,
+    //   world,
+    //   bgColor: '#282c34',
+    //   width: window.innerWidth,
+    //   height: window.innerHeight * 0.85,
+    //   bodies: [],
+    //   boundaries: [],
+    //   buttons: [],
+    //   bubbles: []
+    // }
 
     const handleClick = () => {
-      environment.buttons.forEach(button => {
+      // env.buttons.forEach(button => {
         // if (button.mouseInBounds && button.text) {
-        //   // createBubbles(environment, button)
+        //   // createBubbles(env, button)
         // }
         // if (button.mouseInBounds && button.address) {
         //   document.location.assign(button.address)
         // }
-      })
-      for (let i = 0; i < environment.bubbles.length; i++) {
-        // let bubble = environment.bubbles[i]
+      // })
+      // for (let i = 0; i < env.bubbles.length; i++) {
+        // let bubble = env.bubbles[i]
         // if (bubble.mouseInBounds) {
         //   World.remove(world, bubble.body)
-        //   environment.bubbles.splice(i, 1)
+        //   env.bubbles.splice(i, 1)
         //   i--
         // }
-      }
+      // }
     }
 
     sketch.setup = () => {
-      World.clear(world, false)
-      Engine.clear(engine)
-      world.gravity.y *= -1
-      const canvas = sketch.createCanvas(environment.width, environment.height)
+      
+      const canvas = sketch.createCanvas(env.width, env.height)
       canvas.mouseClicked(handleClick)
-      // setupFrame(environment)
-      // setupExperience(environment)
+      sketchSetup(sketch, env)
+      
     }
     sketch.draw = () => {
-      sketch.background(bgColor)
-      Engine.update(engine)
-      // renderGroup(environment.bodies)
-      // renderGroup(environment.buttons)
-      // checkGroupForMouse(environment.buttons)
-      // renderGroup(environment.bubbles)
-      // checkGroupForMouse(environment.bubbles)
-      // checkGroupForRemoval(world, environment.bubbles)
+      sketchDraw(sketch, env)
     }
     sketch.windowResized = () => {
-      // resetPageFrame(environment)
+      // resetPageFrame(sketch, environment)
       // setupFrame(environment)
+      sketchWindowResized(sketch, env)
     }
   }
 

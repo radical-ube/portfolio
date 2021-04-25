@@ -352,6 +352,7 @@ export const setupProjects = (sketch: p5, environment: any) => {
     textSize,
     website: rainbowAddress,
     github: rainbowGithub,
+    world
   })
   addToWorld(world, rainbowProject, projects)
   addToWorld(world, rainbowProject.description, descriptions)
@@ -382,78 +383,93 @@ export const setupProjects = (sketch: p5, environment: any) => {
   
 }
 
-// export const setupExperience = (environment) => {
-//   const { width, height } = environment
+export const setupExperience = (sketch: p5, environment: any) => {
+  const { width, height, world, buttons, bodies } = environment
 
-//   const credentials = [
-//     {
-//       type: 'languages',
-//       text: ['JavaScript', 'Python', 'C#']
-//     },
-//     {
-//       type: 'front end',
-//       text: ['React', 'Redux', 'HTML5', 'CSS', 'p5.js', 'Matter.js', 'd3.js']
-//     },
-//     {
-//       type: 'back end',
-//       text: ['Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'MongoDB', 'Mongoose']
-//     },
-//     {
-//       type: 'platforms',
-//       text: ['Github', 'Heroku', 'Netlify']
-//     },
-//     // {
-//     //   type: 'testing',
-//     //   text: ['Mocha', 'Chai', 'Jasmine']
-//     // }
-//     {
-//       type: 'artistry',
-//       text: ['improvise freely', 'share vulnerably', 'bold composition', 'play']
-//     },
-//     {
-//       type: 'communication',
-//       text: ['clarity', 'active listening', 'make space', 'don\'t assume']
-//     },
-//     {
-//       type: 'learning',
-//       text: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
-//     },
-//   ]
+  const credentials = [
+    {
+      type: 'languages',
+      text: ['JavaScript', 'TypeScript', 'Python', 'C#']
+    },
+    {
+      type: 'front end',
+      text: ['React', 'Redux', 'HTML5', 'CSS', 'p5.js', 'Matter.js', 'd3.js']
+    },
+    {
+      type: 'back end',
+      text: ['Node.js', 'Express', 'PostgreSQL', 'Sequelize', 'MongoDB', 'Mongoose']
+    },
+    {
+      type: 'platforms',
+      text: ['Github', 'Heroku', 'Netlify']
+    },
+    {
+      type: 'artistry',
+      text: ['improvise freely', 'share vulnerably', 'bold composition', 'play']
+    },
+    {
+      type: 'communication',
+      text: ['clarity', 'active listening', 'make space', 'don\'t assume']
+    },
+    {
+      type: 'learning',
+      text: ['honest curiosity', 'diversity of thought', 'non-binary paradigm']
+    },
+  ]
 
-//   let xCreds = width / (credentials.length + 1)
-//   let bubbleSize = width * 0.015
+  let xCreds = width / (credentials.length + 1)
+  let bubbleSize = width * 0.015
 
-//   credentials.forEach((credential, index) => {
-//     const button = new Button(environment, {
-//       x: xCreds + (xCreds * index),
-//       y: height * 0.8,
-//       options: {
-//         isStatic: true
-//       },
-//       textSettings: {
-//         text: credential.type,
-//         textSize: bubbleSize,
-//       },
-//     })
-//     button.text = credential.text
-//   })
-
-
-//   let headerSize1 =  width * 0.06
-//   new TextBox(environment, {
-//     x: width * 0.5,
-//     y: height * 0.9,
-//     options: {
-//       isStatic: true
-//     },
-//     textSettings: {
-//       textSize: headerSize1,
-//       text: 'technologies, values, and skills'
-//     }
-//   })
+  credentials.forEach((credential, index) => {
+    const dimensions = setTextDimensions(sketch, {
+      textSize: bubbleSize,
+      text: credential.type
+    })
+    const button = new Button(sketch, {
+      bodySettings: {
+        x: xCreds + (xCreds * index),
+        y: height * 0.8,
+        w: dimensions.w,
+        h: dimensions.h,
+        options: {
+          isStatic: true
+        },
+        shape: 'rect'
+      },
+      textSettings: {
+        text: credential.type,
+        textSize: bubbleSize,
+      },
+    })
+    addToWorld(world, button, buttons)
+    // button.text = credential.text
+  })
 
 
-// }
+  let headerSize1 =  width * 0.06
+
+  const headerDimensions = setTextDimensions(sketch, {
+    textSize: headerSize1,
+    text: 'technologies, values, and skills'
+  })
+  const header = new TextBox(sketch, {
+    bodySettings: {
+      x: width * 0.5,
+      y: height * 0.9,
+      w: headerDimensions.w,
+      h: headerDimensions.h,
+      options: {
+        isStatic: true
+      },
+    },
+    textSettings: {
+      textSize: headerSize1,
+      text: 'technologies, values, and skills'
+    }
+  })
+  addToWorld(world, header, bodies)
+
+}
 
 // export const setupContact = (environment) => {
 //   const { width, height } = environment

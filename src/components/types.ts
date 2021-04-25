@@ -8,7 +8,8 @@ import {
   renderOutline,
   renderHighlight,
   setTextDimensions,
-  renderImage
+  renderImage,
+  renderLowlight
 } from './utilities'
 
 // properties
@@ -278,13 +279,13 @@ export class Project {
   description: ParagraphBox
   webButton: Button
   githubButton: Button
-  settings: any
+  bodySettings: any
 
   constructor (sketch: p5, settings: any) {
     const { x, y, w, h, options, image, description, textSize, website, github } = settings
   
     this.sketch = sketch
-    this.settings = settings
+    this.bodySettings = settings
 
     const paraDimensions = setTextDimensions(sketch, {
       textSize,
@@ -356,29 +357,77 @@ export class Project {
     
   }
   
-
   show() {
     this.sketch.push()
     transformBody(this.sketch, this.body)
     renderImage(this.sketch, {
-      image: this.settings.image,
+      image: this.bodySettings.image,
       dimensions: {
-        w: this.settings.w,
-        h: this.settings.h
+        w: this.bodySettings.w,
+        h: this.bodySettings.h
       }
     })
-    // if (this.mouseInBounds) {
-    //   renderLowlight(this.bodyConfig)
-    // }
+    if (this.mouseInBounds) {
+      renderLowlight(this.sketch, this.bodySettings)
+    }
     // else {
-    //   this.webButton.remove()
-    //   this.githubButton.remove()
+    //   this.webButton.remove(this.bodySettings.world)
+    //   this.githubButton.remove(this.bodySettings.world)
     // }
     this.sketch.pop()
   }
 
   // checkMouseInBounds(mousePosition) => {
   //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)
+  // }
+}
+
+export class Bubble {
+  sketch: p5
+  body: Matter.Body
+  mouseInBounds: boolean
+  bubbleShouldPop: boolean
+  bodySettings: any
+  textSettings: TextSettings
+
+  constructor (sketch: p5, settings: any) {
+    
+    const { bodySettings, textSettings } = settings
+  
+    this.sketch = sketch
+    this.bodySettings = bodySettings
+    this.textSettings = textSettings
+
+    const { x, y, w, options } = bodySettings
+    
+    this.body = Matter.Bodies.circle(x, y, w / 2, options)
+    this.mouseInBounds = false
+    this.bubbleShouldPop = false
+    
+  }
+
+  // class methods
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderText(this.sketch, this.textSettings)
+    renderOutline(this.sketch, this.bodySettings, parseColor(this.textSettings.color))
+    if (this.mouseInBounds) {
+      renderHighlight(this.sketch, this.bodySettings)
+    }
+    this.sketch.pop()
+  }
+
+  // checkMouseInBounds (mousePosition) {
+  //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.config)
+  // }
+
+  // this.checkBubblePop = () => {
+  //   this.bubbleShouldPop = (this.body.position.y - (this.config.dimensions.w / 2) < 1)
+  // }
+
+  // this.remove = () => {
+  //   World.remove(world, this.body)
   // }
 }
 
@@ -429,7 +478,7 @@ export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
   images: any
 }
 
-export interface ExperienceEnv extends PhysicalEnv {
+export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {
   bubbles: any[]
 }
 

@@ -2,6 +2,10 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import { connect } from 'react-redux'
 
+import {
+  Button
+} from '../types'
+
 const Project = (props: any) => {
   const { currentPage } = props
   const { env, sketch } = currentPage
@@ -9,12 +13,22 @@ const Project = (props: any) => {
 
   const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
+  const projectHandleClick = () => {
+    env.buttons.forEach((button: Button) => {
+      if (button.mouseInBounds && button.textSettings.address) {
+        document.location.assign(button.textSettings.address)
+      }
+    })
+  }
+
   const Sketch = (sketch: p5) => {
     sketch.preload = () => {
       env.images.rainbow = sketch.loadImage('images/rainbowonme.png')
       env.images.ekopique = sketch.loadImage('images/ekopique.png')
     }
     sketch.setup = () => {
+      const canvas = sketch.createCanvas(env.w, env.h)
+      canvas.mouseClicked(projectHandleClick)
       sketchSetup(sketch, env)
     }
     sketch.draw = () => {

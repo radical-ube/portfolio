@@ -1,3 +1,5 @@
+import p5 from 'p5'
+
 import {
   Color
 } from '../types'
@@ -84,11 +86,11 @@ export const parseColor = (color: Color | undefined = defaultColor): Color => {
   return color
 }
 
-// export const desaturateColor = (environment: Environment, color: Color): Color => {
-//   const { sketch } = environment
-//   return {
-//     hue: color.hue,
-//     saturation: sketch.lerp(color.saturation, defaultColor.saturation, 0.4),
-//     lightness: sketch.lerp(color.lightness, defaultColor.lightness, 0.2)
-//   }
-// }
+export const desaturateColor = (sketch: p5, color: Color): Color => {
+  // const { sketch } = environment
+  return {
+    hue: color.hue,
+    saturation: sketch.lerp(color.saturation, defaultColor.saturation, 0.4),
+    lightness: sketch.lerp(color.lightness, defaultColor.lightness, 0.2)
+  }
+}
