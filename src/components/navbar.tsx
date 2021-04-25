@@ -34,7 +34,13 @@ const Navbar = (props: any) => {
       bodies: [],
       boundaries: [],
       constraints: [],
-      tabs: ['home', 'about', 'projects', 'experience', 'contact'],
+      tabs: [
+        'home', 
+        'about', 
+        // 'projects', 
+        'experience', 
+        'contact'
+      ],
       buttons: []
     }
 
