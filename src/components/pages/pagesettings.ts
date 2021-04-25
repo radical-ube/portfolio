@@ -8,6 +8,7 @@ import {
   setupAbout,
   setupProjects,
   setupExperience,
+  setupContact,
   renderGroup,
   renderProjectDescription,
   resetPageFrame,
@@ -44,6 +45,7 @@ const sketchSetup = (sketch: p5, environment: PhysicalEnv) => {
   const { width, height, engine, world } = environment
   Matter.World.clear(world, false)
   Matter.Engine.clear(engine)
+  world.gravity.y = 1
   const canvas = sketch.createCanvas(width, height)
   createMouseConstraint(canvas.elt, engine, world, sketch)
   setupFrame(environment)
@@ -84,6 +86,7 @@ const aboutSetup = (sketch: p5, environment: any) => {
   const { width, height, engine, world } = environment
   Matter.World.clear(world, false)
   Matter.Engine.clear(engine)
+  world.gravity.y = 1
   sketch.createCanvas(width, height)
   setupFrame(environment)
   setupAbout(sketch, environment)
@@ -126,6 +129,7 @@ const projectSetup = (sketch: p5, environment: any) => {
   const { engine, world } = environment
   Matter.World.clear(world, false)
   Matter.Engine.clear(engine)
+  world.gravity.y = 1
   // const canvas = sketch.createCanvas(environment.w, environment.h)
   // canvas.mouseClicked(projectHandleClick)
   setupFrame(environment)
@@ -184,5 +188,43 @@ const experienceDraw = (sketch: p5, environment: any) => {
 export const experienceFns = {
   sketchSetup: experienceSetup,
   sketchDraw: experienceDraw,
+  sketchWindowResized
+}
+
+
+// Contact page
+export const contactEnv = {
+  engine,
+  world,
+  bgColor: '#282c34',
+  width: window.innerWidth,
+  height: window.innerHeight * 0.85,
+  bodies: [],
+  boundaries: [],
+  constraints: [],
+  buttons: []
+}
+
+const contactSetup = (sketch: p5, environment: any) => {
+  const { engine, world } = environment
+  Matter.World.clear(world, false)
+  Matter.Engine.clear(engine)
+  world.gravity.y = 1
+  setupFrame(environment)
+  setupContact(sketch, environment)
+}
+
+const contactDraw = (sketch: p5, environment: any) => {
+  sketch.background(environment.bgColor)
+  Matter.Engine.update(environment.engine)
+  renderGroup(environment.bodies)
+  renderGroup(environment.constraints)
+  renderGroup(environment.buttons)
+  checkGroupForMouse(environment.buttons)
+}
+
+export const contactFns = {
+  sketchSetup: contactSetup,
+  sketchDraw: contactDraw,
   sketchWindowResized
 }

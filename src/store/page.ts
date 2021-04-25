@@ -6,7 +6,9 @@ import {
   projectEnv,
   projectFns,
   experienceEnv,
-  experienceFns
+  experienceFns,
+  contactEnv,
+  contactFns
 } from '../components/pages/pagesettings'
 
 const initialState = {
@@ -52,6 +54,13 @@ export const setCurrentPage = (tab: string) => (dispatch: any) => {
         tab: 'experience',
         env: experienceEnv,
         sketch: experienceFns
+      }))
+      break
+    case 'contact':
+      dispatch(setPage({
+        tab: 'contact',
+        env: contactEnv,
+        sketch: contactFns
       }))
       break
     default:

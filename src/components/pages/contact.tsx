@@ -4,61 +4,41 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { 
-  // setupFrame, 
-  // resetPageFrame, 
-  // setupContact, 
-  // createMouseConstraint
- } from '../types'
+  createMouseConstraint
+} from '../utilities'
 
-const { Engine, World } = Matter
+import {
+  LinkButton
+} from '../types'
+
 
 const Contact = (props: any) => {
-  const { currentPage, bgColor } = props
+  const { currentPage } = props
+  const { env, sketch } = currentPage
   const ref = React.useRef<HTMLDivElement>(null!)
-  const engine = Engine.create()
-  const world = engine.world
+
+  const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
   const Sketch = (sketch: p5) => {
-    const environment = {
-      sketch,
-      engine,
-      world,
-      width: window.innerWidth,
-      height: window.innerHeight * 0.85,
-      bodies: [],
-      boundaries: [],
-      constraints: [],
-      buttons: []
-    }
-
     const handleClick = () => {
-      environment.buttons.forEach(button => {
-        // if (button.mouseInBounds && button.address) {
-        //   document.location.assign(button.address)
-        // }
+      env.buttons.forEach((button: LinkButton) => {
+        if (button.mouseInBounds && button.address) {
+          document.location.assign(button.address)
+        }
       })
     }
 
     sketch.setup = () => {
-      World.clear(world, false)
-      Engine.clear(engine)
-      const canvas = sketch.createCanvas(environment.width, environment.height)
-      // createMouseConstraint(canvas.elt, engine, world, sketch)
+      const canvas = sketch.createCanvas(env.width, env.height)
+      createMouseConstraint(canvas.elt, env.engine, env.world, sketch)
       canvas.mouseClicked(handleClick)
-      // setupFrame(environment)
-      // setupContact(environment)
+      sketchSetup(sketch, env)
     }
     sketch.draw = () => {
-      sketch.background(bgColor)
-      Engine.update(engine)
-      // renderGroup(environment.bodies)
-      // renderGroup(environment.constraints)
-      // renderGroup(environment.buttons)
-      // checkGroupForMouse(environment.buttons)
+      sketchDraw(sketch, env)
     }
     sketch.windowResized = () => {
-      // resetPageFrame(environment)
-      // setupFrame(environment)
+      sketchWindowResized(sketch, env)
     }
   }
 
@@ -67,7 +47,7 @@ const Contact = (props: any) => {
     return function cleanup() {
       p5canvas.remove()
     }
-  }, [currentPage])
+  }, [])
 
   return <div ref={ref} />
 }

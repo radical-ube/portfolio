@@ -8,7 +8,9 @@ import {
   ParagraphBox,
   Project,
   BubbleButton,
+  LinkButton,
   ButtonSettings,
+  LinkButtonSettings,
   FramedEnv,
   PhysicalEnv,
   NavEnv,
@@ -473,76 +475,103 @@ export const setupExperience = (sketch: p5, environment: any) => {
 
 }
 
-// export const setupContact = (environment) => {
-//   const { width, height } = environment
-//   let titleText = 'drop me a line'
-//   const words = titleText.split(' ')
-//   words.forEach((word, index, array) => {
-//     let contactTextSize = height / array.length
-//     const settings = {
-//       x: width * 0.3,
-//       y: height * 0.2 + (index * 100),
-//       options: {
-//         friction: 0.4,
-//         restitution: 0.8,
-//         isStatic: false
-//       },
-//       textSettings: {
-//         text: word,
-//         textSize: contactTextSize
-//       },
-//       color: randomColor()
-//     }
+export const setupContact = (sketch: p5, environment: any) => {
+  const { width, height, world, bodies, boundaries, buttons, constraints } = environment
+  let titleText = 'drop me a line'
+  const words = titleText.split(' ')
+  words.forEach((word, index, array) => {
+    const contactTextSize = height / array.length
 
-//     new TextBox(environment, settings)
-//   })
+    const dimensions = setTextDimensions(sketch, {
+      textSize: contactTextSize,
+      text: word
+    })
+    const settings = {
+      bodySettings: {
+        x: width * 0.3,
+        y: height * 0.2 + (index * 100),
+        w: dimensions.w,
+        h: dimensions.h,
+        options: {
+          friction: 0.4,
+          restitution: 0.8,
+          isStatic: false
+        }
+      },
+      textSettings: {
+        text: word,
+        textSize: contactTextSize,
+        color: randomColor(),
+        alignment: defaultAlignment
+      },
+    }
 
-//   let invisibleBox = new TextBox(environment, {
-//     x: (width * 0.7),
-//     y: 0,
-//     options: {
-//       isStatic: true
-//     },
-//     textSettings: {}
-//   })
+    const wordBox = new TextBox(sketch, settings)
+    addToWorld(world, wordBox, bodies)
+  })
 
-//   let socials = ['github: radical-ube', 'instagram: @radical_ube', 'linkedIn: in/ube-halaya', 'email: eli.tamondong@gmail.com']
-//   let socialAddresses = ['https://github.com/radical-ube', 'https://instagram.com/radical_ube', 'https://linkedin.com/in/ube-halaya', 'mailto:eli.tamondong@gmail.com']
+  let invisibleBox = new Boundary({
+    x: (width * 0.7),
+    y: 0,
+    w: 1,
+    h: 1,
+    options: {
+      isStatic: true
+    },
+  })
+  addToWorld(world, invisibleBox, boundaries)
 
-//   let prevBody = invisibleBox
-//   let buttonTextSize = width * 0.025
-//   socials.forEach((social, i) => {
-//     let x = width * 0.7
-//     if (i % 2 === 0) {
-//       x += 2
-//     } else {
-//       x -= 2
-//     }
-//     const buttonSettings = {
-//       x,
-//       y: (height * 0.1) + (i * 50),
-//       options: {
-//         friction: 0.4,
-//         restitution: 0.7,
-//         isStatic: false
-//       },
-//       textSettings: {
-//         text: social,
-//         address: socialAddresses[i],
-//         textSize: buttonTextSize,
-//       },
-//       color: randomColor()
-//     }
-//     let button = new Button(environment, buttonSettings)
+  let socials = ['github: radical-ube', 'instagram: @radical_ube', 'linkedIn: in/ube-halaya', 'email: eli.tamondong@gmail.com']
+  let socialAddresses = ['https://github.com/radical-ube', 'https://instagram.com/radical_ube', 'https://linkedin.com/in/ube-halaya', 'mailto:eli.tamondong@gmail.com']
 
-//     new Spring(environment, {
-//       bodyA: prevBody.body,
-//       bodyB: button.body,
-//       length: height * 0.2,
-//       stiffness: 0.2
-//     })
-//     prevBody = button
+  let prevBody = invisibleBox
+  let buttonTextSize = width * 0.025
+  socials.forEach((social, i) => {
+    let x = width * 0.7
+    if (i % 2 === 0) {
+      x += 2
+    } else {
+      x -= 2
+    }
 
-//   })
+    const dimensions = setTextDimensions(sketch, {
+      textSize: buttonTextSize,
+      text: social
+    })
 
-// }
+    const buttonSettings: LinkButtonSettings = {
+      bodySettings: {
+        x,
+        y: (height * 0.1) + (i * 50),
+        w: dimensions.w,
+        h: dimensions.h,
+        options: {
+          friction: 0.4,
+          restitution: 0.7,
+          isStatic: false
+        },
+        padding: dimensions.padding,
+        shape: 'rect'
+      },
+      textSettings: {
+        text: social,
+        textSize: buttonTextSize,
+        color: randomColor()
+      },
+      address: socialAddresses[i]
+    }
+    const button = new LinkButton(sketch, buttonSettings)
+    addToWorld(world, button, buttons)
+
+    const spring = new Spring(sketch, {
+      bodyA: prevBody.body,
+      bodyB: button.body,
+      length: height * 0.2,
+      stiffness: 0.2
+    })
+    addToWorld(world, spring, constraints)
+    prevBody = button
+
+  })
+
+}

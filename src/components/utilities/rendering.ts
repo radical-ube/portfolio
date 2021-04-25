@@ -1,10 +1,10 @@
 import p5 from 'p5'
 import {
   TextSettings,
-  BodySettings,
+  // BodySettings,
   Color,
   ButtonBodySettings,
-  Renderable
+  // Renderable
 } from '../types'
 import {
   parseColor,

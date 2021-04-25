@@ -13,14 +13,14 @@ const Routes = (props: any) => {
       ) : tab === 'about' ? (
         <About />
       ) : tab === 'projects' ? (
-        <Projects />
-        // <Page />
+        // <Projects />
+        <Page />
       ) : tab === 'experience' ? (
         <Experience />
         // <Page />
       ) : tab === 'contact' ? (
-        // <Contact />
-        <Page />
+        <Contact />
+        // <Page />
       ) : (
         <Page />
       )}

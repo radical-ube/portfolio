@@ -98,6 +98,10 @@ export interface BubbleButtonSettings extends ButtonSettings {
   bubbleText: string[]
 }
 
+export interface LinkButtonSettings extends ButtonSettings {
+  address: string
+}
+
 export interface ProjectSettings extends HasBodySettings {
   image: any
   description: string
@@ -200,6 +204,19 @@ export class BubbleButton extends Button {
     })
 
     this.text = settings.bubbleText
+  }
+}
+
+export class LinkButton extends Button {
+  address: string
+
+  constructor (sketch: p5, settings: LinkButtonSettings) {
+    super(sketch, {
+      bodySettings: settings.bodySettings,
+      textSettings: settings.textSettings
+    })
+
+    this.address = settings.address
   }
 }
 
