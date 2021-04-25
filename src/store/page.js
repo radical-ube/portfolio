@@ -1,3 +1,16 @@
+import {
+  environment,
+  sketchFns,
+  aboutEnv,
+  aboutFns
+} from '../components/pages/pagesettings'
+
+const initialState = {
+  tab: 'home',
+  env: environment,
+  sketch: sketchFns
+}
+
 const SET_PAGE = 'SET_PAGE'
 
 const setPage = page => ({
@@ -5,11 +18,30 @@ const setPage = page => ({
   page
 })
 
-export const setCurrentPage = page => dispatch => {
-  dispatch(setPage(page))
+export const setCurrentPage = tab => dispatch => {
+  const page = initialState
+
+  switch (tab) {
+    case 'home':
+      dispatch(setPage({
+        tab: 'home',
+        env: environment,
+        sketch: sketchFns
+      }))
+      break
+    case 'about':
+      dispatch(setPage({
+        tab: 'about',
+        env: aboutEnv,
+        sketch: aboutFns
+      }))
+      break
+    default:
+      dispatch(setPage(page))
+      break
+  }
 }
 
-const initialState = 'home'
 
 const currentPageReducer = (state = initialState, action) => {
   switch (action.type) {

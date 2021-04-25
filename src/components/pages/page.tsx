@@ -3,20 +3,21 @@ import p5 from 'p5'
 import { connect } from 'react-redux'
 
 const Page = (props: any) => {
-  const { currentEnv, currentSketch } = props
+  const { currentPage } = props
+  const { env, sketch } = currentPage
   const ref = React.useRef<HTMLDivElement>(null!)
 
-  const { sketchDraw, sketchSetup, sketchWindowResized } = currentSketch
+  const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
   const Sketch = (sketch: p5) => {
     sketch.setup = () => {
-      sketchSetup(sketch, currentEnv)
+      sketchSetup(sketch, env)
     }
     sketch.draw = () => {
-      sketchDraw(sketch, currentEnv)
+      sketchDraw(sketch, env)
     }
     sketch.windowResized = () => {
-      sketchWindowResized(sketch, currentEnv)
+      sketchWindowResized(sketch, env)
     }
   }
 
@@ -32,8 +33,9 @@ const Page = (props: any) => {
 
 const mapState = (state: any) => {
   return {
-    currentEnv: state.currentEnv,
-    currentSketch: state.currentSketch
+    currentPage: state.currentPage,
+    // currentEnv: state.currentEnv,
+    // currentSketch: state.currentSketch
   }
 }
 

@@ -1,5 +1,6 @@
 import {
-  sketchFns
+  sketchFns,
+  aboutFns
 } from '../components/pages/pagesettings'
 
 const SET_SKETCH = 'SET_SKETCH'

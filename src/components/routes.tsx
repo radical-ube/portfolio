@@ -5,20 +5,20 @@ import { About, Contact, Projects, Experience, Page } from './pages'
 
 const Routes = (props: any) => {
   const { currentPage } = props
+  const { tab } = currentPage
   return (
     <div>
-      {currentPage === 'home' ? (
+      {tab === 'home' ? (
         <Page />
-      ) : currentPage === 'about' ? (
+      ) : tab === 'about' ? (
         <About />
-        // <Page />
-      ) : currentPage === 'projects' ? (
+      ) : tab === 'projects' ? (
         // <Projects />
         <Page />
-      ) : currentPage === 'experience' ? (
+      ) : tab === 'experience' ? (
         // <Experience />
         <Page />
-      ) : currentPage === 'contact' ? (
+      ) : tab === 'contact' ? (
         // <Contact />
         <Page />
       ) : (

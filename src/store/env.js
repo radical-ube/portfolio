@@ -1,5 +1,6 @@
 import {
-  environment
+  environment,
+  AboutEnv
 } from '../components/pages/pagesettings'
 
 const SET_ENV = 'SET_ENV'
