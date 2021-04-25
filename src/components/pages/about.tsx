@@ -6,12 +6,11 @@ import { connect } from 'react-redux'
 import { 
   setupFrame, 
   setupAbout,
-  renderGroup
+  renderGroup,
+  createColorParticles,
+  resetPageFrame
 } from '../utilities'
 
-import {
-  environment
-} from './pagesettings'
 
 const { Engine, World } = Matter
 
@@ -21,11 +20,22 @@ const About = (props: any) => {
   const engine = Engine.create()
   const world = engine.world
 
+  const environment = {
+    engine,
+    world,
+    bgColor: '#282c34',
+    width: window.innerWidth,
+    height: window.innerHeight * 0.85,
+    bodies: [],
+    boundaries: [],
+    particles: []
+  }
+
   const Sketch = (sketch: p5) => {
     sketch.setup = () => {
       World.clear(world, false)
       Engine.clear(engine)
-      const canvas = sketch.createCanvas(environment.width, environment.height)
+      sketch.createCanvas(environment.width, environment.height)
       setupFrame(environment)
       setupAbout(sketch, environment)
     }
@@ -33,14 +43,14 @@ const About = (props: any) => {
       sketch.background(environment.bgColor)
       Engine.update(engine)
       if (sketch.frameCount % 4 === 0) {
-        // createColorParticles(environment)
+        createColorParticles(sketch, environment)
       }
       renderGroup(environment.bodies)
-      // renderGroup(environment.particles)
+      renderGroup(environment.particles)
       // checkGroupForRemoval(world, environment.particles)
     }
     sketch.windowResized = () => {
-      // resetPageFrame(environment)
+      resetPageFrame(sketch, environment)
       setupFrame(environment)
     }
   }

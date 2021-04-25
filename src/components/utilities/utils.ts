@@ -1,4 +1,5 @@
 import p5 from 'p5'
+import Matter from 'matter-js'
 
 import { 
   TextSettings,
@@ -61,18 +62,18 @@ export const checkGroupForMouse = (group: any[]) => {
   })
 }
 
-// export const checkGroupForRemoval = (world, group) => {
-//   if (group.length) {
-//     for (let i = 0; i < group.length; i++) {
-//       const instance = group[i]
-//       if (instance.shouldBeRemoved()) {
-//         World.remove(world, instance.body)
-//         group.splice(i, 1)
-//         i--
-//       }
-//     }
-//   }
-// }
+export const checkGroupForRemoval = (world: Matter.World, group: any[]) => {
+  if (group.length) {
+    for (let i = 0; i < group.length; i++) {
+      const instance = group[i]
+      if (instance.shouldBeRemoved()) {
+        Matter.World.remove(world, instance.body)
+        group.splice(i, 1)
+        i--
+      }
+    }
+  }
+}
 
 // export const manageParticleRender = (array: any[]) => {
 //   for (let i = 0; i < array.length; i++) {

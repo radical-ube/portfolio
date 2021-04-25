@@ -44,8 +44,17 @@ export interface BodySettings {
   w: number
   h: number
   padding?: number
+  color?: Color
   // shape?: Shape
   index?: number
+  options: any
+}
+
+export interface CircleBodySettings {
+  x: number
+  y: number
+  r: number
+  color: Color
   options: any
 }
 
@@ -214,6 +223,40 @@ export class ParagraphBox implements Renderable, HasBodySettings, HasText {
     transformBody(this.sketch, this.body)
     renderText(this.sketch, this.textSettings)
     this.sketch.pop()
+  }
+}
+
+export class ColorBall {
+  body: Matter.Body
+  sketch: p5
+  bodySettings: CircleBodySettings
+
+  constructor (sketch: p5, settings: any) {
+    const { x, y, r, options } = settings
+  
+    this.sketch = sketch
+    this.bodySettings = settings
+    this.body = Matter.Bodies.circle(x, y, r, options)
+  }
+
+  show() {
+    const { hue, saturation, lightness } = parseColor(this.bodySettings.color)
+
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    this.sketch.noStroke()
+    this.sketch.colorMode('hsl')
+    this.sketch.fill(hue, saturation, lightness)
+    this.sketch.ellipse(0, 0, this.bodySettings.r * 2)
+    this.sketch.pop()
+  }
+
+  isBelowLine(height: number): boolean {
+    return (this.body.position.y > (height * 0.95))
+  }
+
+  remove(world: Matter.World) {
+    Matter.World.remove(world, this.body)
   }
 }
 

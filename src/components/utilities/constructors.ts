@@ -77,41 +77,6 @@ import Matter from 'matter-js'
 
 
 
-// export function ColorBallConstructor(this: ColorBall, environment: Environment, settings: any) {
-//   const { sketch, world, particles, height } = environment
-//   const { x, y, r, options, color } = settings
-
-//   this.r = r
-//   this.options = options
-//   this.color = color || defaultColor
-//   this.body = Bodies.circle(x, y, this.r, this.options)
-//   if (particles.length < 200) {
-//     addToWorld(world, this, particles)
-//   }
-
-//   this.show = () => {
-//     const { hue, saturation, lightness } = this.color
-
-//     sketch.push()
-//     transformBody(sketch, this.body)
-//     sketch.noStroke()
-//     sketch.colorMode('hsl')
-//     sketch.fill(hue, saturation, lightness)
-//     sketch.ellipse(0, 0, this.r * 2)
-//     sketch.pop()
-//   }
-
-//   this.isBelowLine = () => {
-//     return (this.body.position.y > (height * 0.95))
-//   }
-//   this.remove = () => {
-//     World.remove(world, this.body)
-//   }
-// }
-
-
-
-
 // export function BubbleConstructor(this: Bubble, environment: Environment, settings: any) {
 //   const { sketch, world, bubbles } = environment
 //   const { x, y, options, textSettings, color } = settings

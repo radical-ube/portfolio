@@ -4,8 +4,13 @@ import Matter from 'matter-js'
 import {
   PhysicalObject,
   Container,
-  HasBody
+  HasBody,
+  ColorBall
 } from '../types'
+import {
+  getRandomInt,
+  randomColor
+} from './'
 
 export const createMouseConstraint = (canvas: HTMLCanvasElement, engine: Matter.Engine, world: Matter.World, sketch: p5) => {
   const mouse = Matter.Mouse.create(canvas)
@@ -30,22 +35,26 @@ export function addToWorld (world: Matter.World, object: HasBody, container: any
   container.push(object)
 }
 
-// export const createColorParticles = (environment: Environment) => {
-//   const { width } = environment
-//   const particleSettings = {
-//     x: width * 0.3,
-//     y: 10,
-//     r: getRandomInt(4, 9),
-//     options: {
-//       friction: 0,
-//       restitution: 0.4,
-//       isStatic: false
-//     },
-//     color: randomColor()
-//   }
+export const createColorParticles = (sketch: p5, environment: any) => {
+  const { width, particles, world } = environment
 
-//   new ColorBallConstructor(environment, particleSettings)
-// }
+  const particleSettings = {
+    x: width * 0.3,
+    y: 10,
+    r: getRandomInt(4, 9),
+    options: {
+      friction: 0,
+      restitution: 0.4,
+      isStatic: false
+    },
+    color: randomColor()
+  }
+
+  const colorBall = new ColorBall(sketch, particleSettings)
+  if (particles.length < 200) {
+    addToWorld(world, colorBall, particles)
+  }
+}
 
 // export const createBubbles = (environment: Environment, button: Button) => {
 //   const position = button.body.position
