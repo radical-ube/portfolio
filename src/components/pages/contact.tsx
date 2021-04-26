@@ -8,15 +8,18 @@ import {
 } from '../utilities'
 
 import {
-  LinkButton
+  LinkButton,
+  State,
+  ContactEnv
 } from '../types'
 
 
-const Contact = (props: any) => {
-  const { currentPage } = props
-  const { env, sketch } = currentPage
+const Contact = (props: State) => {
   const ref = React.useRef<HTMLDivElement>(null!)
-
+  const { currentPage } = props
+  const { sketch } = currentPage
+  const env = currentPage.env as ContactEnv
+  
   const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
   const Sketch = (sketch: p5) => {
@@ -54,7 +57,7 @@ const Contact = (props: any) => {
   return <div ref={ref} />
 }
 
-const mapState = (state: any) => {
+const mapState = (state: State) => {
   return {
     currentPage: state.currentPage
   }

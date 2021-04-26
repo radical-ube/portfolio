@@ -8,29 +8,32 @@ import {
 } from '../utilities'
 
 import {
-  BubbleButton
+  BubbleButton,
+  State,
+  ExperienceEnv
 } from '../types'
 
-const Experience = (props: any) => {
-  const { currentPage } = props
-  const { env, sketch } = currentPage
+const Experience = (props: State) => {
   const ref = React.useRef<HTMLDivElement>(null!)
- 
+  const { currentPage } = props
+  const { sketch } = currentPage
+  const env = currentPage.env as ExperienceEnv
+  const { buttons, bubbles } = env
   const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
   const Sketch = (sketch: p5) => {
 
     const handleClick = () => {
-      env.buttons.forEach((button: BubbleButton) => {
+      buttons.forEach((button: BubbleButton) => {
         if (button.mouseInBounds && button.text) {
           createBubbles(sketch, env, button)
         }
       })
       for (let i = 0; i < env.bubbles.length; i++) {
-        let bubble = env.bubbles[i]
+        let bubble = bubbles[i]
         if (bubble.mouseInBounds) {
           Matter.World.remove(env.world, bubble.body)
-          env.bubbles.splice(i, 1)
+          bubbles.splice(i, 1)
           i--
         }
       }
@@ -61,7 +64,7 @@ const Experience = (props: any) => {
   return <div ref={ref} />
 }
 
-const mapState = (state: any) => {
+const mapState = (state: State) => {
   return {
     currentPage: state.currentPage
   }

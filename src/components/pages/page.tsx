@@ -3,7 +3,11 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-const Page = (props: any) => {
+import {
+  State
+} from '../types'
+
+const Page = (props: State) => {
   const { currentPage } = props
   const { env, sketch } = currentPage
   const ref = React.useRef<HTMLDivElement>(null!)
@@ -34,11 +38,9 @@ const Page = (props: any) => {
   return <div ref={ref} />
 }
 
-const mapState = (state: any) => {
+const mapState = (state: State) => {
   return {
-    currentPage: state.currentPage,
-    // currentEnv: state.currentEnv,
-    // currentSketch: state.currentSketch
+    currentPage: state.currentPage
   }
 }
 

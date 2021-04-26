@@ -1,7 +1,6 @@
 import p5 from 'p5'
 import {
   TextSettings,
-  Color,
   RectBodySettings,
   CircleBodySettings,
   RenderedObject

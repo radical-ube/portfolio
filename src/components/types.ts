@@ -369,11 +369,30 @@ export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
 }
 
 export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {
+  buttons: BubbleButton[]
   bubbles: Bubble[]
 }
 
-export interface ContactEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {}
+export interface ContactEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {
+  buttons: LinkButton[]
+}
 
+type StateEnv = PhysicalEnv | AboutEnv | ExperienceEnv | ContactEnv
+
+// state
+interface SketchFunctions {
+  sketchSetup: (sketch: p5, environment: StateEnv) => void
+  sketchDraw: (sketch: p5, environment: StateEnv) => void
+  sketchWindowResized: (sketch: p5, environment: StateEnv) => void
+}
+
+export type State = {
+  currentPage: {
+    tab: string,
+    env: StateEnv,
+    sketch: SketchFunctions
+  }
+}
 
 
 //
