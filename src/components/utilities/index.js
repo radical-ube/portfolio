@@ -1,5 +1,0 @@
-export * from './constructors'
-export * from './setups'
-export * from './physics'
-export * from './drawing'
-export * from './rendering'

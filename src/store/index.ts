@@ -6,7 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import currentPage from './page'
 
 const reducer = combineReducers({
-  currentPage
+  currentPage,
 })
 
 const middleware = composeWithDevTools(
