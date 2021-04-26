@@ -8,14 +8,19 @@ import {
   BubbleButton,
   CircleBodySettings,
   AboutEnv,
-  ExperienceEnv
+  ExperienceEnv,
+  PhysicalEnv,
+  RectBodySettings,
+  TextBox
 } from '../types'
 import {
   getRandomInt,
   randomColor,
-  desaturateColor
+  desaturateColor,
+  setTextDimensions, 
+  defaultAlignment 
 } from './'
-import { setTextDimensions } from './utils'
+
 
 export const createMouseConstraint = (canvas: HTMLCanvasElement, engine: Matter.Engine, world: Matter.World, sketch: p5) => {
   const mouse = Matter.Mouse.create(canvas)
@@ -98,4 +103,61 @@ export const createBubbles = (sketch: p5, environment: ExperienceEnv, bubbleButt
     })
     addToWorld(environment.world, bubble, environment.bubbles)
   })
+}
+
+type Modifiers = {
+  xMod: number
+  offsetMod?: number
+}
+
+export const createWordColumn = (sentence: string, sketch: p5, environment: PhysicalEnv, modifiers: Modifiers) => {
+  const { width, height, world, bodies } = environment
+  const { xMod, offsetMod } = modifiers
+  
+  sentence.split(' ')
+    .forEach((text, index, array) => {
+      const textSize = height / array.length
+      let mod
+
+      if (offsetMod && index === 1) mod = offsetMod
+      else mod = xMod
+
+      const x = width * mod
+      const y = height * 0.2 + (index * textSize)
+
+      const dimensions = setTextDimensions(sketch, {
+        textSize,
+        text
+      })
+
+      const options = {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      }
+
+      const bodySettings: RectBodySettings = {
+        x,
+        y,
+        w: dimensions.w,
+        h: dimensions.h,
+        options,
+        shape: 'rect'
+      }
+
+      const textSettings = {
+        textSize,
+        text,
+        color: randomColor(),
+        alignment: defaultAlignment
+      }
+
+      const settings = {
+        bodySettings,
+        textSettings
+      }
+
+      const word = new TextBox(sketch, settings)
+      addToWorld(world, word, bodies)
+    })
 }

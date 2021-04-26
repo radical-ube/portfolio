@@ -18,15 +18,17 @@ import {
   ExperienceEnv,
   ContactEnv
 } from '../types'
-import { 
-  setTextDimensions,
-} from './utils'
+// import { 
+  
+// } from './utils'
 import {
   randomColor,
   addToWorld,
   defaultAlignment,
-  defaultColor
-} from '.'
+  defaultColor,
+  setTextDimensions,
+  createWordColumn
+} from './'
 
 
 export const setupFrame = (environment: FramedEnv) => {
@@ -191,92 +193,16 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
 }
 
 export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
-  const { width, height, world, bodies } = environment
-
   let homeText1 = 'hello world, my name is ube'
-  homeText1.split(' ')
-    .forEach((word, index, array) => {
-      const textSize = height / array.length
-      let x = width * 0.35
-      let y = height * 0.2 + (index * textSize)
-
-      if (index === 1) {
-        x = width * 0.41
-      }
-
-      const dimensions = setTextDimensions(sketch, {
-        textSize,
-        text: word,
-        alignment: defaultAlignment
-      })
-
-      const options = {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      }
-      const bodySettings: RectBodySettings = {
-        x,
-        y,
-        w: dimensions.w,
-        h: dimensions.h,
-        options,
-        shape: 'rect'
-      }
-      const settings = {
-        bodySettings,
-        textSettings: {
-          textSize,
-          text: word,
-          color: randomColor(),
-          alignment: defaultAlignment
-        }
-      }
-
-      const wordBox = new TextBox(sketch, settings)
-      addToWorld(world, wordBox, bodies)
-    })
+  createWordColumn(homeText1, sketch, environment, {
+    xMod: 0.35,
+    offsetMod: 0.41
+  })
 
   let homeText2 = 'i am a work in progress'
-  homeText2.split(' ')
-    .forEach((word, index, array) => {
-      const textSize = height / array.length
-      let x = width * 0.65
-      let y = height * 0.2 + (index * textSize)
-
-      const dimensions = setTextDimensions(sketch, {
-        textSize,
-        text: word,
-        alignment: defaultAlignment
-      })
-
-      const options = {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      }
-
-      const bodySettings: RectBodySettings = {
-        x,
-        y,
-        w: dimensions.w,
-        h: dimensions.h,
-        options,
-        shape: 'rect'
-      }
-      const settings = {
-        bodySettings,
-        textSettings: {
-          textSize,
-          text: word,
-          color: randomColor(),
-          alignment: defaultAlignment
-        },
-      }
-
-      const wordBox = new TextBox(sketch, settings)
-      addToWorld(world, wordBox, bodies)
-    })
+  createWordColumn(homeText2, sketch, environment, {
+    xMod: 0.65
+  })
 }
 
 export const setupAbout = (sketch: p5, environment: AboutEnv) => {
@@ -491,42 +417,11 @@ export const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
 }
 
 export const setupContact = (sketch: p5, environment: ContactEnv) => {
-  const { width, height, world, bodies, boundaries, buttons, constraints } = environment
+  const { width, height, world, boundaries, buttons, constraints } = environment
+  
   let titleText = 'drop me a line'
-  const words = titleText.split(' ')
-  words.forEach((word, index, array) => {
-    const contactTextSize = height / array.length
-
-    const dimensions = setTextDimensions(sketch, {
-      textSize: contactTextSize,
-      text: word
-    })
-
-    const bodySettings: RectBodySettings = {
-      x: width * 0.3,
-      y: height * 0.2 + (index * 100),
-      w: dimensions.w,
-      h: dimensions.h,
-      options: {
-        friction: 0.4,
-        restitution: 0.8,
-        isStatic: false
-      },
-      shape: 'rect'
-    }
-    
-    const settings = {
-      bodySettings,
-      textSettings: {
-        text: word,
-        textSize: contactTextSize,
-        color: randomColor(),
-        alignment: defaultAlignment
-      },
-    }
-
-    const wordBox = new TextBox(sketch, settings)
-    addToWorld(world, wordBox, bodies)
+  createWordColumn(titleText, sketch, environment, {
+    xMod: 0.3
   })
 
   let invisibleBox = new Boundary({
