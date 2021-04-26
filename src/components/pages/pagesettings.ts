@@ -14,7 +14,8 @@ import {
   resetPageFrame,
   createColorParticles,
   checkGroupForRemoval,
-  checkGroupForMouse
+  checkGroupForMouse,
+  clearGroup
 } from '../utilities'
 
 import {
@@ -79,8 +80,9 @@ export const aboutEnv = {
 }
 
 const aboutSetup = (sketch: p5, environment: AboutEnv) => {
-  const { width, height, world } = environment
+  const { width, height, world, particles } = environment
   world.gravity.y = 1
+  clearGroup(particles)
   sketch.createCanvas(width, height)
   setupFrame(environment)
   setupAbout(sketch, environment)

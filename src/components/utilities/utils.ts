@@ -71,4 +71,7 @@ export const checkGroupForRemoval = (world: Matter.World, group: any[]) => {
   }
 }
 
+export const clearGroup = (group: any[]) => {
+  while (group.length) group.shift()
+}
 
