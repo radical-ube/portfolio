@@ -38,8 +38,6 @@ export const environment: PhysicalEnv = {
 
 const sketchSetup = (sketch: p5, environment: PhysicalEnv) => {
   const { width, height, engine, world } = environment
-  Matter.World.clear(world, false)
-  Matter.Engine.clear(engine)
   world.gravity.y = 1
   const canvas = sketch.createCanvas(width, height)
   createMouseConstraint(canvas.elt, engine, world, sketch)
@@ -79,8 +77,6 @@ export const aboutEnv = {
 
 const aboutSetup = (sketch: p5, environment: any) => {
   const { width, height, engine, world } = environment
-  Matter.World.clear(world, false)
-  Matter.Engine.clear(engine)
   world.gravity.y = 1
   sketch.createCanvas(width, height)
   setupFrame(environment)
@@ -122,8 +118,6 @@ export const projectEnv = {
 
 const projectSetup = (sketch: p5, environment: any) => {
   const { engine, world } = environment
-  Matter.World.clear(world, false)
-  Matter.Engine.clear(engine)
   world.gravity.y = 1
   // const canvas = sketch.createCanvas(environment.w, environment.h)
   // canvas.mouseClicked(projectHandleClick)
@@ -162,8 +156,6 @@ export const experienceEnv = {
 
 const experienceSetup = (sketch: p5, environment: any) => {
   const { engine, world } = environment
-  Matter.World.clear(world, false)
-  Matter.Engine.clear(engine)
   world.gravity.y *= -1
   setupFrame(environment)
   setupExperience(sketch, environment)
@@ -202,8 +194,6 @@ export const contactEnv = {
 
 const contactSetup = (sketch: p5, environment: any) => {
   const { engine, world } = environment
-  Matter.World.clear(world, false)
-  Matter.Engine.clear(engine)
   world.gravity.y = 1
   setupFrame(environment)
   setupContact(sketch, environment)

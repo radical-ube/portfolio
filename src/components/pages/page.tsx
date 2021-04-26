@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
+import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 const Page = (props: any) => {
@@ -11,6 +12,8 @@ const Page = (props: any) => {
 
   const Sketch = (sketch: p5) => {
     sketch.setup = () => {
+      Matter.World.clear(env.world, false)
+      Matter.Engine.clear(env.engine)
       sketchSetup(sketch, env)
     }
     sketch.draw = () => {

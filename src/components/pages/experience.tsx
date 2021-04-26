@@ -25,9 +25,6 @@ const Experience = (props: any) => {
         if (button.mouseInBounds && button.text) {
           createBubbles(sketch, env, button)
         }
-        // if (button.mouseInBounds && button.address) {
-        //   document.location.assign(button.address)
-        // }
       })
       for (let i = 0; i < env.bubbles.length; i++) {
         let bubble = env.bubbles[i]
@@ -40,6 +37,8 @@ const Experience = (props: any) => {
     }
 
     sketch.setup = () => {
+      Matter.World.clear(env.world, false)
+      Matter.Engine.clear(env.engine)
       const canvas = sketch.createCanvas(env.width, env.height)
       canvas.mouseClicked(handleClick)
       sketchSetup(sketch, env)

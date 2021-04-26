@@ -7,6 +7,9 @@ import {
   renderText,
   renderOutline,
   renderHighlight,
+  renderImage,
+  renderLowlight,
+  setTextDimensions
 } from './utilities'
 
 // properties
@@ -382,109 +385,110 @@ export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {
 //
 
 export class Project {
-  // sketch: p5
-  // body: Matter.Body
-  // mouseInBounds: boolean
-  // description: TextBox
-  // webButton: Button
-  // githubButton: Button
-  // bodySettings: any
+  sketch: p5
+  body: Matter.Body
+  mouseInBounds: boolean
+  description: TextBox
+  webButton: Button
+  githubButton: Button
+  bodySettings: any
 
-  // constructor (sketch: p5, settings: any) {
-  //   const { x, y, w, h, options, image, description, textSize, website, github } = settings
+  constructor (sketch: p5, settings: any) {
+    const { x, y, w, h, options, image, description, textSize, website, github } = settings
   
-  //   this.sketch = sketch
-  //   this.bodySettings = settings
+    this.sketch = sketch
+    this.bodySettings = settings
 
-  //   const paraDimensions = setTextDimensions(sketch, {
-  //     textSize,
-  //     text: description
-  //   })
+    const paraDimensions = setTextDimensions(sketch, {
+      textSize,
+      text: description
+    })
 
-  //   const webButtonDimensions = setTextDimensions(sketch, {
-  //     textSize,
-  //     text: website
-  //   })
+    const webButtonDimensions = setTextDimensions(sketch, {
+      textSize,
+      text: website
+    })
 
-  //   const githubButtonDimensions = setTextDimensions(sketch, {
-  //     textSize,
-  //     text: github
-  //   })
+    const githubButtonDimensions = setTextDimensions(sketch, {
+      textSize,
+      text: github
+    })
   
-    // this.description = new TextBox(sketch, {
-    //   bodySettings: {
-    //     x,
-    //     y,
-    //     w: paraDimensions.w,
-    //     h: paraDimensions.h
-    //   },
-    //   textSettings: {
-    //     text: description,
-    //     textSize,
-    //     boxWidth: w / 2,
-    //     boxHeight: h / 2
-    //   },
-    //   options
-    // })
+    this.description = new TextBox(sketch, {
+      bodySettings: {
+        x,
+        y,
+        w: paraDimensions.w,
+        h: paraDimensions.h,
+        shape: 'rect',
+        options
+      },
+      textSettings: {
+        text: description,
+        textSize,
+        boxWidth: w / 2,
+        boxHeight: h / 2
+      },
+    })
   
-    // this.webButton = new Button(sketch, {
-    //   bodySettings: {
-    //     x: x - 50,
-    //     y: y + 50,
-    //     w: webButtonDimensions.w,
-    //     h: webButtonDimensions.h,
-    //     options,
-    //     shape: 'rect'
-    //   },
+    this.webButton = new Button(sketch, {
+      bodySettings: {
+        x: x - 50,
+        y: y + 50,
+        w: webButtonDimensions.w,
+        h: webButtonDimensions.h,
+        options,
+        shape: 'rect'
+      },
       
-    //   textSettings: {
-    //     text: 'Website',
-    //     textSize,
-    //     // address: website
-    //   }
+      textSettings: {
+        text: 'Website',
+        textSize,
+        // address: website
+      }
       
-    // })
+    })
   
-    // this.githubButton = new Button(sketch, {
-    //   bodySettings: {
-    //     x: x + 50,
-    //     y: y + 50,
-    //     w: githubButtonDimensions.w,
-    //     h: githubButtonDimensions.h,
-    //     options,
-    //     shape: 'rect'
-    //   },
-    //   textSettings: {
-    //     text: 'Github',
-    //     textSize,
-    //     // address: github
-    //   },
-    // })
+    this.githubButton = new Button(sketch, {
+      bodySettings: {
+        x: x + 50,
+        y: y + 50,
+        w: githubButtonDimensions.w,
+        h: githubButtonDimensions.h,
+        options,
+        shape: 'rect'
+      },
+      textSettings: {
+        text: 'Github',
+        textSize,
+        // address: github
+      },
+    })
     
-    // this.body = Matter.Bodies.rectangle(x, y, w, h, options)
-    // this.mouseInBounds = false
+    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
+    this.mouseInBounds = false
     
-  // }
+  }
   
-  // show() {
-  //   this.sketch.push()
-  //   transformBody(this.sketch, this.body)
-  //   renderImage(this.sketch, {
-  //     image: this.bodySettings.image,
-  //     dimensions: {
-  //       w: this.bodySettings.w,
-  //       h: this.bodySettings.h
-  //     }
-  //   })
-  //   if (this.mouseInBounds) {
-  //     renderLowlight(this.sketch, this.bodySettings)
-  //   }
-  //   // else {
-  //   //   this.webButton.remove(this.bodySettings.world)
-  //   //   this.githubButton.remove(this.bodySettings.world)
-  //   // }
-  //   this.sketch.pop()
-  // }
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderImage(this.sketch, {
+      image: this.bodySettings.image,
+      dimensions: {
+        w: this.bodySettings.w,
+        h: this.bodySettings.h
+      }
+    })
+    if (this.mouseInBounds) {
+      renderLowlight(this.sketch, this.bodySettings)
+    }
+    // else {
+    //   this.webButton.remove(this.bodySettings.world)
+    //   this.githubButton.remove(this.bodySettings.world)
+    // }
+    this.sketch.pop()
+  }
 
   // checkMouseInBounds(mousePosition) => {
   //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)

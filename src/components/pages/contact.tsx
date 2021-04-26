@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
+import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { 
@@ -28,6 +29,8 @@ const Contact = (props: any) => {
     }
 
     sketch.setup = () => {
+      Matter.World.clear(env.world, false)
+      Matter.Engine.clear(env.engine)
       const canvas = sketch.createCanvas(env.width, env.height)
       createMouseConstraint(canvas.elt, env.engine, env.world, sketch)
       canvas.mouseClicked(handleClick)

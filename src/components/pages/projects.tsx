@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
+import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 const Project = (props: any) => {
@@ -23,6 +24,8 @@ const Project = (props: any) => {
       env.images.ekopique = sketch.loadImage('images/ekopique.png')
     }
     sketch.setup = () => {
+      Matter.World.clear(env.world, false)
+      Matter.Engine.clear(env.engine)
       const canvas = sketch.createCanvas(env.w, env.h)
       canvas.mouseClicked(projectHandleClick)
       sketchSetup(sketch, env)
