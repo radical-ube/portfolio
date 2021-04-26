@@ -111,19 +111,15 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
   let y = height * 0.5
   let stiffness = 0.6
 
-  const boundaryOptions = {
-    friction: 0.3,
-    restitution: 1,
-    isStatic: true,
-    label: 'boundary'
-  }
 
   let end1 = new Boundary({
     x: -15,
     y,
     w: 1,
     h: 1,
-    options: boundaryOptions,
+    options: {
+      isStatic: true
+    },
     shape: 'rect'
   })
   addToWorld(world, end1, boundaries)
@@ -178,7 +174,9 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
     y,
     w: 1,
     h: 1,
-    options: boundaryOptions,
+    options: {
+      isStatic: true
+    },
     shape: 'rect'
   })
   addToWorld(world, end2, boundaries)
