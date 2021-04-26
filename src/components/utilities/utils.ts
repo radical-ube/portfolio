@@ -4,7 +4,9 @@ import Matter from 'matter-js'
 import { 
   TextSettings,
   Button,
-  Alignment
+  Alignment,
+  ButtonBodySettings,
+  CircleBodySettings
 } from '../types'
 
 import {
@@ -21,6 +23,10 @@ export const parseAlignment = (alignment: Alignment | undefined): Alignment => {
   if (alignment) return alignment
   else return defaultAlignment
 }
+
+// export const parseRectOrCircle = (bodySettings: unknown): ButtonBodySettings | CircleBodySettings => {
+
+// }
 
 
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {

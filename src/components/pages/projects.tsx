@@ -14,11 +14,11 @@ const Project = (props: any) => {
   const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
 
   const projectHandleClick = () => {
-    env.buttons.forEach((button: Button) => {
-      if (button.mouseInBounds && button.textSettings.address) {
-        document.location.assign(button.textSettings.address)
-      }
-    })
+    // env.buttons.forEach((button: Button) => {
+    //   if (button.mouseInBounds && button.textSettings.address) {
+    //     document.location.assign(button.textSettings.address)
+    //   }
+    // })
   }
 
   const Sketch = (sketch: p5) => {

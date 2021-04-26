@@ -4,7 +4,8 @@ import Matter from 'matter-js'
 import {
   HasBody,
   ColorBall,
-  Bubble
+  Bubble,
+  CircleBodySettings
 } from '../types'
 import {
   getRandomInt,
@@ -39,7 +40,7 @@ export function addToWorld (world: Matter.World, object: HasBody, container: any
 export const createColorParticles = (sketch: p5, environment: any) => {
   const { width, particles, world } = environment
 
-  const particleSettings = {
+  const particleSettings: CircleBodySettings = {
     x: width * 0.3,
     y: 10,
     r: getRandomInt(4, 9),
@@ -48,7 +49,8 @@ export const createColorParticles = (sketch: p5, environment: any) => {
       restitution: 0.4,
       isStatic: false
     },
-    color: randomColor()
+    color: randomColor(),
+    shape: 'circle'
   }
 
   const colorBall = new ColorBall(sketch, particleSettings)
@@ -74,8 +76,9 @@ export const createBubbles = (sketch: p5, environment: any, bubbleButton: any) =
       bodySettings: {
         x,
         y,
-        w: dimensions.w,
-        h: dimensions.h,
+        r: dimensions.w / 2,
+        // w: dimensions.w,
+        // h: dimensions.h,
         padding: dimensions.padding,
         options: {
           frictionAir: 0.25,

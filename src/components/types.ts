@@ -41,26 +41,24 @@ export interface Triangle {
 
 export type Shape = 'circle' | 'rect'
 
-export interface BodySettings {
-  x: number
-  y: number
+export interface RectBodySettings extends Position {
   w: number
   h: number
   padding?: number
   color?: Color
-  index?: number
   options: any
+  shape: Shape
 }
 
-export interface CircleBodySettings {
-  x: number
-  y: number
+export interface CircleBodySettings extends Position {
   r: number
   color: Color
   options: any
+  shape: Shape
+  padding?: number
 }
 
-export interface ButtonBodySettings extends BodySettings {
+export interface ButtonBodySettings extends RectBodySettings {
   shape: Shape
 }
 
@@ -72,7 +70,6 @@ export interface TextSettings {
   boxWidth?: number
   boxHeight?: number
   padding?: number
-  address?: string
 }
 
 export interface HasBody {
@@ -80,7 +77,7 @@ export interface HasBody {
 }
 
 interface HasBodySettings {
-  bodySettings: BodySettings
+  bodySettings: RectBodySettings
 }
 
 interface HasText {
@@ -114,17 +111,21 @@ export interface Renderable {
   show(): void
 }
 
-interface Removable {
-  remove(world: Matter.World): void
+// interface Removable {
+//   remove(world: Matter.World): void
+// }
+
+interface HasSketch {
+  sketch: p5
 }
 
 
 // objects
-export class Boundary implements Removable {
+export class Boundary {
   body: Matter.Body
-  bodySettings: BodySettings
+  bodySettings: RectBodySettings
 
-  constructor(bodySettings: BodySettings) {
+  constructor(bodySettings: RectBodySettings) {
     const { x, y, w, h, options } = bodySettings
     
     this.bodySettings = bodySettings
@@ -136,21 +137,43 @@ export class Boundary implements Removable {
   }
 }
 
-export class TextBox implements Renderable, HasText, HasBodySettings {
+class P5Object implements HasSketch {
   sketch: p5
-  bodySettings: BodySettings
-  textSettings: TextSettings
+
+  constructor (sketch: p5) {
+    this.sketch = sketch
+  }
+}
+
+class RectBody extends P5Object {
   body: Matter.Body
 
-  constructor(sketch: p5, settings: TextBoxSettings) {
-    const { bodySettings, textSettings } = settings
-    const { x, y, w, h, options } = bodySettings
+  constructor(sketch: p5, settings: RectBodySettings) {
+    super(sketch)
 
-    this.sketch = sketch
-    this.bodySettings = bodySettings
-    this.textSettings = textSettings
-    
+    const { x, y, w, h, options } = settings
     this.body = Matter.Bodies.rectangle(x, y, w, h, options)
+  }
+}
+
+class CircleBody extends P5Object {
+  body: Matter.Body
+
+  constructor(sketch: p5, settings: CircleBodySettings) {
+    super (sketch)
+
+    const { x, y, r, options } = settings
+    this.body = Matter.Bodies.circle(x, y, r, options)
+  }
+}
+
+export class TextBox extends RectBody implements Renderable, HasText {
+  textSettings: TextSettings
+
+  constructor(sketch: p5, settings: TextBoxSettings) {
+    super(sketch, settings.bodySettings)
+
+    this.textSettings = settings.textSettings
   }
   
   show() {
@@ -161,19 +184,16 @@ export class TextBox implements Renderable, HasText, HasBodySettings {
   }
 }
 
-export class Button implements Renderable, Removable, HasText, HasBodySettings {
-  body: Matter.Body
+export class Button extends TextBox implements Renderable, HasText {
   mouseInBounds: boolean
-  sketch: p5
-  textSettings: TextSettings
   bodySettings: ButtonBodySettings
 
   constructor(sketch: p5, settings: ButtonSettings) {
-    this.sketch = sketch
-    this.bodySettings = settings.bodySettings
-    this.textSettings = settings.textSettings
-    const { x, y, w, h, padding = 0, options } = this.bodySettings
+    super (sketch, settings)
 
+    const { x, y, w, h, padding = 0, options } = settings.bodySettings
+    
+    this.bodySettings = settings.bodySettings
     this.body = Matter.Bodies.rectangle(x, y, w + padding, h + padding, options)
     this.mouseInBounds = false
   }
@@ -247,41 +267,13 @@ export class Spring {
   }
 }
 
-export class ParagraphBox implements Renderable, HasBodySettings, HasText {
-  body: Matter.Body
-  sketch: p5
-  bodySettings: BodySettings
-  textSettings: TextSettings
-
-  constructor (sketch: p5, settings: any) {
-    const { bodySettings, textSettings } = settings
-    const { x, y, w, h, options } = bodySettings
-    this.sketch = sketch
-    this.bodySettings = bodySettings
-    this.textSettings = textSettings
-    
-    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
-  }
-
-  show() {
-    this.sketch.push()
-    transformBody(this.sketch, this.body)
-    renderText(this.sketch, this.textSettings)
-    this.sketch.pop()
-  }
-}
-
-export class ColorBall {
-  body: Matter.Body
-  sketch: p5
+export class ColorBall extends CircleBody {
   bodySettings: CircleBodySettings
 
-  constructor (sketch: p5, settings: any) {
-    const { x, y, r, options } = settings
+  constructor (sketch: p5, settings: CircleBodySettings) {
+    super(sketch, settings)
   
-    this.sketch = sketch
     this.bodySettings = settings
-    this.body = Matter.Bodies.circle(x, y, r, options)
   }
 
   show() {
@@ -306,134 +298,135 @@ export class ColorBall {
 }
 
 export class Project {
-  sketch: p5
-  body: Matter.Body
-  mouseInBounds: boolean
-  description: ParagraphBox
-  webButton: Button
-  githubButton: Button
-  bodySettings: any
+  // sketch: p5
+  // body: Matter.Body
+  // mouseInBounds: boolean
+  // description: TextBox
+  // webButton: Button
+  // githubButton: Button
+  // bodySettings: any
 
-  constructor (sketch: p5, settings: any) {
-    const { x, y, w, h, options, image, description, textSize, website, github } = settings
+  // constructor (sketch: p5, settings: any) {
+  //   const { x, y, w, h, options, image, description, textSize, website, github } = settings
   
-    this.sketch = sketch
-    this.bodySettings = settings
+  //   this.sketch = sketch
+  //   this.bodySettings = settings
 
-    const paraDimensions = setTextDimensions(sketch, {
-      textSize,
-      text: description
-    })
+  //   const paraDimensions = setTextDimensions(sketch, {
+  //     textSize,
+  //     text: description
+  //   })
 
-    const webButtonDimensions = setTextDimensions(sketch, {
-      textSize,
-      text: website
-    })
+  //   const webButtonDimensions = setTextDimensions(sketch, {
+  //     textSize,
+  //     text: website
+  //   })
 
-    const githubButtonDimensions = setTextDimensions(sketch, {
-      textSize,
-      text: github
-    })
+  //   const githubButtonDimensions = setTextDimensions(sketch, {
+  //     textSize,
+  //     text: github
+  //   })
   
-    this.description = new ParagraphBox(sketch, {
-      bodySettings: {
-        x,
-        y,
-        w: paraDimensions.w,
-        h: paraDimensions.h
-      },
-      textSettings: {
-        text: description,
-        textSize,
-        boxWidth: w / 2,
-        boxHeight: h / 2
-      },
-      options
-    })
+    // this.description = new TextBox(sketch, {
+    //   bodySettings: {
+    //     x,
+    //     y,
+    //     w: paraDimensions.w,
+    //     h: paraDimensions.h
+    //   },
+    //   textSettings: {
+    //     text: description,
+    //     textSize,
+    //     boxWidth: w / 2,
+    //     boxHeight: h / 2
+    //   },
+    //   options
+    // })
   
-    this.webButton = new Button(sketch, {
-      bodySettings: {
-        x: x - 50,
-        y: y + 50,
-        w: webButtonDimensions.w,
-        h: webButtonDimensions.h,
-        options,
-        shape: 'rect'
-      },
+    // this.webButton = new Button(sketch, {
+    //   bodySettings: {
+    //     x: x - 50,
+    //     y: y + 50,
+    //     w: webButtonDimensions.w,
+    //     h: webButtonDimensions.h,
+    //     options,
+    //     shape: 'rect'
+    //   },
       
-      textSettings: {
-        text: 'Website',
-        textSize,
-        address: website
-      }
+    //   textSettings: {
+    //     text: 'Website',
+    //     textSize,
+    //     // address: website
+    //   }
       
-    })
+    // })
   
-    this.githubButton = new Button(sketch, {
-      bodySettings: {
-        x: x + 50,
-        y: y + 50,
-        w: githubButtonDimensions.w,
-        h: githubButtonDimensions.h,
-        options,
-        shape: 'rect'
-      },
-      textSettings: {
-        text: 'Github',
-        textSize,
-        address: github
-      },
-    })
+    // this.githubButton = new Button(sketch, {
+    //   bodySettings: {
+    //     x: x + 50,
+    //     y: y + 50,
+    //     w: githubButtonDimensions.w,
+    //     h: githubButtonDimensions.h,
+    //     options,
+    //     shape: 'rect'
+    //   },
+    //   textSettings: {
+    //     text: 'Github',
+    //     textSize,
+    //     // address: github
+    //   },
+    // })
     
-    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
-    this.mouseInBounds = false
+    // this.body = Matter.Bodies.rectangle(x, y, w, h, options)
+    // this.mouseInBounds = false
     
-  }
+  // }
   
-  show() {
-    this.sketch.push()
-    transformBody(this.sketch, this.body)
-    renderImage(this.sketch, {
-      image: this.bodySettings.image,
-      dimensions: {
-        w: this.bodySettings.w,
-        h: this.bodySettings.h
-      }
-    })
-    if (this.mouseInBounds) {
-      renderLowlight(this.sketch, this.bodySettings)
-    }
-    // else {
-    //   this.webButton.remove(this.bodySettings.world)
-    //   this.githubButton.remove(this.bodySettings.world)
-    // }
-    this.sketch.pop()
-  }
+  // show() {
+  //   this.sketch.push()
+  //   transformBody(this.sketch, this.body)
+  //   renderImage(this.sketch, {
+  //     image: this.bodySettings.image,
+  //     dimensions: {
+  //       w: this.bodySettings.w,
+  //       h: this.bodySettings.h
+  //     }
+  //   })
+  //   if (this.mouseInBounds) {
+  //     renderLowlight(this.sketch, this.bodySettings)
+  //   }
+  //   // else {
+  //   //   this.webButton.remove(this.bodySettings.world)
+  //   //   this.githubButton.remove(this.bodySettings.world)
+  //   // }
+  //   this.sketch.pop()
+  // }
 
   // checkMouseInBounds(mousePosition) => {
   //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)
   // }
 }
 
-export class Bubble {
-  sketch: p5
-  body: Matter.Body
+export class Bubble extends CircleBody implements Renderable {
+  // sketch: p5
+  // body: Matter.Body
   mouseInBounds: boolean
   bubbleShouldPop: boolean
-  bodySettings: any
+  bodySettings: CircleBodySettings
   textSettings: TextSettings
 
   constructor (sketch: p5, settings: any) {
+    super(sketch, settings.bodySettings)
     
     const { bodySettings, textSettings } = settings
   
-    this.sketch = sketch
+    // this.sketch = sketch
     this.bodySettings = bodySettings
     this.textSettings = textSettings
 
-    const { x, y, w, options } = bodySettings
+    // const { x, y, r, options } = bodySettings
     
-    this.body = Matter.Bodies.circle(x, y, w / 2, options)
+    // this.body = Matter.Bodies.circle(x, y, r, options)
     this.mouseInBounds = false
     this.bubbleShouldPop = false
     
@@ -451,7 +444,7 @@ export class Bubble {
   }
 
   shouldBeRemoved(): boolean {
-    return (this.body.position.y - (this.bodySettings.w / 2) < 1)
+    return (this.body.position.y - (this.bodySettings.r) < 1)
   }
 }
 

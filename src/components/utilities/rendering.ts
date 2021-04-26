@@ -4,6 +4,7 @@ import {
   // BodySettings,
   Color,
   ButtonBodySettings,
+  CircleBodySettings
   // Renderable
 } from '../types'
 import {
@@ -29,34 +30,38 @@ export const renderText = (sketch: p5, textSettings: TextSettings) => {
   }
 }
 
-export const renderOutline = (sketch: p5, bodySettings: ButtonBodySettings, color: Color) => {
-  const { w, h, shape, padding = 0 } = bodySettings
+export const renderOutline = (sketch: p5, bodySettings: ButtonBodySettings | CircleBodySettings, color: Color) => {
+  const { shape, padding = 0 } = bodySettings
   const { hue, saturation, lightness } = color
   sketch.colorMode('hsl')
   sketch.noFill()
   sketch.stroke(hue, saturation, lightness)
   switch (shape) {
     case 'rect':
+      const { w, h } = bodySettings as ButtonBodySettings
       sketch.rect(0, 0, w + padding, h + padding)
       break
     case 'circle':
-      sketch.ellipse(0, 0, w + padding)
+      const { r } = bodySettings as CircleBodySettings
+      sketch.ellipse(0, 0, (r * 2) + padding)
       break
   }
 }
 
-export const renderHighlight = (sketch: p5, bodySettings: ButtonBodySettings) => {
-  const { w, h, padding = 0, shape } = bodySettings
+export const renderHighlight = (sketch: p5, bodySettings: ButtonBodySettings | CircleBodySettings) => {
+  const { padding = 0, shape } = bodySettings
   sketch.colorMode('hsl')
   sketch.noStroke()
   sketch.fill(0, 0, 100, 0.1)
   switch (shape) {
     case 'rect':
+      const { w, h } = bodySettings as ButtonBodySettings
       sketch.rectMode('center')
       sketch.rect(0, 0, w + (padding || 0), h + (padding || 0))
       break
     case 'circle':
-      sketch.ellipse(0, 0, w + padding)
+      const { r } = bodySettings as CircleBodySettings
+      sketch.ellipse(0, 0, (r * 2) + padding)
       break
   }
 }
