@@ -77,8 +77,6 @@ export const createBubbles = (sketch: p5, environment: any, bubbleButton: any) =
         x,
         y,
         r: dimensions.w / 2,
-        // w: dimensions.w,
-        // h: dimensions.h,
         padding: dimensions.padding,
         options: {
           frictionAir: 0.25,

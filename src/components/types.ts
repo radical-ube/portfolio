@@ -7,9 +7,6 @@ import {
   renderText,
   renderOutline,
   renderHighlight,
-  setTextDimensions,
-  renderImage,
-  renderLowlight
 } from './utilities'
 
 // properties
@@ -41,21 +38,20 @@ export interface Triangle {
 
 export type Shape = 'circle' | 'rect'
 
-export interface RectBodySettings extends Position {
-  w: number
-  h: number
+interface BodySettings extends Position {
   padding?: number
   color?: Color
-  options: any
   shape: Shape
+  options: any
 }
 
-export interface CircleBodySettings extends Position {
+export interface RectBodySettings extends BodySettings {
+  w: number
+  h: number
+}
+
+export interface CircleBodySettings extends BodySettings {
   r: number
-  color: Color
-  options: any
-  shape: Shape
-  padding?: number
 }
 
 export interface ButtonBodySettings extends RectBodySettings {
@@ -297,6 +293,94 @@ export class ColorBall extends CircleBody {
   }
 }
 
+
+
+export class Bubble extends CircleBody implements Renderable {
+  mouseInBounds: boolean
+  bubbleShouldPop: boolean
+  bodySettings: CircleBodySettings
+  textSettings: TextSettings
+
+  constructor (sketch: p5, settings: any) {
+    super(sketch, settings.bodySettings)
+    
+    const { bodySettings, textSettings } = settings
+    this.bodySettings = bodySettings
+    this.textSettings = textSettings
+    this.mouseInBounds = false
+    this.bubbleShouldPop = false
+  }
+
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderText(this.sketch, this.textSettings)
+    renderOutline(this.sketch, this.bodySettings, parseColor(this.textSettings.color))
+    if (this.mouseInBounds) {
+      renderHighlight(this.sketch, this.bodySettings)
+    }
+    this.sketch.pop()
+  }
+
+  shouldBeRemoved(): boolean {
+    return (this.body.position.y - (this.bodySettings.r) < 1)
+  }
+}
+
+export type PhysicalObject = TextBox | Boundary | Button | Spring
+
+export type Container = Button[] | Boundary[] | Spring[] | TextBox[]
+
+// env settings
+export interface Environment {
+  engine: Matter.Engine
+  world: Matter.World
+  bgColor: string
+  width: number
+  height: number
+}
+
+interface HasBoundaryGroup {
+  boundaries: Boundary[]
+}
+
+interface HasBodyGroup {
+  bodies: Matter.Body[]
+}
+
+interface HasButtonGroup {
+  buttons: Button[]
+}
+
+interface HasSpringGroup {
+  constraints: Spring[]
+}
+
+export interface FramedEnv extends Environment, HasBoundaryGroup {}
+
+export interface PhysicalEnv extends FramedEnv, HasBodyGroup {}
+
+export interface NavEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {
+  tabs: string[],
+}
+
+export interface AboutEnv extends PhysicalEnv {
+  particles: any[]
+}
+
+export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
+  projects: any[]
+  descriptions: any[]
+  images: any
+}
+
+export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {
+  bubbles: any[]
+}
+
+
+//
+
 export class Project {
   // sketch: p5
   // body: Matter.Body
@@ -406,96 +490,3 @@ export class Project {
   //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)
   // }
 }
-
-export class Bubble extends CircleBody implements Renderable {
-  // sketch: p5
-  // body: Matter.Body
-  mouseInBounds: boolean
-  bubbleShouldPop: boolean
-  bodySettings: CircleBodySettings
-  textSettings: TextSettings
-
-  constructor (sketch: p5, settings: any) {
-    super(sketch, settings.bodySettings)
-    
-    const { bodySettings, textSettings } = settings
-  
-    // this.sketch = sketch
-    this.bodySettings = bodySettings
-    this.textSettings = textSettings
-
-    // const { x, y, r, options } = bodySettings
-    
-    // this.body = Matter.Bodies.circle(x, y, r, options)
-    this.mouseInBounds = false
-    this.bubbleShouldPop = false
-    
-  }
-
-  show() {
-    this.sketch.push()
-    transformBody(this.sketch, this.body)
-    renderText(this.sketch, this.textSettings)
-    renderOutline(this.sketch, this.bodySettings, parseColor(this.textSettings.color))
-    if (this.mouseInBounds) {
-      renderHighlight(this.sketch, this.bodySettings)
-    }
-    this.sketch.pop()
-  }
-
-  shouldBeRemoved(): boolean {
-    return (this.body.position.y - (this.bodySettings.r) < 1)
-  }
-}
-
-export type PhysicalObject = TextBox | Boundary | Button | Spring
-
-export type Container = Button[] | Boundary[] | Spring[] | TextBox[]
-
-// env settings
-export interface Environment {
-  engine: Matter.Engine
-  world: Matter.World
-  bgColor: string
-  width: number
-  height: number
-}
-
-interface HasBoundaryGroup {
-  boundaries: Boundary[]
-}
-
-interface HasBodyGroup {
-  bodies: Matter.Body[]
-}
-
-interface HasButtonGroup {
-  buttons: Button[]
-}
-
-interface HasSpringGroup {
-  constraints: Spring[]
-}
-
-export interface FramedEnv extends Environment, HasBoundaryGroup {}
-
-export interface PhysicalEnv extends FramedEnv, HasBodyGroup {}
-
-export interface NavEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {
-  tabs: string[],
-}
-
-export interface AboutEnv extends PhysicalEnv {
-  particles: any[]
-}
-
-export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
-  projects: any[]
-  descriptions: any[]
-  images: any
-}
-
-export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {
-  bubbles: any[]
-}
-

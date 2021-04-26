@@ -2,10 +2,6 @@ import React, { useEffect } from 'react'
 import p5 from 'p5'
 import { connect } from 'react-redux'
 
-import {
-  Button
-} from '../types'
-
 const Project = (props: any) => {
   const { currentPage } = props
   const { env, sketch } = currentPage

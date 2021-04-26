@@ -1,7 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { About, Contact, Projects, Experience, Page } from './pages'
+import { 
+  About, 
+  Contact, 
+  // Projects, 
+  Experience, 
+  Page 
+} from './pages'
 
 const Routes = (props: any) => {
   const { currentPage } = props

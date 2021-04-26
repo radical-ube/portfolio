@@ -19,12 +19,7 @@ import {
 
 import {
   PhysicalEnv,
-  Button
 } from '../types'
-
-// import {
-//   projectHandleClick
-// } from '../pages/projects'
 
 const engine = Matter.Engine.create()
 const world = engine.world

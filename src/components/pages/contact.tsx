@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import p5 from 'p5'
-import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import { 

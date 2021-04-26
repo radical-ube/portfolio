@@ -5,8 +5,9 @@ import {
   TextSettings,
   Button,
   Alignment,
-  ButtonBodySettings,
-  CircleBodySettings
+  // ButtonBodySettings,
+  CircleBodySettings,
+  Bubble
 } from '../types'
 
 import {
@@ -24,11 +25,6 @@ export const parseAlignment = (alignment: Alignment | undefined): Alignment => {
   else return defaultAlignment
 }
 
-// export const parseRectOrCircle = (bodySettings: unknown): ButtonBodySettings | CircleBodySettings => {
-
-// }
-
-
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
   const { text, textSize, boxWidth, boxHeight, padding } = textSettings
   sketch.textSize(textSize || 18)
@@ -40,9 +36,9 @@ export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
 }
 
 
-export const checkMouseInBounds = (obj: Button) => {
+export const checkMouseInBounds = (obj: Button | Bubble) => {
   const { bodySettings, body, sketch } = obj
-  const { shape, w } = bodySettings
+  const { shape } = bodySettings
   const mousePosition = {
     x: sketch.mouseX,
     y: sketch.mouseY
@@ -55,8 +51,9 @@ export const checkMouseInBounds = (obj: Button) => {
       obj.mouseInBounds = (mouseArea < body.area + 1)
       break
     case 'circle':
+      const { r } = bodySettings as CircleBodySettings
       const distance = distanceBetweenTwoPoints(body.position, mousePosition)
-      obj.mouseInBounds = (distance < w / 2)
+      obj.mouseInBounds = (distance < r)
       break
   }
 }
