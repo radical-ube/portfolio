@@ -2,117 +2,26 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 
 import {
-  defaultColor,
+  RectBodySettings,
+  Renderable,
+  CircleBodySettings,
+  TextSettings,
+  TextBoxSettings,
+  ButtonSettings,
+  ButtonBodySettings,
+  BubbleButtonSettings,
+  LinkButtonSettings
+} from './'
+
+import {
   transformBody,
   renderText,
   renderOutline,
   renderHighlight,
-  renderImage,
-  renderLowlight,
-  setTextDimensions
-} from './utilities'
+  defaultColor,
+  setTextDimensions,
+} from '../utilities'
 
-// properties
-export type Horizontal = p5.LEFT | p5.RIGHT | p5.CENTER
-
-export type Vertical = p5.CENTER | p5.TOP | p5.BOTTOM
-
-export interface Alignment {
-  horizontal: Horizontal
-  vertical: Vertical
-}
-
-export interface Color {
-  hue: number
-  saturation: number
-  lightness: number
-}
-
-export interface Position {
-  x: number
-  y: number
-}
-
-export interface Triangle {
-  sideOne: number
-  sideTwo: number
-  sideThree: number
-}
-
-export type Shape = 'circle' | 'rect'
-
-interface BodySettings extends Position {
-  padding?: number
-  color?: Color
-  shape: Shape
-  options: any
-}
-
-export interface RectBodySettings extends BodySettings {
-  w: number
-  h: number
-}
-
-export interface CircleBodySettings extends BodySettings {
-  r: number
-}
-
-export interface ButtonBodySettings extends RectBodySettings {
-  shape: Shape
-}
-
-export interface TextSettings {
-  text: string
-  textSize: number
-  color?: Color
-  alignment?: Alignment
-  boxWidth?: number
-  boxHeight?: number
-  padding?: number
-}
-
-export interface HasBody {
-  body: Matter.Body | Matter.Constraint
-}
-
-interface HasBodySettings {
-  bodySettings: RectBodySettings
-}
-
-interface HasText {
-  textSettings: TextSettings
-}
-
-interface TextBoxSettings extends HasBodySettings, HasText {}
-
-export interface ButtonSettings {
-  bodySettings: ButtonBodySettings
-  textSettings: TextSettings
-}
-
-export interface BubbleButtonSettings extends ButtonSettings {
-  bubbleText: string[]
-}
-
-export interface LinkButtonSettings extends ButtonSettings {
-  address: string
-}
-
-export interface ProjectSettings extends HasBodySettings {
-  image: any
-  description: string
-  textSize: number
-  website: string
-  github: string
-}
-
-export interface Renderable {
-  sketch: p5
-  show(): void
-}
-
-
-// objects
 export class Boundary {
   body: Matter.Body
   bodySettings: RectBodySettings
@@ -325,78 +234,7 @@ export class Bubble extends CircleBody {
 }
 
 
-// env settings
-export interface Environment {
-  engine: Matter.Engine
-  world: Matter.World
-  bgColor: string
-  width: number
-  height: number
-}
-
-interface HasBoundaryGroup {
-  boundaries: Boundary[]
-}
-
-interface HasBodyGroup {
-  bodies: RenderedObject[]
-}
-
-interface HasButtonGroup {
-  buttons: Button[]
-}
-
-interface HasSpringGroup {
-  constraints: Spring[]
-}
-
-export interface FramedEnv extends Environment, HasBoundaryGroup {}
-
-export interface PhysicalEnv extends FramedEnv, HasBodyGroup {}
-
-export interface NavEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {
-  tabs: string[],
-}
-
-export interface AboutEnv extends PhysicalEnv {
-  particles: ColorBall[]
-}
-
-export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
-  projects: any[]
-  descriptions: any[]
-  images: any
-}
-
-export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {
-  buttons: BubbleButton[]
-  bubbles: Bubble[]
-}
-
-export interface ContactEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {
-  buttons: LinkButton[]
-}
-
-type StateEnv = PhysicalEnv | AboutEnv | ExperienceEnv | ContactEnv
-
-// state
-interface SketchFunctions {
-  sketchSetup: (sketch: p5, environment: StateEnv) => void
-  sketchDraw: (sketch: p5, environment: StateEnv) => void
-  sketchWindowResized: (sketch: p5, environment: StateEnv) => void
-}
-
-export type State = {
-  currentPage: {
-    tab: string,
-    env: StateEnv,
-    sketch: SketchFunctions
-  }
-}
-
-
-//
-//
+// --- TBD ---
 export class Project {
   sketch: p5
   body: Matter.Body
@@ -483,25 +321,25 @@ export class Project {
     
   }
   
-  show() {
-    this.sketch.push()
-    transformBody(this.sketch, this.body)
-    renderImage(this.sketch, {
-      image: this.bodySettings.image,
-      dimensions: {
-        w: this.bodySettings.w,
-        h: this.bodySettings.h
-      }
-    })
-    if (this.mouseInBounds) {
-      renderLowlight(this.sketch, this.bodySettings)
-    }
-    // else {
-    //   this.webButton.remove(this.bodySettings.world)
-    //   this.githubButton.remove(this.bodySettings.world)
-    // }
-    this.sketch.pop()
-  }
+  // show() {
+  //   this.sketch.push()
+  //   transformBody(this.sketch, this.body)
+  //   renderImage(this.sketch, {
+  //     image: this.bodySettings.image,
+  //     dimensions: {
+  //       w: this.bodySettings.w,
+  //       h: this.bodySettings.h
+  //     }
+  //   })
+  //   if (this.mouseInBounds) {
+  //     renderLowlight(this.sketch, this.bodySettings)
+  //   }
+  //   // else {
+  //   //   this.webButton.remove(this.bodySettings.world)
+  //   //   this.githubButton.remove(this.bodySettings.world)
+  //   // }
+  //   this.sketch.pop()
+  // }
 
   // checkMouseInBounds(mousePosition) => {
   //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)
