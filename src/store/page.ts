@@ -1,5 +1,5 @@
 import {
-  environment,
+  homeEnv,
   sketchFns,
   aboutEnv,
   aboutFns,
@@ -9,11 +9,11 @@ import {
   experienceFns,
   contactEnv,
   contactFns
-} from '../components/pages/pagesettings'
+} from '../components/setups'
 
 const initialState = {
   tab: 'home',
-  env: environment,
+  env: homeEnv,
   sketch: sketchFns
 }
 
@@ -31,7 +31,7 @@ export const setCurrentPage = (tab: string) => (dispatch: any) => {
     case 'home':
       dispatch(setPage({
         tab: 'home',
-        env: environment,
+        env: homeEnv,
         sketch: sketchFns
       }))
       break

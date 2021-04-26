@@ -5,15 +5,19 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import {
-  renderGroup,
-  checkGroupForMouse,
-  resetNavFrame,
-  setupFrame,
-  setupNav
-} from './utilities'
-import {
   NavEnv
 } from './types'
+
+import {
+  renderGroup,
+  checkGroupForMouse,
+} from './utilities'
+
+import {
+  setupNav,
+  setupFrame,
+  resetNavFrame
+} from './setups'
 
 import { setCurrentPage } from '../store/page'
 
