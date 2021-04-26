@@ -5,7 +5,6 @@ import {
   TextSettings,
   Button,
   Alignment,
-  // ButtonBodySettings,
   CircleBodySettings,
   Bubble
 } from '../types'
@@ -20,18 +19,13 @@ export const defaultAlignment: Alignment = {
   vertical: 'center'
 }
 
-export const parseAlignment = (alignment: Alignment | undefined): Alignment => {
-  if (alignment) return alignment
-  else return defaultAlignment
-}
-
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
-  const { text, textSize, boxWidth, boxHeight, padding } = textSettings
+  const { text, textSize, boxWidth, boxHeight, padding = 10 } = textSettings
   sketch.textSize(textSize || 18)
   return {
     w: boxWidth || sketch.textWidth(text),
     h: boxHeight || sketch.textAscent(),
-    padding: padding || 10
+    padding: padding
   }
 }
 

@@ -2,7 +2,7 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 
 import {
-  parseColor,
+  defaultColor,
   transformBody,
   renderText,
   renderOutline,
@@ -107,15 +107,8 @@ export interface ProjectSettings extends HasBodySettings {
 }
 
 export interface Renderable {
-  show(): void
-}
-
-// interface Removable {
-//   remove(world: Matter.World): void
-// }
-
-interface HasSketch {
   sketch: p5
+  show(): void
 }
 
 
@@ -136,15 +129,17 @@ export class Boundary {
   }
 }
 
-class P5Object implements HasSketch {
+export class RenderedObject implements Renderable {
   sketch: p5
 
   constructor (sketch: p5) {
     this.sketch = sketch
   }
+
+  show() {}
 }
 
-class RectBody extends P5Object {
+class RectBody extends RenderedObject {
   body: Matter.Body
 
   constructor(sketch: p5, settings: RectBodySettings) {
@@ -155,7 +150,7 @@ class RectBody extends P5Object {
   }
 }
 
-class CircleBody extends P5Object {
+class CircleBody extends RenderedObject {
   body: Matter.Body
 
   constructor(sketch: p5, settings: CircleBodySettings) {
@@ -166,7 +161,7 @@ class CircleBody extends P5Object {
   }
 }
 
-export class TextBox extends RectBody implements Renderable, HasText {
+export class TextBox extends RectBody {
   textSettings: TextSettings
 
   constructor(sketch: p5, settings: TextBoxSettings) {
@@ -183,7 +178,7 @@ export class TextBox extends RectBody implements Renderable, HasText {
   }
 }
 
-export class Button extends TextBox implements Renderable, HasText {
+export class Button extends TextBox {
   mouseInBounds: boolean
   bodySettings: ButtonBodySettings
 
@@ -201,7 +196,7 @@ export class Button extends TextBox implements Renderable, HasText {
     this.sketch.push()
     transformBody(this.sketch, this.body)
     renderText(this.sketch, this.textSettings)
-    renderOutline(this.sketch, this.bodySettings, parseColor(this.textSettings.color))
+    renderOutline(this.sketch, this.bodySettings)
     if (this.mouseInBounds) {
       renderHighlight(this.sketch, this.bodySettings)
     }
@@ -276,7 +271,8 @@ export class ColorBall extends CircleBody {
   }
 
   show() {
-    const { hue, saturation, lightness } = parseColor(this.bodySettings.color)
+    const { color = defaultColor } = this.bodySettings
+    const { hue, saturation, lightness } = color
 
     this.sketch.push()
     transformBody(this.sketch, this.body)
@@ -296,9 +292,7 @@ export class ColorBall extends CircleBody {
   }
 }
 
-
-
-export class Bubble extends CircleBody implements Renderable {
+export class Bubble extends CircleBody {
   mouseInBounds: boolean
   bubbleShouldPop: boolean
   bodySettings: CircleBodySettings
@@ -318,7 +312,7 @@ export class Bubble extends CircleBody implements Renderable {
     this.sketch.push()
     transformBody(this.sketch, this.body)
     renderText(this.sketch, this.textSettings)
-    renderOutline(this.sketch, this.bodySettings, parseColor(this.textSettings.color))
+    renderOutline(this.sketch, this.bodySettings)
     if (this.mouseInBounds) {
       renderHighlight(this.sketch, this.bodySettings)
     }
@@ -330,9 +324,6 @@ export class Bubble extends CircleBody implements Renderable {
   }
 }
 
-export type PhysicalObject = TextBox | Boundary | Button | Spring
-
-export type Container = Button[] | Boundary[] | Spring[] | TextBox[]
 
 // env settings
 export interface Environment {
@@ -348,7 +339,7 @@ interface HasBoundaryGroup {
 }
 
 interface HasBodyGroup {
-  bodies: Matter.Body[]
+  bodies: RenderedObject[]
 }
 
 interface HasButtonGroup {
@@ -368,7 +359,7 @@ export interface NavEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {
 }
 
 export interface AboutEnv extends PhysicalEnv {
-  particles: any[]
+  particles: ColorBall[]
 }
 
 export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
@@ -378,12 +369,15 @@ export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
 }
 
 export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {
-  bubbles: any[]
+  bubbles: Bubble[]
 }
+
+export interface ContactEnv extends PhysicalEnv, HasButtonGroup, HasSpringGroup {}
+
 
 
 //
-
+//
 export class Project {
   sketch: p5
   body: Matter.Body
@@ -394,7 +388,7 @@ export class Project {
   bodySettings: any
 
   constructor (sketch: p5, settings: any) {
-    const { x, y, w, h, options, image, description, textSize, website, github } = settings
+    const { x, y, w, h, options, description, textSize, website, github } = settings
   
     this.sketch = sketch
     this.bodySettings = settings

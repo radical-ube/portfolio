@@ -82,12 +82,7 @@ export const randomColor = (): Color => {
   }
 }
 
-export const parseColor = (color: Color | undefined = defaultColor): Color => {
-  return color
-}
-
 export const desaturateColor = (sketch: p5, color: Color): Color => {
-  // const { sketch } = environment
   return {
     hue: color.hue,
     saturation: sketch.lerp(color.saturation, defaultColor.saturation, 0.4),

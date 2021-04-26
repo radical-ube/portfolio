@@ -14,6 +14,9 @@ import {
   FramedEnv,
   PhysicalEnv,
   NavEnv,
+  AboutEnv,
+  ExperienceEnv,
+  ContactEnv
 } from '../types'
 import { 
   setTextDimensions,
@@ -131,6 +134,7 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
       text: word,
       alignment: defaultAlignment
     })
+    const color = randomColor()
     const buttonSettings: ButtonSettings = {
       bodySettings: {
         x: x + (40 * i),
@@ -144,11 +148,12 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
         },
         padding: dimensions.padding,
         shape: 'rect',
+        color
       },
       textSettings: {
         textSize,
         text: word,
-        color: randomColor(),
+        color,
         alignment: defaultAlignment
       },
     }
@@ -274,7 +279,7 @@ export const setupHome = (sketch: p5, environment: PhysicalEnv) => {
     })
 }
 
-export const setupAbout = (sketch: p5, environment: any) => {
+export const setupAbout = (sketch: p5, environment: AboutEnv) => {
   const { world, width, height, bodies } = environment
 
   const texts = [
@@ -395,7 +400,7 @@ export const setupProjects = (sketch: p5, environment: any) => {
   
 }
 
-export const setupExperience = (sketch: p5, environment: any) => {
+export const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
   const { width, height, world, buttons, bodies } = environment
 
   const credentials = [
@@ -485,7 +490,7 @@ export const setupExperience = (sketch: p5, environment: any) => {
 
 }
 
-export const setupContact = (sketch: p5, environment: any) => {
+export const setupContact = (sketch: p5, environment: ContactEnv) => {
   const { width, height, world, bodies, boundaries, buttons, constraints } = environment
   let titleText = 'drop me a line'
   const words = titleText.split(' ')
@@ -554,6 +559,8 @@ export const setupContact = (sketch: p5, environment: any) => {
       text: social
     })
 
+    const color = randomColor()
+
     const buttonSettings: LinkButtonSettings = {
       bodySettings: {
         x,
@@ -566,12 +573,13 @@ export const setupContact = (sketch: p5, environment: any) => {
           isStatic: false
         },
         padding: dimensions.padding,
-        shape: 'rect'
+        shape: 'rect',
+        color
       },
       textSettings: {
         text: social,
         textSize: buttonTextSize,
-        color: randomColor()
+        color
       },
       address: socialAddresses[i]
     }

@@ -5,7 +5,10 @@ import {
   HasBody,
   ColorBall,
   Bubble,
-  CircleBodySettings
+  BubbleButton,
+  CircleBodySettings,
+  AboutEnv,
+  ExperienceEnv
 } from '../types'
 import {
   getRandomInt,
@@ -37,7 +40,7 @@ export function addToWorld (world: Matter.World, object: HasBody, container: any
   container.push(object)
 }
 
-export const createColorParticles = (sketch: p5, environment: any) => {
+export const createColorParticles = (sketch: p5, environment: AboutEnv) => {
   const { width, particles, world } = environment
 
   const particleSettings: CircleBodySettings = {
@@ -59,7 +62,7 @@ export const createColorParticles = (sketch: p5, environment: any) => {
   }
 }
 
-export const createBubbles = (sketch: p5, environment: any, bubbleButton: any) => {
+export const createBubbles = (sketch: p5, environment: ExperienceEnv, bubbleButton: BubbleButton) => {
   const position = bubbleButton.body.position
   const textSize = bubbleButton.textSettings.textSize
 
@@ -72,6 +75,7 @@ export const createBubbles = (sketch: p5, environment: any, bubbleButton: any) =
       text
     })
 
+    const color = desaturateColor(sketch, randomColor())
     const bubble = new Bubble(sketch, {
       bodySettings: {
         x,
@@ -83,12 +87,13 @@ export const createBubbles = (sketch: p5, environment: any, bubbleButton: any) =
           restitution: 0.8,
           isStatic: false
         },
-        shape: 'circle'
+        shape: 'circle',
+        color
       },
       textSettings: {
         text: text,
         textSize,
-        color: desaturateColor(sketch, randomColor())
+        color
       },
     })
     addToWorld(environment.world, bubble, environment.bubbles)

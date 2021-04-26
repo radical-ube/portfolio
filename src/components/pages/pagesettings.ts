@@ -19,6 +19,9 @@ import {
 
 import {
   PhysicalEnv,
+  AboutEnv,
+  ExperienceEnv,
+  ContactEnv
 } from '../types'
 
 const engine = Matter.Engine.create()
@@ -45,13 +48,13 @@ const sketchSetup = (sketch: p5, environment: PhysicalEnv) => {
   setupHome(sketch, environment)
 }
 
-const sketchDraw = (sketch: p5, environment: any) => {
+const sketchDraw = (sketch: p5, environment: PhysicalEnv) => {
   sketch.background(environment.bgColor)
   Matter.Engine.update(engine)
   renderGroup(environment.bodies)
 }
 
-const sketchWindowResized = (sketch: p5, environment: any) => {
+const sketchWindowResized = (sketch: p5, environment: PhysicalEnv) => {
   resetPageFrame(sketch, environment)
   setupFrame(environment)
 }
@@ -75,15 +78,15 @@ export const aboutEnv = {
   particles: []
 }
 
-const aboutSetup = (sketch: p5, environment: any) => {
-  const { width, height, engine, world } = environment
+const aboutSetup = (sketch: p5, environment: AboutEnv) => {
+  const { width, height, world } = environment
   world.gravity.y = 1
   sketch.createCanvas(width, height)
   setupFrame(environment)
   setupAbout(sketch, environment)
 }
 
-const aboutDraw = (sketch: p5, environment: any) => {
+const aboutDraw = (sketch: p5, environment: AboutEnv) => {
   sketch.background(environment.bgColor)
   Matter.Engine.update(engine)
   if (sketch.frameCount % 4 === 0) {
@@ -117,7 +120,7 @@ export const projectEnv = {
 }
 
 const projectSetup = (sketch: p5, environment: any) => {
-  const { engine, world } = environment
+  const { world } = environment
   world.gravity.y = 1
   // const canvas = sketch.createCanvas(environment.w, environment.h)
   // canvas.mouseClicked(projectHandleClick)
@@ -154,22 +157,23 @@ export const experienceEnv = {
   bubbles: []
 }
 
-const experienceSetup = (sketch: p5, environment: any) => {
-  const { engine, world } = environment
+const experienceSetup = (sketch: p5, environment: ExperienceEnv) => {
+  const { world } = environment
   world.gravity.y *= -1
   setupFrame(environment)
   setupExperience(sketch, environment)
 }
 
-const experienceDraw = (sketch: p5, environment: any) => {
-  sketch.background(environment.bgColor)
-  Matter.Engine.update(environment.engine)
-  renderGroup(environment.bodies)
-  renderGroup(environment.buttons)
-  checkGroupForMouse(environment.buttons)
-  renderGroup(environment.bubbles)
-  checkGroupForMouse(environment.bubbles)
-  checkGroupForRemoval(world, environment.bubbles)
+const experienceDraw = (sketch: p5, environment: ExperienceEnv) => {
+  const { bgColor, engine, bodies, buttons, bubbles } = environment
+  sketch.background(bgColor)
+  Matter.Engine.update(engine)
+  renderGroup(bodies)
+  renderGroup(buttons)
+  checkGroupForMouse(buttons)
+  renderGroup(bubbles)
+  checkGroupForMouse(bubbles)
+  checkGroupForRemoval(world, bubbles)
 }
 
 export const experienceFns = {
@@ -192,14 +196,14 @@ export const contactEnv = {
   buttons: []
 }
 
-const contactSetup = (sketch: p5, environment: any) => {
-  const { engine, world } = environment
+const contactSetup = (sketch: p5, environment: ContactEnv) => {
+  const { world } = environment
   world.gravity.y = 1
   setupFrame(environment)
   setupContact(sketch, environment)
 }
 
-const contactDraw = (sketch: p5, environment: any) => {
+const contactDraw = (sketch: p5, environment: ContactEnv) => {
   sketch.background(environment.bgColor)
   Matter.Engine.update(environment.engine)
   renderGroup(environment.bodies)

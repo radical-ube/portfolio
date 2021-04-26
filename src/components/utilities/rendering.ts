@@ -1,21 +1,20 @@
 import p5 from 'p5'
 import {
   TextSettings,
-  // BodySettings,
   Color,
-  ButtonBodySettings,
-  CircleBodySettings
-  // Renderable
+  RectBodySettings,
+  CircleBodySettings,
+  RenderedObject
 } from '../types'
 import {
-  parseColor,
-  parseAlignment
+  defaultColor,
+  defaultAlignment
 } from '.'
 
 export const renderText = (sketch: p5, textSettings: TextSettings) => {
-  const { textSize, text, color, alignment, boxWidth, boxHeight } = textSettings
-  const { hue, saturation, lightness } = parseColor(color)
-  const { horizontal, vertical } = parseAlignment(alignment)
+  const { textSize, text, color = defaultColor, alignment = defaultAlignment, boxWidth, boxHeight } = textSettings
+  const { hue, saturation, lightness } = color
+  const { horizontal, vertical } = alignment
 
   sketch.rectMode('center')
   sketch.textAlign(horizontal, vertical)
@@ -30,15 +29,15 @@ export const renderText = (sketch: p5, textSettings: TextSettings) => {
   }
 }
 
-export const renderOutline = (sketch: p5, bodySettings: ButtonBodySettings | CircleBodySettings, color: Color) => {
-  const { shape, padding = 0 } = bodySettings
+export const renderOutline = (sketch: p5, bodySettings: RectBodySettings | CircleBodySettings) => {
+  const { color = defaultColor, shape, padding = 0 } = bodySettings
   const { hue, saturation, lightness } = color
   sketch.colorMode('hsl')
   sketch.noFill()
   sketch.stroke(hue, saturation, lightness)
   switch (shape) {
     case 'rect':
-      const { w, h } = bodySettings as ButtonBodySettings
+      const { w, h } = bodySettings as RectBodySettings
       sketch.rect(0, 0, w + padding, h + padding)
       break
     case 'circle':
@@ -48,14 +47,14 @@ export const renderOutline = (sketch: p5, bodySettings: ButtonBodySettings | Cir
   }
 }
 
-export const renderHighlight = (sketch: p5, bodySettings: ButtonBodySettings | CircleBodySettings) => {
+export const renderHighlight = (sketch: p5, bodySettings: RectBodySettings | CircleBodySettings) => {
   const { padding = 0, shape } = bodySettings
   sketch.colorMode('hsl')
   sketch.noStroke()
   sketch.fill(0, 0, 100, 0.1)
   switch (shape) {
     case 'rect':
-      const { w, h } = bodySettings as ButtonBodySettings
+      const { w, h } = bodySettings as RectBodySettings
       sketch.rectMode('center')
       sketch.rect(0, 0, w + (padding || 0), h + (padding || 0))
       break
@@ -66,7 +65,7 @@ export const renderHighlight = (sketch: p5, bodySettings: ButtonBodySettings | C
   }
 }
 
-export const renderGroup = (array: any[]): void => {
+export const renderGroup = (array: RenderedObject[]): void => {
   array.forEach(obj => {
     obj.show()
   })
@@ -89,18 +88,20 @@ export const renderProjectDescription = (projects: any[]) => {
   })
 }
 
-export const renderLowlight = (sketch: p5, bodySettings: any) => {
-  const { dimensions, shape } = bodySettings
+export const renderLowlight = (sketch: p5, bodySettings: RectBodySettings | CircleBodySettings) => {
+  const { padding = 0, shape } = bodySettings
   sketch.colorMode('hsl')
   sketch.noStroke()
   sketch.fill(0, 0, 0, 0.8)
   switch (shape) {
     case 'rect':
+      const { w, h } = bodySettings as RectBodySettings
       sketch.rectMode('center')
-      sketch.rect(0, 0, dimensions.w + (dimensions.padding || 0), dimensions.h + (dimensions.padding || 0))
+      sketch.rect(0, 0, w + padding, h + padding)
       break
     case 'circle':
-      sketch.ellipse(0, 0, dimensions.w + dimensions.padding)
+      const { r } = bodySettings as CircleBodySettings
+      sketch.ellipse(0, 0, r + padding)
       break
   }
 }
