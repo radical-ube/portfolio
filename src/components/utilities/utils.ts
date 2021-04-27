@@ -85,8 +85,8 @@ export const clearGroup = (group: any[]) => {
 }
 
 export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: ProjectData) => {
-  const { width, height, world, bodies, buttons } = environment
-  const { image, titleText, descriptionText, websiteAddress, githubAddress } = data
+  const { width, height, world, bodies, buttons, image } = environment
+  const { titleText, descriptionText, websiteAddress, githubAddress } = data
 
   const imageWidth = width * 0.45
   const imageHeight = imageWidth * (9 / 16)
@@ -103,7 +103,7 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: Pr
       },
       shape: 'rect'
     },
-    image
+    image: image.data
   }
 
   const projectImg = new ImageBox(sketch, imgSettings)
@@ -115,7 +115,7 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: Pr
   })
   const titleBodySettings: RectBodySettings = {
     x: width * 0.25,
-    y: height * 0.7,
+    y: height * 0.725,
     w: titleDimensions.w,
     h: titleDimensions.h,
     options: {isStatic: true},

@@ -10,6 +10,11 @@ import {
   Page 
 } from './pages'
 
+import {
+  rainbowData,
+  ekopiqueData
+} from '../components/setups/'
+
 const Routes = (props: any) => {
   const { currentPage } = props
   const { tab } = currentPage
@@ -20,7 +25,11 @@ const Routes = (props: any) => {
       ) : tab === 'about' ? (
         <About />
       ) : tab === 'projects' ? (
-        <Projects />
+        <div>
+          <Projects projectData = {rainbowData}/>
+          <Projects projectData = {ekopiqueData}/>
+          <Projects projectData = {rainbowData}/>
+        </div>
         // <Page />
       ) : tab === 'experience' ? (
         <Experience />

@@ -49,9 +49,7 @@ export interface AboutEnv extends PhysicalEnv {
 
 export interface ProjectEnv extends PhysicalEnv, HasButtonGroup {
   buttons: LinkButton[]
-  projects: any[]
-  descriptions: any[]
-  images: any
+  image: any
 }
 
 export interface ExperienceEnv extends PhysicalEnv, HasButtonGroup {

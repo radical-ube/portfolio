@@ -10,14 +10,14 @@ import {
   LinkButton
 } from '../types'
 
-const Project = (props: State) => {
+const Project = (props: any) => {
   const ref = React.useRef<HTMLDivElement>(null!)
-  const { currentPage } = props
-  
+  const { currentPage, projectData } = props
+  const { imagePath } = projectData
   useEffect(() => {
     const { env, sketch } = currentPage
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
-    const { images, buttons } = env as ProjectEnv
+    const { image, buttons } = env as ProjectEnv
   
     const projectHandleClick = () => {
       buttons.forEach((button: LinkButton) => {
@@ -29,15 +29,14 @@ const Project = (props: State) => {
   
     const Sketch = (sketch: p5) => {
       sketch.preload = () => {
-        images.rainbow = sketch.loadImage('images/rainbowonme.png')
-        images.ekopique = sketch.loadImage('images/ekopique.png')
+        image.data = sketch.loadImage(imagePath)
       }
       sketch.setup = () => {
         Matter.World.clear(env.world, false)
         Matter.Engine.clear(env.engine)
         const canvas = sketch.createCanvas(env.width, env.height)
         canvas.mouseClicked(projectHandleClick)
-        sketchSetup(sketch, env)
+        sketchSetup(sketch, env, projectData)
       }
       sketch.draw = () => {
         sketchDraw(sketch, env)
