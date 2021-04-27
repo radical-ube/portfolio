@@ -44,7 +44,7 @@ const Navbar = (props: any) => {
         tabs: [
           'home', 
           'about', 
-          // 'projects', 
+          'projects', 
           'experience', 
           'contact'
         ],

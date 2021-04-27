@@ -7,10 +7,9 @@ import {
   CircleBodySettings,
   TextSettings,
   TextBoxSettings,
-  ButtonSettings,
-  ButtonBodySettings,
   BubbleButtonSettings,
-  LinkButtonSettings
+  LinkButtonSettings,
+  ImageSettings
 } from './'
 
 import {
@@ -20,6 +19,7 @@ import {
   renderHighlight,
   defaultColor,
   setTextDimensions,
+  renderImage
 } from '../utilities'
 
 export class Boundary {
@@ -89,9 +89,9 @@ export class TextBox extends RectBody {
 
 export class Button extends TextBox {
   mouseInBounds: boolean
-  bodySettings: ButtonBodySettings
+  bodySettings: RectBodySettings
 
-  constructor(sketch: p5, settings: ButtonSettings) {
+  constructor(sketch: p5, settings: TextBoxSettings) {
     super (sketch, settings)
 
     const { x, y, w, h, padding = 0, options } = settings.bodySettings
@@ -234,6 +234,25 @@ export class Bubble extends CircleBody {
 }
 
 
+export class ImageBox extends RectBody {
+  image: any
+  settings: ImageSettings
+
+  constructor (sketch: p5, settings: ImageSettings) {
+    super(sketch, settings.bodySettings)
+
+    this.settings = settings
+    this.image = settings.image
+  }
+
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderImage(this.sketch, this.settings)
+    this.sketch.pop()
+  }
+}
+
 // --- TBD ---
 export class Project {
   sketch: p5
@@ -282,7 +301,7 @@ export class Project {
       },
     })
   
-    this.webButton = new Button(sketch, {
+    this.webButton = new LinkButton(sketch, {
       bodySettings: {
         x: x - 50,
         y: y + 50,
@@ -295,12 +314,11 @@ export class Project {
       textSettings: {
         text: 'Website',
         textSize,
-        // address: website
-      }
-      
+      },
+      address: website
     })
   
-    this.githubButton = new Button(sketch, {
+    this.githubButton = new LinkButton(sketch, {
       bodySettings: {
         x: x + 50,
         y: y + 50,
@@ -312,8 +330,8 @@ export class Project {
       textSettings: {
         text: 'Github',
         textSize,
-        // address: github
       },
+      address: github
     })
     
     this.body = Matter.Bodies.rectangle(x, y, w, h, options)
@@ -321,25 +339,25 @@ export class Project {
     
   }
   
-  // show() {
-  //   this.sketch.push()
-  //   transformBody(this.sketch, this.body)
-  //   renderImage(this.sketch, {
-  //     image: this.bodySettings.image,
-  //     dimensions: {
-  //       w: this.bodySettings.w,
-  //       h: this.bodySettings.h
-  //     }
-  //   })
-  //   if (this.mouseInBounds) {
-  //     renderLowlight(this.sketch, this.bodySettings)
-  //   }
-  //   // else {
-  //   //   this.webButton.remove(this.bodySettings.world)
-  //   //   this.githubButton.remove(this.bodySettings.world)
-  //   // }
-  //   this.sketch.pop()
-  // }
+  show() {
+    // this.sketch.push()
+    // transformBody(this.sketch, this.body)
+    // renderImage(this.sketch, {
+    //   image: this.bodySettings.image,
+    //   dimensions: {
+    //     w: this.bodySettings.w,
+    //     h: this.bodySettings.h
+    //   }
+    // })
+    // if (this.mouseInBounds) {
+    //   renderLowlight(this.sketch, this.bodySettings)
+    // }
+    // else {
+    //   this.webButton.remove(this.bodySettings.world)
+    //   this.githubButton.remove(this.bodySettings.world)
+    // }
+    // this.sketch.pop()
+  }
 
   // checkMouseInBounds(mousePosition) => {
   //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)

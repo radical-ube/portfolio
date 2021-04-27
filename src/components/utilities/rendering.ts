@@ -3,7 +3,8 @@ import {
   TextSettings,
   RectBodySettings,
   CircleBodySettings,
-  RenderedObject
+  RenderedObject,
+  ImageSettings
 } from '../types'
 import {
   defaultColor,
@@ -55,7 +56,7 @@ export const renderHighlight = (sketch: p5, bodySettings: RectBodySettings | Cir
     case 'rect':
       const { w, h } = bodySettings as RectBodySettings
       sketch.rectMode('center')
-      sketch.rect(0, 0, w + (padding || 0), h + (padding || 0))
+      sketch.rect(0, 0, w + padding, h + padding)
       break
     case 'circle':
       const { r } = bodySettings as CircleBodySettings
@@ -70,11 +71,12 @@ export const renderGroup = (array: RenderedObject[]): void => {
   })
 }
 
-export const renderImage = (sketch: p5, imageSettings: any) => {
-  const { image, dimensions } = imageSettings
+export const renderImage = (sketch: p5, imageSettings: ImageSettings) => {
+  const { image, bodySettings } = imageSettings
+  const { w, h } = bodySettings
 
   sketch.imageMode('center')
-  sketch.image(image, 0, 0, dimensions.w, dimensions.h)
+  sketch.image(image, 0, 0, w, h)
 }
 
 export const renderProjectDescription = (projects: any[]) => {

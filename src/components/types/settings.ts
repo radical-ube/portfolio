@@ -23,10 +23,6 @@ export interface CircleBodySettings extends BodySettings {
   r: number
 }
 
-export interface ButtonBodySettings extends RectBodySettings {
-  shape: Shape
-}
-
 export interface TextSettings {
   text: string
   textSize: number
@@ -41,7 +37,7 @@ export interface HasBody {
   body: Matter.Body | Matter.Constraint
 }
 
-interface HasBodySettings {
+interface HasRectBody {
   bodySettings: RectBodySettings
 }
 
@@ -49,22 +45,23 @@ interface HasText {
   textSettings: TextSettings
 }
 
-export interface TextBoxSettings extends HasBodySettings, HasText {}
+export interface TextBoxSettings extends HasRectBody, HasText {}
 
-export interface ButtonSettings {
-  bodySettings: ButtonBodySettings
-  textSettings: TextSettings
-}
-
-export interface BubbleButtonSettings extends ButtonSettings {
+export interface BubbleButtonSettings extends TextBoxSettings {
   bubbleText: string[]
 }
 
-export interface LinkButtonSettings extends ButtonSettings {
+export interface LinkButtonSettings extends TextBoxSettings {
   address: string
 }
 
-export interface ProjectSettings extends HasBodySettings {
+export type Image = any 
+
+export interface ImageSettings extends HasRectBody {
+  image: Image
+}
+
+export interface ProjectSettings extends HasRectBody {
   image: any
   description: string
   textSize: number

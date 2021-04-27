@@ -4,13 +4,19 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-const Project = (props: any) => {
+import {
+  State, 
+  ProjectEnv
+} from '../types'
+
+const Project = (props: State) => {
   const ref = React.useRef<HTMLDivElement>(null!)
   const { currentPage } = props
   
   useEffect(() => {
     const { env, sketch } = currentPage
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
+    const { images } = env as ProjectEnv
   
     const projectHandleClick = () => {
       // env.buttons.forEach((button: Button) => {
@@ -22,13 +28,13 @@ const Project = (props: any) => {
   
     const Sketch = (sketch: p5) => {
       sketch.preload = () => {
-        env.images.rainbow = sketch.loadImage('images/rainbowonme.png')
-        env.images.ekopique = sketch.loadImage('images/ekopique.png')
+        images.rainbow = sketch.loadImage('images/rainbowonme.png')
+        images.ekopique = sketch.loadImage('images/ekopique.png')
       }
       sketch.setup = () => {
         Matter.World.clear(env.world, false)
         Matter.Engine.clear(env.engine)
-        const canvas = sketch.createCanvas(env.w, env.h)
+        const canvas = sketch.createCanvas(env.width, env.height)
         canvas.mouseClicked(projectHandleClick)
         sketchSetup(sketch, env)
       }
@@ -49,7 +55,7 @@ const Project = (props: any) => {
   return <div ref={ref} />
 }
 
-const mapState = (state: any) => {
+const mapState = (state: State) => {
   return {
     currentPage: state.currentPage
   }

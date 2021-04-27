@@ -3,7 +3,7 @@ import p5 from 'p5'
 import {
   NavEnv,
   Boundary,
-  ButtonSettings,
+  TextBoxSettings,
   Button,
   Spring,
   FramedEnv
@@ -45,7 +45,7 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
       alignment: defaultAlignment
     })
     const color = randomColor()
-    const buttonSettings: ButtonSettings = {
+    const buttonSettings: TextBoxSettings = {
       bodySettings: {
         x: x + (40 * i),
         y,
