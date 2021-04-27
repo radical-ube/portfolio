@@ -2,23 +2,13 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 
 import {
-  Project,
-  ImageBox,
-  ImageSettings,
-  RectBodySettings,
-  ProjectEnv,
-  TextBox
+  ProjectEnv
 } from '../types'
 
 import {
-  addToWorld,
   renderGroup,
   checkGroupForMouse,
-  renderProjectDescription,
-  createWordColumn,
-  setTextDimensions,
-  defaultColor,
-  defaultAlignment
+  createProjectGroup
 } from '../utilities'
 
 import {
@@ -27,102 +17,39 @@ import {
 } from './general'
 
 const setupProjects = (sketch: p5, environment: ProjectEnv) => {
-  const { width, height, images, descriptions, buttons, world, projects, bodies } = environment
+  const { images } = environment
   const { rainbow, ekopique } = images
 
-  const imageWidth = width * 0.45
-  const imageHeight = imageWidth * (9 / 16)
-  const textSize = width * 0.03
+  const rainbowTitle = 'Rainbow On Me (2020)'
+  const rainbowDescription = 'Rainbow On Me was a 2-day hack-a-thon style project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.\n\nTech Stack includes:\n\nReact front-end architecture\np5.js for canvas rendering\nMatter.js for physics calculations'
+  const rainbowWebsite = 'https://rainbow-on-me.herokuapp.com/rainbow'
+  const rainbowGithub = 'https://github.com/radical-ube/stackathon'
 
-  const rainbowImgSettings: ImageSettings = {
-    bodySettings: {
-      x: width * 0.25,
-      y: height * 0.35,
-      w: imageWidth,
-      h: imageHeight,
-      options: {
-        isStatic: true
-      },
-      shape: 'rect'
-    },
-    image: rainbow
+  const rainbowData = {
+    image: rainbow,
+    titleText: rainbowTitle,
+    descriptionText: rainbowDescription,
+    websiteAddress: rainbowWebsite,
+    githubAddress: rainbowGithub
   }
 
-  const rainbowImage = new ImageBox(sketch, rainbowImgSettings)
-  addToWorld(world, rainbowImage, bodies)
+  createProjectGroup(sketch, environment, rainbowData)
 
-  const titleText = 'Rainbow On Me'
-  const dimensions = setTextDimensions(sketch, {
-    textSize,
-    text: titleText
-  })
-  const titleBodySettings: RectBodySettings = {
-    x: width * 0.25,
-    y: height * 0.7,
-    w: dimensions.w,
-    h: dimensions.h,
-    options: {isStatic: true},
-    padding: 10,
-    shape: 'rect'
+
+  const ekopiqueTitle = 'ekoPique (2020)'
+  const ekopiqueDescription = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API, and represented the data with a variety of graphs.\n\nTech Stack includes:\n\nReact/Redux front-end\nExpress and MongoDB back-end\nSpotify API for data sourcing\nd3.js for data calculation'
+  let ekopiqueAddress = 'https://ekopique.herokuapp.com'
+  let ekopiqueGithub = 'https://github.com/2004-wdf-capstone-d/capstone-spotify'
+
+  const ekopiqueData = {
+    image: ekopique,
+    titleText: ekopiqueTitle,
+    descriptionText: ekopiqueDescription,
+    // websiteAddress: ekopiqueAddress,
+    githubAddress: ekopiqueGithub
   }
-  const title = new TextBox(sketch, {
-    bodySettings: titleBodySettings,
-    textSettings: {
-      textSize,
-      text: titleText,
-      color: defaultColor,
-      alignment: defaultAlignment
-    }
-  })
-  addToWorld(world, title, bodies)
 
-  // let rainbowText = 'Rainbow On Me was a 2-day hack-a-thon style project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.'
-  // let rainbowAddress = 'https://rainbow-on-me.herokuapp.com/rainbow'
-  // let rainbowGithub = 'https://github.com/radical-ube/stackathon'
-
-  // createWordColumn(rainbowText, sketch, environment, {
-  //   xMod: 0.65
-  // })
-
-  // const rainbowProject = new Project(sketch, {
-  //   x: width * 0.5,
-  //   y: height * 0.25,
-  //   w: imageWidth,
-  //   h: imageHeight,
-  //   options: {isStatic: true},
-  //   image: rainbow,
-  //   description: rainbowText,
-  //   textSize,
-  //   website: rainbowAddress,
-  //   github: rainbowGithub,
-  //   world
-  // })
-  // addToWorld(world, rainbowProject, projects)
-  // addToWorld(world, rainbowProject.description, descriptions)
-  // addToWorld(world, rainbowProject.webButton, buttons)
-  // addToWorld(world, rainbowProject.githubButton, buttons)
-
-
-  // let ekopiqueText = 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API. Find out how "danceable" your favorite songs are!'
-  // let ekopiqueAddress = 'https://ekopique.herokuapp.com'
-  // let ekopiqueGithub = 'https://github.com/2004-wdf-capstone-d/capstone-spotify'
-
-  // const ekopiqueProject = new Project(sketch, {
-  //   x: width * 0.5,
-  //   y: height * 0.75,
-  //   w: imageWidth,
-  //   h: imageHeight,
-  //   options: {isStatic: true},
-  //   image: ekopique,
-  //   description: ekopiqueText,
-  //   textSize,
-  //   website: ekopiqueAddress,
-  //   github: ekopiqueGithub,
-  // })
-  // addToWorld(world, ekopiqueProject, projects)
-  // addToWorld(world, ekopiqueProject.description, descriptions)
-  // addToWorld(world, ekopiqueProject.webButton, buttons)
-  // addToWorld(world, ekopiqueProject.githubButton, buttons)
+  // createProjectGroup(sketch, environment, ekopiqueData)
   
 }
 
@@ -156,8 +83,8 @@ const projectDraw = (sketch: p5, environment: ProjectEnv) => {
   sketch.background(environment.bgColor)
   Matter.Engine.update(engine)
   renderGroup(environment.bodies)
-  // renderGroup(environment.projects)
-  // checkGroupForMouse(environment.projects)
+  renderGroup(environment.buttons)
+  checkGroupForMouse(environment.buttons)
   // renderProjectDescription(environment.projects)
   // checkGroupForMouse(environment.buttons)
 }

@@ -6,13 +6,22 @@ import {
   Button,
   Alignment,
   CircleBodySettings,
-  Bubble
+  Bubble,
+  ProjectEnv,
+  ImageSettings,
+  ImageBox,
+  RectBodySettings,
+  TextBox,
+  LinkButton,
+  ProjectData
 } from '../types'
 
 import {
   distanceBetweenTwoPoints,
-  rectAreaFromVertices
-} from '.'
+  rectAreaFromVertices,
+  addToWorld,
+  defaultColor
+} from './'
 
 export const defaultAlignment: Alignment = {
   horizontal: 'center',
@@ -73,5 +82,135 @@ export const checkGroupForRemoval = (world: Matter.World, group: any[]) => {
 
 export const clearGroup = (group: any[]) => {
   while (group.length) group.shift()
+}
+
+export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: ProjectData) => {
+  const { width, height, world, bodies, buttons } = environment
+  const { image, titleText, descriptionText, websiteAddress, githubAddress } = data
+
+  const imageWidth = width * 0.45
+  const imageHeight = imageWidth * (9 / 16)
+  const textSize = width * 0.03
+
+  const imgSettings: ImageSettings = {
+    bodySettings: {
+      x: width * 0.25,
+      y: height * 0.35,
+      w: imageWidth,
+      h: imageHeight,
+      options: {
+        isStatic: true
+      },
+      shape: 'rect'
+    },
+    image
+  }
+
+  const projectImg = new ImageBox(sketch, imgSettings)
+  addToWorld(world, projectImg, bodies)
+  
+  const titleDimensions = setTextDimensions(sketch, {
+    textSize,
+    text: titleText
+  })
+  const titleBodySettings: RectBodySettings = {
+    x: width * 0.25,
+    y: height * 0.7,
+    w: titleDimensions.w,
+    h: titleDimensions.h,
+    options: {isStatic: true},
+    padding: 10,
+    shape: 'rect'
+  }
+  const title = new TextBox(sketch, {
+    bodySettings: titleBodySettings,
+    textSettings: {
+      textSize,
+      text: titleText,
+      color: defaultColor,
+      alignment: defaultAlignment
+    }
+  })
+  addToWorld(world, title, bodies)
+
+  const descriptionDimensions = setTextDimensions(sketch, {
+    textSize: textSize * 0.55,
+    text: descriptionText,
+    boxWidth: imageWidth,
+    boxHeight: imageHeight
+  })
+  const descriptionBodySettings: RectBodySettings = {
+    x: width * 0.75,
+    y: height * 0.35,
+    w: descriptionDimensions.w,
+    h: descriptionDimensions.h,
+    options: {isStatic: true},
+    padding: 10,
+    shape: 'rect'
+  }
+  const description = new TextBox(sketch, {
+    bodySettings: descriptionBodySettings,
+    textSettings: {
+      textSize: textSize * 0.55,
+      text: descriptionText,
+      boxWidth: imageWidth,
+      boxHeight: imageHeight,
+      color: defaultColor,
+      alignment: {
+        horizontal: 'left',
+        vertical: 'top'
+      }
+    }
+  })
+  addToWorld(world, description, bodies)
+
+  if (websiteAddress) {
+    const websiteButtonDimensions = setTextDimensions(sketch, {
+      textSize: textSize * 0.55,
+      text: 'website'
+    })
+    const websiteButtonBodySettings: RectBodySettings = {
+      x: titleBodySettings.x - 50,
+      y: titleBodySettings.y + 50,
+      w: websiteButtonDimensions.w,
+      h: websiteButtonDimensions.h,
+      options: {isStatic: true},
+      shape: 'rect',
+      padding: 10
+    }
+    const websiteButton = new LinkButton(sketch, {
+      bodySettings: websiteButtonBodySettings,
+      textSettings: {
+        text: 'website',
+        textSize: textSize * 0.55
+      },
+      address: websiteAddress
+    })
+    addToWorld(world, websiteButton, buttons)
+  }
+
+  const githubButtonDimensions = setTextDimensions(sketch, {
+    textSize: textSize * 0.55,
+    text: 'github'
+  })
+  const githubButtonBodySettings: RectBodySettings = {
+    x: titleBodySettings.x + 50,
+    y: titleBodySettings.y + 50,
+    w: githubButtonDimensions.w,
+    h: githubButtonDimensions.h,
+    options: {isStatic: true},
+    shape: 'rect',
+    padding: 10
+  }
+  const githubButton = new LinkButton(sketch, {
+    bodySettings: githubButtonBodySettings,
+    textSettings: {
+      text: 'github',
+      textSize: textSize * 0.55
+    },
+    address: githubAddress
+  })
+  addToWorld(world, githubButton, buttons)
+
 }
 

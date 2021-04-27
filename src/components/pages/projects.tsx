@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 
 import {
   State, 
-  ProjectEnv
+  ProjectEnv,
+  LinkButton
 } from '../types'
 
 const Project = (props: State) => {
@@ -16,14 +17,14 @@ const Project = (props: State) => {
   useEffect(() => {
     const { env, sketch } = currentPage
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
-    const { images } = env as ProjectEnv
+    const { images, buttons } = env as ProjectEnv
   
     const projectHandleClick = () => {
-      // env.buttons.forEach((button: Button) => {
-      //   if (button.mouseInBounds && button.textSettings.address) {
-      //     document.location.assign(button.textSettings.address)
-      //   }
-      // })
+      buttons.forEach((button: LinkButton) => {
+        if (button.mouseInBounds && button.address) {
+          document.location.assign(button.address)
+        }
+      })
     }
   
     const Sketch = (sketch: p5) => {

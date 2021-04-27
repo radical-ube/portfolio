@@ -61,10 +61,10 @@ export interface ImageSettings extends HasRectBody {
   image: Image
 }
 
-export interface ProjectSettings extends HasRectBody {
+export interface ProjectData {
   image: any
-  description: string
-  textSize: number
-  website: string
-  github: string
+  titleText: string
+  descriptionText: string
+  websiteAddress?: string
+  githubAddress: string
 }
