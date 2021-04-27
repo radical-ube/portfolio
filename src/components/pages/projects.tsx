@@ -13,7 +13,7 @@ import {
 const Project = (props: any) => {
   const ref = React.useRef<HTMLDivElement>(null!)
   const { currentPage, projectData, images } = props
-  // const { imagePath } = projectData
+  
   useEffect(() => {
     const { env, sketch } = currentPage
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
@@ -28,9 +28,6 @@ const Project = (props: any) => {
     }
   
     const Sketch = (sketch: p5) => {
-      // sketch.preload = () => {
-      //   image.data = sketch.loadImage(imagePath)
-      // }
       sketch.setup = () => {
         Matter.World.clear(env.world, false)
         Matter.Engine.clear(env.engine)

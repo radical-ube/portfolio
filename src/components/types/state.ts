@@ -10,11 +10,18 @@ interface SketchFunctions {
   sketchWindowResized: (sketch: p5, environment: StateEnv) => void
 }
 
+export interface CurrentPage {
+  tab: string
+  env: StateEnv
+  sketch: SketchFunctions
+}
+
+export interface LoadedImageData {
+  key: string
+  object: HTMLImageElement
+}
+
 export type State = {
-  currentPage: {
-    tab: string,
-    env: StateEnv,
-    sketch: SketchFunctions
-  },
-  loadedImages?: any[]
+  currentPage: CurrentPage,
+  loadedImages?: LoadedImageData[]
 }

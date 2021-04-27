@@ -31,13 +31,10 @@ const Routes = (props: any) => {
           <Projects projectData = {ekopiqueData}/>
           <Projects projectData = {rainbowData}/>
         </div>
-        // <Page />
       ) : tab === 'experience' ? (
         <Experience />
-        // <Page />
       ) : tab === 'contact' ? (
         <Contact />
-        // <Page />
       ) : (
         <Page />
       )}

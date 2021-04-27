@@ -3,7 +3,8 @@ import Matter from 'matter-js'
 
 import {
   ProjectEnv, 
-  ProjectData
+  ProjectData,
+  LoadedImageData
 } from '../types'
 
 import {
@@ -56,11 +57,10 @@ export const projectEnv: ProjectEnv = {
   height: window.innerHeight * 0.75,
   bodies: [],
   boundaries: [],
-  image: {},
   buttons: [],
 }
 
-const projectSetup = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: any[]) => {
+const projectSetup = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: LoadedImageData[]) => {
   const { world } = environment
   world.gravity.y = 1
   setupFrame(environment)

@@ -5,7 +5,8 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import {
-  NavEnv
+  NavEnv,
+  LoadedImageData
 } from './types'
 
 import {
@@ -22,7 +23,6 @@ import {
 
 import { setCurrentPage } from '../store/page'
 import { setLoadedImages } from '../store/images'
-
 
 const imageData = [
   {
@@ -112,7 +112,7 @@ const Navbar = (props: any) => {
 const mapDispatch = (dispatch: any) => {
   return {
     setCurrentPage: (page: string) => dispatch(setCurrentPage(page)),
-    setLoadedImages: (images: any[]) => dispatch(setLoadedImages(images))
+    setLoadedImages: (images: LoadedImageData[]) => dispatch(setLoadedImages(images))
   }
 }
 

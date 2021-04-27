@@ -1,13 +1,17 @@
-const initialState: any[] = []
+import {
+  LoadedImageData
+} from '../components/types'
+
+const initialState: LoadedImageData[] = []
 
 const SET_IMAGES = 'SET_IMAGES'
 
-const setImages = (images: any[]) => ({
+const setImages = (images: LoadedImageData[]) => ({
   type: SET_IMAGES,
   images
 })
 
-export const setLoadedImages = (images: any[]) => (dispatch: any) => {
+export const setLoadedImages = (images: LoadedImageData[]) => (dispatch: any) => {
   dispatch(setImages(images))
 }
 

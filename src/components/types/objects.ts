@@ -232,9 +232,8 @@ export class Bubble extends CircleBody {
   }
 }
 
-
 export class ImageBox extends RectBody {
-  image: any
+  image: HTMLImageElement
   settings: ImageSettings
 
   constructor (sketch: p5, settings: ImageSettings) {
