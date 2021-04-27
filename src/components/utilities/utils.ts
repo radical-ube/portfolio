@@ -84,13 +84,15 @@ export const clearGroup = (group: any[]) => {
   while (group.length) group.shift()
 }
 
-export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: ProjectData) => {
-  const { width, height, world, bodies, buttons, image } = environment
-  const { titleText, descriptionText, websiteAddress, githubAddress } = data
+export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: any[]) => {
+  const { width, height, world, bodies, buttons } = environment
+  const { imageKey, titleText, descriptionText, websiteAddress, githubAddress } = data
 
   const imageWidth = width * 0.45
   const imageHeight = imageWidth * (9 / 16)
   const textSize = width * 0.03
+
+  const image = images.filter(image => image.key === imageKey)
 
   const imgSettings: ImageSettings = {
     bodySettings: {
@@ -103,7 +105,7 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: Pr
       },
       shape: 'rect'
     },
-    image: image.data
+    image: image[0].object
   }
 
   const projectImg = new ImageBox(sketch, imgSettings)
@@ -214,3 +216,9 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: Pr
 
 }
 
+export const preloadImages = (sketch: p5, images: any[]) => {
+  return images.map(image => {
+    image.object = sketch.loadImage(image.object)
+    return image
+  })
+}

@@ -17,8 +17,9 @@ import {
   sketchWindowResized
 } from './general'
 
+
 export const rainbowData = {
-  imagePath: 'images/rainbowonme.png',
+  imageKey: 'rainbow',
   titleText: 'Rainbow On Me (2020)',
   descriptionText: 'Rainbow On Me was a 2-day hack-a-thon style project using p5.js to render Matter.js physics into rainbow colored blocks. It is a dedication to the Pride that can never be cancelled.\n\nTech Stack includes:\n\nReact front-end architecture\np5.js for canvas rendering\nMatter.js for physics calculations',
   websiteAddress: 'https://rainbow-on-me.herokuapp.com/rainbow',
@@ -26,14 +27,22 @@ export const rainbowData = {
 }
 
 export const ekopiqueData = {
-  imagePath: 'images/ekopique.png',
+  imageKey: 'ekopique',
   titleText: 'ekoPique (2020)',
   descriptionText: 'ekoPique is a web app that visualizes Spotify data, created in collaboration with teammates Lyle Aigbedion and Ousainu Jabbi. We used d3.js for calculation of data pulled using Spotify\'s API, and represented the data with a variety of graphs.\n\nTech Stack includes:\n\nReact/Redux front-end\nExpress and MongoDB back-end\nSpotify API for data sourcing\nd3.js for data calculation',
   githubAddress: 'https://github.com/2004-wdf-capstone-d/capstone-spotify'
 }
 
-const setupProjects = (sketch: p5, environment: ProjectEnv, data: ProjectData) => {
-  createProjectGroup(sketch, environment, data)
+export const portfolioData = {
+  imageKey: 'portfolio',
+  titleText: 'portfolio project (2020-21)',
+  descriptionText: 'This website was created as an extension of my Rainbow On Me solo project. It was bootstrapped with Create React App, originally written in JavaScript (2020), and recently transcribed and reorganized with TypeScript (2021).\n\nTech Stack includes:\n\nTypeScript React/Redux front-end architecture\np5.js for canvas rendering\nMatter.js for physics calculations',
+  websiteAddress: 'https://radical-ube.netlify.app',
+  githubAddress: 'https://github.com/radical-ube/portfolio'
+}
+
+const setupProjects = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: any[]) => {
+  createProjectGroup(sketch, environment, data, images)
 }
 
 const engine = Matter.Engine.create()
@@ -51,13 +60,11 @@ export const projectEnv: ProjectEnv = {
   buttons: [],
 }
 
-const projectSetup = (sketch: p5, environment: ProjectEnv, data: ProjectData) => {
+const projectSetup = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: any[]) => {
   const { world } = environment
   world.gravity.y = 1
-  // const canvas = sketch.createCanvas(environment.w, environment.h)
-  // canvas.mouseClicked(projectHandleClick)
   setupFrame(environment)
-  setupProjects(sketch, environment, data)
+  setupProjects(sketch, environment, data, images)
 }
 
 const projectDraw = (sketch: p5, environment: ProjectEnv) => {
@@ -66,8 +73,6 @@ const projectDraw = (sketch: p5, environment: ProjectEnv) => {
   renderGroup(environment.bodies)
   renderGroup(environment.buttons)
   checkGroupForMouse(environment.buttons)
-  // renderProjectDescription(environment.projects)
-  // checkGroupForMouse(environment.buttons)
 }
 
 export const projectFns = {

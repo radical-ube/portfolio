@@ -12,7 +12,8 @@ import {
 
 import {
   rainbowData,
-  ekopiqueData
+  ekopiqueData,
+  portfolioData
 } from '../components/setups/'
 
 const Routes = (props: any) => {
@@ -26,7 +27,7 @@ const Routes = (props: any) => {
         <About />
       ) : tab === 'projects' ? (
         <div>
-          <Projects projectData = {rainbowData}/>
+          <Projects projectData = {portfolioData}/>
           <Projects projectData = {ekopiqueData}/>
           <Projects projectData = {rainbowData}/>
         </div>

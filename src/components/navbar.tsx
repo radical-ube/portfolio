@@ -11,6 +11,7 @@ import {
 import {
   renderGroup,
   checkGroupForMouse,
+  preloadImages
 } from './utilities'
 
 import {
@@ -20,15 +21,31 @@ import {
 } from './setups'
 
 import { setCurrentPage } from '../store/page'
+import { setLoadedImages } from '../store/images'
 
-const { Engine, World } = Matter
+
+const imageData = [
+  {
+    key: 'rainbow',
+    object: 'images/rainbowonme.png'
+  },
+  {
+    key: 'ekopique',
+    object: 'images/ekopique.png'
+  },
+  {
+    key: 'portfolio',
+    object: 'images/portfolio.png'
+  }
+]
+
 
 const Navbar = (props: any) => {
   const ref = React.useRef<HTMLDivElement>(null!)
-  const { setCurrentPage } = props
+  const { setCurrentPage, setLoadedImages } = props
 
   useEffect(() => {  
-    const engine = Engine.create()
+    const engine = Matter.Engine.create()
     const world = engine.world
 
     const Sketch = (sketch: p5) => {
@@ -59,9 +76,13 @@ const Navbar = (props: any) => {
           })
       }
   
+      sketch.preload = () => {
+        const loadedImages = preloadImages(sketch, imageData)
+        setLoadedImages(loadedImages)
+      }
       sketch.setup = () => {
-        Engine.clear(engine)
-        World.clear(world, false)
+        Matter.Engine.clear(engine)
+        Matter.World.clear(world, false)
         const canvas = sketch.createCanvas(environment.width, environment.height)
         canvas.mouseClicked(handleClick)
         setupFrame(environment)
@@ -69,7 +90,7 @@ const Navbar = (props: any) => {
       }
       sketch.draw = () => {
         sketch.background(environment.bgColor)
-        Engine.update(engine)
+        Matter.Engine.update(engine)
         renderGroup(environment.buttons)
         checkGroupForMouse(environment.buttons)
       }
@@ -83,14 +104,15 @@ const Navbar = (props: any) => {
     return function cleanup() {
       p5canvas.remove()
     }
-  }, [setCurrentPage])
+  }, [setCurrentPage, setLoadedImages])
 
   return <div ref={ref} />
 }
 
 const mapDispatch = (dispatch: any) => {
   return {
-    setCurrentPage: (page: string) => dispatch(setCurrentPage(page))
+    setCurrentPage: (page: string) => dispatch(setCurrentPage(page)),
+    setLoadedImages: (images: any[]) => dispatch(setLoadedImages(images))
   }
 }
 

@@ -15,5 +15,6 @@ export type State = {
     tab: string,
     env: StateEnv,
     sketch: SketchFunctions
-  }
+  },
+  loadedImages?: any[]
 }

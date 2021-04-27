@@ -79,33 +79,3 @@ export const renderImage = (sketch: p5, imageSettings: ImageSettings) => {
   sketch.image(image, 0, 0, w, h)
 }
 
-export const renderProjectDescription = (projects: any[]) => {
-  projects.forEach(project => {
-    if (project.mouseInBounds) {
-      project.description.show()
-      project.webButton.show()
-      project.githubButton.show()
-    }
-  })
-}
-
-export const renderLowlight = (sketch: p5, bodySettings: RectBodySettings | CircleBodySettings) => {
-  const { padding = 0, shape } = bodySettings
-  sketch.colorMode('hsl')
-  sketch.noStroke()
-  sketch.fill(0, 0, 0, 0.8)
-  switch (shape) {
-    case 'rect':
-      const { w, h } = bodySettings as RectBodySettings
-      sketch.rectMode('center')
-      sketch.rect(0, 0, w + padding, h + padding)
-      break
-    case 'circle':
-      const { r } = bodySettings as CircleBodySettings
-      sketch.ellipse(0, 0, r + padding)
-      break
-  }
-}
-
-
-
