@@ -6,7 +6,8 @@ import {
   Boundary,
   LinkButtonSettings,
   LinkButton,
-  Spring
+  Spring,
+  RectBodySettings
 } from '../types'
 
 import {
@@ -48,8 +49,24 @@ const setupContact = (sketch: p5, environment: ContactEnv) => {
   })
   addToWorld(world, invisibleBox, boundaries)
 
-  let socials = ['github: radical-ube', 'instagram: @radical_ube', 'linkedIn: in/ube-halaya', 'email: eli.tamondong@gmail.com']
-  let socialAddresses = ['https://github.com/radical-ube', 'https://instagram.com/radical_ube', 'https://linkedin.com/in/ube-halaya', 'mailto:eli.tamondong@gmail.com']
+  const socials = [
+    {
+      text: 'github: radical-ube',
+      address: 'https://github.com/radical-ube'
+    },
+    {
+      text: 'instagram: @radical_ube',
+      address: 'https://instagram.com/radical_ube'
+    },
+    {
+      text: 'linkedIn: in/ube-halaya',
+      address: 'https://linkedin.com/in/ube-halaya'
+    },
+    {
+      text: 'email: eli.tamondong@gmail.com',
+      address: 'mailto:eli.tamondong@gmail.com'
+    }
+  ]
 
   let prevBody = invisibleBox
   let buttonTextSize = width * 0.025
@@ -61,34 +78,34 @@ const setupContact = (sketch: p5, environment: ContactEnv) => {
       x -= 2
     }
 
-    const dimensions = setTextDimensions(sketch, {
-      textSize: buttonTextSize,
-      text: social
-    })
-
     const color = randomColor()
+    const textSettings = {
+      text: social.text,
+      textSize: buttonTextSize,
+      color
+    }
+
+    const dimensions = setTextDimensions(sketch, textSettings)
+
+    const bodySettings: RectBodySettings = {
+      x,
+      y: (height * 0.1) + (i * 50),
+      w: dimensions.w,
+      h: dimensions.h,
+      options: {
+        friction: 0.4,
+        restitution: 0.7,
+        isStatic: false
+      },
+      padding: dimensions.padding,
+      shape: 'rect',
+      color
+    }
 
     const buttonSettings: LinkButtonSettings = {
-      bodySettings: {
-        x,
-        y: (height * 0.1) + (i * 50),
-        w: dimensions.w,
-        h: dimensions.h,
-        options: {
-          friction: 0.4,
-          restitution: 0.7,
-          isStatic: false
-        },
-        padding: dimensions.padding,
-        shape: 'rect',
-        color
-      },
-      textSettings: {
-        text: social,
-        textSize: buttonTextSize,
-        color
-      },
-      address: socialAddresses[i]
+      bodySettings,
+      textSettings,
+      address: social.address
     }
     const button = new LinkButton(sketch, buttonSettings)
     addToWorld(world, button, buttons)
@@ -124,12 +141,13 @@ const contactSetup = (sketch: p5, environment: ContactEnv) => {
 }
 
 const contactDraw = (sketch: p5, environment: ContactEnv) => {
-  sketch.background(environment.bgColor)
-  Matter.Engine.update(environment.engine)
-  renderGroup(environment.bodies)
-  renderGroup(environment.constraints)
-  renderGroup(environment.buttons)
-  checkGroupForMouse(environment.buttons)
+  const { bgColor, engine, bodies, constraints, buttons } = environment
+  sketch.background(bgColor)
+  Matter.Engine.update(engine)
+  renderGroup(bodies)
+  renderGroup(constraints)
+  renderGroup(buttons)
+  checkGroupForMouse(buttons)
 }
 
 export const contactFns = {

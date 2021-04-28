@@ -4,7 +4,8 @@ import Matter from 'matter-js'
 import {
   AboutEnv,
   RectBodySettings,
-  TextBox
+  TextBox,
+  TextSettings
 } from '../types'
 
 import {
@@ -52,12 +53,19 @@ const setupAbout = (sketch: p5, environment: AboutEnv) => {
       angle *= -1
     }
 
-    const dimensions = setTextDimensions(sketch, {
+    const textSettings: TextSettings = {
       textSize,
       text,
       boxWidth,
-      boxHeight
-    })
+      boxHeight,
+      color: defaultColor,
+      alignment: {
+        horizontal: 'left',
+        vertical: 'top'
+      }
+    }
+
+    const dimensions = setTextDimensions(sketch, textSettings)
 
     const options = {
       friction: 0,
@@ -78,17 +86,7 @@ const setupAbout = (sketch: p5, environment: AboutEnv) => {
 
     const para = new TextBox(sketch, {
       bodySettings,
-      textSettings: {
-        textSize,
-        text,
-        boxWidth,
-        boxHeight,
-        color: defaultColor,
-        alignment: {
-          horizontal: 'left',
-          vertical: 'top'
-        }
-      }
+      textSettings
     })
     addToWorld(world, para, bodies)
   })

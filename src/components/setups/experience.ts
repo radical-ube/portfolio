@@ -63,10 +63,11 @@ const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
   let bubbleSize = width * 0.015
 
   credentials.forEach((credential, index) => {
-    const dimensions = setTextDimensions(sketch, {
+    const textSettings = {
+      text: credential.type,
       textSize: bubbleSize,
-      text: credential.type
-    })
+    }
+    const dimensions = setTextDimensions(sketch, textSettings)
     const button = new BubbleButton(sketch, {
       bodySettings: {
         x: xCreds + (xCreds * index),
@@ -79,10 +80,7 @@ const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
         },
         shape: 'rect'
       },
-      textSettings: {
-        text: credential.type,
-        textSize: bubbleSize,
-      },
+      textSettings,
       bubbleText: credential.text
     })
     addToWorld(world, button, buttons)
@@ -114,9 +112,6 @@ const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
   addToWorld(world, header, bodies)
 
 }
-
-// const engine = Matter.Engine.create()
-// const world = engine.world
 
 export const experienceEnv = {
   engine,

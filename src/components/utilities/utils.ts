@@ -4,7 +4,6 @@ import Matter from 'matter-js'
 import { 
   TextSettings,
   Button,
-  Alignment,
   CircleBodySettings,
   Bubble
 } from '../types'
@@ -14,10 +13,7 @@ import {
   rectAreaFromVertices,
 } from './'
 
-export const defaultAlignment: Alignment = {
-  horizontal: 'center',
-  vertical: 'center'
-}
+
 
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
   const { text, textSize, boxWidth, boxHeight, padding = 10 } = textSettings

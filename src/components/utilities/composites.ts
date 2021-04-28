@@ -14,7 +14,8 @@ import {
   LinkButton,
   BubbleButton,
   Bubble,
-  SetupModifiers
+  SetupModifiers,
+  TextSettings
 } from '../types'
 
 import {
@@ -51,10 +52,14 @@ export const createWordColumn = (sentence: string, sketch: p5, environment: Phys
       const x = width * mod
       const y = height * 0.2 + (index * textSize)
 
-      const dimensions = setTextDimensions(sketch, {
+      const textSettings = {
         textSize,
-        text
-      })
+        text,
+        color: randomColor(),
+        alignment: defaultAlignment
+      }
+
+      const dimensions = setTextDimensions(sketch, textSettings)
 
       const options = {
         friction: 0.4,
@@ -71,12 +76,7 @@ export const createWordColumn = (sentence: string, sketch: p5, environment: Phys
         shape: 'rect'
       }
 
-      const textSettings = {
-        textSize,
-        text,
-        color: randomColor(),
-        alignment: defaultAlignment
-      }
+      
 
       const settings = {
         bodySettings,
@@ -158,7 +158,6 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, modifier
   const textSize = width * 0.03
 
   const image = images.filter(image => image.key === imageKey)
-
   const imgSettings: ImageSettings = {
     bodySettings: {
       x: width * 0.25,
@@ -172,14 +171,16 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, modifier
     },
     image: image[0].object
   }
-
   const projectImg = new ImageBox(sketch, imgSettings)
   addToWorld(world, projectImg, bodies)
   
-  const titleDimensions = setTextDimensions(sketch, {
+  const titleTextSettings = {
     textSize,
-    text: titleText
-  })
+    text: titleText,
+    color: defaultColor,
+    alignment: defaultAlignment
+  }
+  const titleDimensions = setTextDimensions(sketch, titleTextSettings)
   const titleBodySettings: RectBodySettings = {
     x: width * 0.25,
     y: height * 0.725,
@@ -191,21 +192,22 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, modifier
   }
   const title = new TextBox(sketch, {
     bodySettings: titleBodySettings,
-    textSettings: {
-      textSize,
-      text: titleText,
-      color: defaultColor,
-      alignment: defaultAlignment
-    }
+    textSettings: titleTextSettings
   })
   addToWorld(world, title, bodies)
 
-  const descriptionDimensions = setTextDimensions(sketch, {
+  const descriptionTextSettings: TextSettings = {
     textSize: textSize * 0.55,
     text: descriptionText,
     boxWidth: imageWidth,
-    boxHeight: imageHeight
-  })
+    boxHeight: imageHeight,
+    color: defaultColor,
+    alignment: {
+      horizontal: 'left',
+      vertical: 'top'
+    }
+  }
+  const descriptionDimensions = setTextDimensions(sketch, descriptionTextSettings)
   const descriptionBodySettings: RectBodySettings = {
     x: width * 0.75,
     y: height * 0.35,
@@ -217,25 +219,16 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, modifier
   }
   const description = new TextBox(sketch, {
     bodySettings: descriptionBodySettings,
-    textSettings: {
-      textSize: textSize * 0.55,
-      text: descriptionText,
-      boxWidth: imageWidth,
-      boxHeight: imageHeight,
-      color: defaultColor,
-      alignment: {
-        horizontal: 'left',
-        vertical: 'top'
-      }
-    }
+    textSettings: descriptionTextSettings
   })
   addToWorld(world, description, bodies)
 
   if (websiteAddress) {
-    const websiteButtonDimensions = setTextDimensions(sketch, {
-      textSize: textSize * 0.55,
-      text: 'website'
-    })
+    const websiteTextSettings = {
+      text: 'website',
+      textSize: textSize * 0.55
+    }
+    const websiteButtonDimensions = setTextDimensions(sketch, websiteTextSettings)
     const websiteButtonBodySettings: RectBodySettings = {
       x: titleBodySettings.x - 50,
       y: titleBodySettings.y + 50,
@@ -247,19 +240,17 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, modifier
     }
     const websiteButton = new LinkButton(sketch, {
       bodySettings: websiteButtonBodySettings,
-      textSettings: {
-        text: 'website',
-        textSize: textSize * 0.55
-      },
+      textSettings: websiteTextSettings,
       address: websiteAddress
     })
     addToWorld(world, websiteButton, buttons)
   }
 
-  const githubButtonDimensions = setTextDimensions(sketch, {
-    textSize: textSize * 0.55,
-    text: 'github'
-  })
+  const githubTextSettings = {
+    text: 'github',
+    textSize: textSize * 0.55
+  }
+  const githubButtonDimensions = setTextDimensions(sketch, githubTextSettings)
   const githubButtonBodySettings: RectBodySettings = {
     x: titleBodySettings.x + 50,
     y: titleBodySettings.y + 50,
@@ -271,12 +262,8 @@ export const createProjectGroup = (sketch: p5, environment: ProjectEnv, modifier
   }
   const githubButton = new LinkButton(sketch, {
     bodySettings: githubButtonBodySettings,
-    textSettings: {
-      text: 'github',
-      textSize: textSize * 0.55
-    },
+    textSettings: githubTextSettings,
     address: githubAddress
   })
   addToWorld(world, githubButton, buttons)
-
 }

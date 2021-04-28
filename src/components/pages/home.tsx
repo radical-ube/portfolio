@@ -23,6 +23,12 @@ type State = {
   }
 }
 
+const mapState = (state: State) => {
+  return {
+    currentPage: state.currentPage
+  }
+}
+
 const Home = (props: Props) => {
   const ref = React.useRef<HTMLDivElement>(null!)
   const { currentPage } = props
@@ -52,12 +58,6 @@ const Home = (props: Props) => {
   }, [currentPage])
 
   return <div ref={ref} />
-}
-
-const mapState = (state: State) => {
-  return {
-    currentPage: state.currentPage
-  }
 }
 
 export default connect(mapState)(Home)
