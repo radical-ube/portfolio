@@ -5,7 +5,6 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import {
-  NavEnv,
   LoadedImageData
 } from './types'
 
@@ -16,33 +15,15 @@ import {
 } from './utilities'
 
 import {
+  navEnv,
   setupNav,
   setupFrame,
-  resetNavFrame
+  resetNavFrame,
+  imageData
 } from './setups'
 
 import { setCurrentPage } from '../store/page'
 import { setLoadedImages } from '../store/images'
-
-// type Dispatch = {
-//   setCurrentPage: (page: string) => void,
-//   setLoadedImages: (images: LoadedImageData[]) => void
-// }
-
-const imageData = [
-  {
-    key: 'rainbow',
-    object: 'images/rainbowonme.png'
-  },
-  {
-    key: 'ekopique',
-    object: 'images/ekopique.png'
-  },
-  {
-    key: 'portfolio',
-    object: 'images/portfolio.png'
-  }
-]
 
 
 const Navbar = (props: any) => {
@@ -50,31 +31,11 @@ const Navbar = (props: any) => {
   const { setCurrentPage, setLoadedImages } = props
 
   useEffect(() => {  
-    const engine = Matter.Engine.create()
-    const world = engine.world
+    const {engine, world, width, height, buttons, bgColor } = navEnv
 
     const Sketch = (sketch: p5) => {
-      const environment: NavEnv = {
-        engine,
-        world,
-        bgColor: '#282c34',
-        width: window.innerWidth,
-        height: window.innerHeight * 0.15,
-        bodies: [],
-        boundaries: [],
-        constraints: [],
-        tabs: [
-          'home', 
-          'about', 
-          'projects', 
-          'experience', 
-          'contact'
-        ],
-        buttons: []
-      }
-  
       const handleClick = () => {
-          environment.buttons.forEach(button => {
+          buttons.forEach(button => {
             if (button.mouseInBounds) {
               setCurrentPage(button.textSettings.text)
             }
@@ -88,20 +49,20 @@ const Navbar = (props: any) => {
       sketch.setup = () => {
         Matter.Engine.clear(engine)
         Matter.World.clear(world, false)
-        const canvas = sketch.createCanvas(environment.width, environment.height)
+        const canvas = sketch.createCanvas(width, height)
         canvas.mouseClicked(handleClick)
-        setupFrame(environment)
-        setupNav(sketch, environment)
+        setupFrame(navEnv)
+        setupNav(sketch, navEnv)
       }
       sketch.draw = () => {
-        sketch.background(environment.bgColor)
+        sketch.background(bgColor)
         Matter.Engine.update(engine)
-        renderGroup(environment.buttons)
-        checkGroupForMouse(environment.buttons)
+        renderGroup(buttons)
+        checkGroupForMouse(buttons)
       }
       sketch.windowResized = () => {
-        resetNavFrame(sketch, environment)
-        setupFrame(environment)
+        resetNavFrame(sketch, navEnv)
+        setupFrame(navEnv)
       }
     }
 

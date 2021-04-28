@@ -17,8 +17,13 @@ import {
 
 import {
   setupFrame,
-  sketchWindowResized
-} from './general'
+  sketchWindowResized,
+  engine,
+  world,
+  bgColor,
+  width,
+  height
+} from './defaults'
 
 const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
   const { width, height, world, buttons, bodies } = environment
@@ -110,15 +115,15 @@ const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
 
 }
 
-const engine = Matter.Engine.create()
-const world = engine.world
+// const engine = Matter.Engine.create()
+// const world = engine.world
 
 export const experienceEnv = {
   engine,
   world,
-  bgColor: '#282c34',
-  width: window.innerWidth,
-  height: window.innerHeight * 0.85,
+  bgColor,
+  width,
+  height,
   bodies: [],
   boundaries: [],
   buttons: [],

@@ -10,7 +10,6 @@ import {
 import {
   setTextDimensions,
   addToWorld,
-  defaultColor,
   clearGroup,
   createColorParticles,
   renderGroup,
@@ -19,8 +18,14 @@ import {
 
 import {
   setupFrame,
-  sketchWindowResized
-} from './general'
+  sketchWindowResized,
+  engine,
+  world,
+  bgColor,
+  width,
+  height,
+  defaultColor
+} from './defaults'
 
 
 const setupAbout = (sketch: p5, environment: AboutEnv) => {
@@ -89,15 +94,12 @@ const setupAbout = (sketch: p5, environment: AboutEnv) => {
   })
 }
 
-const engine = Matter.Engine.create()
-const world = engine.world
-
 export const aboutEnv = {
   engine,
   world,
-  bgColor: '#282c34',
-  width: window.innerWidth,
-  height: window.innerHeight * 0.85,
+  bgColor,
+  width,
+  height,
   bodies: [],
   boundaries: [],
   particles: []
@@ -113,14 +115,15 @@ const aboutSetup = (sketch: p5, environment: AboutEnv) => {
 }
 
 const aboutDraw = (sketch: p5, environment: AboutEnv) => {
-  sketch.background(environment.bgColor)
+  const { bgColor, engine, bodies, particles } = environment
+  sketch.background(bgColor)
   Matter.Engine.update(engine)
   if (sketch.frameCount % 4 === 0) {
     createColorParticles(sketch, environment)
   }
-  renderGroup(environment.bodies)
-  renderGroup(environment.particles)
-  checkGroupForRemoval(world, environment.particles)
+  renderGroup(bodies)
+  renderGroup(particles)
+  checkGroupForRemoval(world, particles)
 }
 
 export const aboutFns = {

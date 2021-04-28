@@ -7,7 +7,7 @@ import {
   Contact, 
   Projects, 
   Experience, 
-  Page 
+  Home 
 } from './pages'
 
 import {
@@ -34,7 +34,7 @@ const Routes = (props: Props) => {
   return (
     <div>
       {tab === 'home' ? (
-        <Page />
+        <Home />
       ) : tab === 'about' ? (
         <About />
       ) : tab === 'projects' ? (
@@ -48,7 +48,7 @@ const Routes = (props: Props) => {
       ) : tab === 'contact' ? (
         <Contact />
       ) : (
-        <Page />
+        <Home />
       )}
     </div>
   )

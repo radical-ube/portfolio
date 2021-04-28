@@ -8,6 +8,10 @@ import {
   getRandomInt
 } from './math'
 
+import {
+  defaultColor
+} from '../setups'
+
 const getRedColor = (): Color => {
   return {
     hue: getRandomInt(347, 353),
@@ -54,12 +58,6 @@ const getPurpleColor = (): Color => {
     saturation: getRandomInt(210, 246),
     lightness: getRandomInt(52, 58),
   }
-}
-
-export const defaultColor: Color = {
-  hue: 0,
-  saturation: 0,
-  lightness: 94
 }
 
 export const randomColor = (): Color => {

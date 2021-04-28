@@ -1,14 +1,49 @@
 import p5 from 'p5'
+import Matter from 'matter-js'
 
 import {
   FramedEnv,
   Boundary,
-  PhysicalEnv
+  PhysicalEnv,
+  Alignment,
+  Color
 } from '../types'
 
 import {
   addToWorld
 } from '../utilities'
+
+export const engine = Matter.Engine.create()
+export const world = engine.world
+export const bgColor = '#282c34'
+export const width = window.innerWidth
+export const height = window.innerHeight * 0.85
+
+export const defaultColor: Color = {
+  hue: 0,
+  saturation: 0,
+  lightness: 94
+}
+
+export const defaultAlignment: Alignment = {
+  horizontal: 'center',
+  vertical: 'center'
+}
+
+export const imageData = [
+  {
+    key: 'rainbow',
+    object: 'images/rainbowonme.png'
+  },
+  {
+    key: 'ekopique',
+    object: 'images/ekopique.png'
+  },
+  {
+    key: 'portfolio',
+    object: 'images/portfolio.png'
+  }
+]
 
 export const setupFrame = (environment: FramedEnv) => {
   const { width, height, world, boundaries } = environment
@@ -77,3 +112,4 @@ export const sketchWindowResized = (sketch: p5, environment: PhysicalEnv) => {
   resetPageFrame(sketch, environment)
   setupFrame(environment)
 }
+

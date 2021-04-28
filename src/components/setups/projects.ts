@@ -14,8 +14,13 @@ import {
 
 import {
   setupFrame,
-  sketchWindowResized
-} from './general'
+  sketchWindowResized,
+  engine,
+  world,
+  bgColor,
+  width,
+  height
+} from './defaults'
 
 
 export const rainbowData = {
@@ -45,15 +50,12 @@ const setupProjects = (sketch: p5, environment: ProjectEnv, modifiers: SetupModi
   createProjectGroup(sketch, environment, modifiers)
 }
 
-const engine = Matter.Engine.create()
-const world = engine.world
-
 export const projectEnv: ProjectEnv = {
   engine,
   world,
-  bgColor: '#282c34',
-  width: window.innerWidth,
-  height: window.innerHeight * 0.75,
+  bgColor,
+  width,
+  height: height * 0.85,
   bodies: [],
   boundaries: [],
   buttons: [],

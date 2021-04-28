@@ -9,7 +9,15 @@ import {
 import {
   defaultColor,
   defaultAlignment
-} from '.'
+} from '../setups'
+
+export const transformBody = (sketch: p5, body: Matter.Body) => {
+  const position = body.position
+  const angle = body.angle
+
+  sketch.translate(position.x, position.y)
+  sketch.rotate(angle)
+}
 
 export const renderText = (sketch: p5, textSettings: TextSettings) => {
   const { textSize, text, color = defaultColor, alignment = defaultAlignment, boxWidth, boxHeight } = textSettings

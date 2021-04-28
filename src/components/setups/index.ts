@@ -1,4 +1,4 @@
-export * from './general'
+export * from './defaults'
 export * from './navbar'
 export * from './home'
 export * from './about'

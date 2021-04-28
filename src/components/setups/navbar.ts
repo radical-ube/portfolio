@@ -1,4 +1,5 @@
 import p5 from 'p5'
+import Matter from 'matter-js'
 
 import {
   NavEnv,
@@ -12,9 +13,39 @@ import {
 import {
   addToWorld,
   setTextDimensions,
-  defaultAlignment,
   randomColor
 } from '../utilities'
+
+import {
+  defaultAlignment
+} from '../setups'
+
+import {
+  bgColor,
+  width
+} from './'
+
+const engine = Matter.Engine.create()
+const world = engine.world
+
+export const navEnv: NavEnv = {
+  engine,
+  world,
+  bgColor,
+  width,
+  height: window.innerHeight * 0.15,
+  bodies: [],
+  boundaries: [],
+  constraints: [],
+  tabs: [
+    'home', 
+    'about', 
+    'projects', 
+    'experience', 
+    'contact'
+  ],
+  buttons: []
+}
 
 export const setupNav = (sketch: p5, environment: NavEnv) => {
   const { width, height, tabs, buttons, world, constraints, boundaries } = environment

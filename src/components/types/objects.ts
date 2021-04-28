@@ -17,9 +17,12 @@ import {
   renderText,
   renderOutline,
   renderHighlight,
-  defaultColor,
   renderImage
 } from '../utilities'
+
+import {
+  defaultColor
+} from '../setups'
 
 export class Boundary {
   body: Matter.Body

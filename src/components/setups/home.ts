@@ -13,8 +13,13 @@ import {
 
 import {
   sketchWindowResized,
-  setupFrame
-} from './general'
+  setupFrame,
+  engine,
+  world,
+  bgColor,
+  width,
+  height
+} from './defaults'
 
 const setupHome = (sketch: p5, environment: PhysicalEnv) => {
   let homeText1 = 'hello world, my name is ube'
@@ -29,15 +34,12 @@ const setupHome = (sketch: p5, environment: PhysicalEnv) => {
   })
 }
 
-const engine = Matter.Engine.create()
-const world = engine.world
-
 export const homeEnv: PhysicalEnv = {
   engine,
   world,
-  bgColor: '#282c34',
-  width: window.innerWidth,
-  height: window.innerHeight * 0.85,
+  bgColor,
+  width,
+  height,
   bodies: [],
   boundaries: [],
 }
@@ -53,7 +55,7 @@ const homeSetup = (sketch: p5, environment: PhysicalEnv) => {
 
 const homeDraw = (sketch: p5, environment: PhysicalEnv) => {
   sketch.background(environment.bgColor)
-  Matter.Engine.update(engine)
+  Matter.Engine.update(environment.engine)
   renderGroup(environment.bodies)
 }
 

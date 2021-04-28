@@ -20,8 +20,13 @@ import {
 
 import {
   setupFrame,
-  sketchWindowResized
-} from './general'
+  sketchWindowResized,
+  engine,
+  world,
+  bgColor,
+  width,
+  height
+} from './defaults'
 
 const setupContact = (sketch: p5, environment: ContactEnv) => {
   const { width, height, world, boundaries, buttons, constraints } = environment
@@ -99,15 +104,12 @@ const setupContact = (sketch: p5, environment: ContactEnv) => {
   })
 }
 
-const engine = Matter.Engine.create()
-const world = engine.world
-
 export const contactEnv = {
   engine,
   world,
-  bgColor: '#282c34',
-  width: window.innerWidth,
-  height: window.innerHeight * 0.85,
+  bgColor,
+  width,
+  height,
   bodies: [],
   boundaries: [],
   constraints: [],
