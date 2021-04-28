@@ -7,10 +7,9 @@ import {
   CircleBodySettings,
   TextSettings,
   TextBoxSettings,
-  ButtonSettings,
-  ButtonBodySettings,
   BubbleButtonSettings,
-  LinkButtonSettings
+  LinkButtonSettings,
+  ImageSettings
 } from './'
 
 import {
@@ -18,9 +17,12 @@ import {
   renderText,
   renderOutline,
   renderHighlight,
-  defaultColor,
-  setTextDimensions,
+  renderImage
 } from '../utilities'
+
+import {
+  defaultColor
+} from '../setups'
 
 export class Boundary {
   body: Matter.Body
@@ -89,9 +91,9 @@ export class TextBox extends RectBody {
 
 export class Button extends TextBox {
   mouseInBounds: boolean
-  bodySettings: ButtonBodySettings
+  bodySettings: RectBodySettings
 
-  constructor(sketch: p5, settings: ButtonSettings) {
+  constructor(sketch: p5, settings: TextBoxSettings) {
     super (sketch, settings)
 
     const { x, y, w, h, padding = 0, options } = settings.bodySettings
@@ -233,115 +235,22 @@ export class Bubble extends CircleBody {
   }
 }
 
+export class ImageBox extends RectBody {
+  image: HTMLImageElement
+  settings: ImageSettings
 
-// --- TBD ---
-export class Project {
-  sketch: p5
-  body: Matter.Body
-  mouseInBounds: boolean
-  description: TextBox
-  webButton: Button
-  githubButton: Button
-  bodySettings: any
+  constructor (sketch: p5, settings: ImageSettings) {
+    super(sketch, settings.bodySettings)
 
-  constructor (sketch: p5, settings: any) {
-    const { x, y, w, h, options, description, textSize, website, github } = settings
-  
-    this.sketch = sketch
-    this.bodySettings = settings
-
-    const paraDimensions = setTextDimensions(sketch, {
-      textSize,
-      text: description
-    })
-
-    const webButtonDimensions = setTextDimensions(sketch, {
-      textSize,
-      text: website
-    })
-
-    const githubButtonDimensions = setTextDimensions(sketch, {
-      textSize,
-      text: github
-    })
-  
-    this.description = new TextBox(sketch, {
-      bodySettings: {
-        x,
-        y,
-        w: paraDimensions.w,
-        h: paraDimensions.h,
-        shape: 'rect',
-        options
-      },
-      textSettings: {
-        text: description,
-        textSize,
-        boxWidth: w / 2,
-        boxHeight: h / 2
-      },
-    })
-  
-    this.webButton = new Button(sketch, {
-      bodySettings: {
-        x: x - 50,
-        y: y + 50,
-        w: webButtonDimensions.w,
-        h: webButtonDimensions.h,
-        options,
-        shape: 'rect'
-      },
-      
-      textSettings: {
-        text: 'Website',
-        textSize,
-        // address: website
-      }
-      
-    })
-  
-    this.githubButton = new Button(sketch, {
-      bodySettings: {
-        x: x + 50,
-        y: y + 50,
-        w: githubButtonDimensions.w,
-        h: githubButtonDimensions.h,
-        options,
-        shape: 'rect'
-      },
-      textSettings: {
-        text: 'Github',
-        textSize,
-        // address: github
-      },
-    })
-    
-    this.body = Matter.Bodies.rectangle(x, y, w, h, options)
-    this.mouseInBounds = false
-    
+    this.settings = settings
+    this.image = settings.image
   }
-  
-  // show() {
-  //   this.sketch.push()
-  //   transformBody(this.sketch, this.body)
-  //   renderImage(this.sketch, {
-  //     image: this.bodySettings.image,
-  //     dimensions: {
-  //       w: this.bodySettings.w,
-  //       h: this.bodySettings.h
-  //     }
-  //   })
-  //   if (this.mouseInBounds) {
-  //     renderLowlight(this.sketch, this.bodySettings)
-  //   }
-  //   // else {
-  //   //   this.webButton.remove(this.bodySettings.world)
-  //   //   this.githubButton.remove(this.bodySettings.world)
-  //   // }
-  //   this.sketch.pop()
-  // }
 
-  // checkMouseInBounds(mousePosition) => {
-  //   this.mouseInBounds = checkMouseInBounds(this.body, mousePosition, this.bodyConfig)
-  // }
+  show() {
+    this.sketch.push()
+    transformBody(this.sketch, this.body)
+    renderImage(this.sketch, this.settings)
+    this.sketch.pop()
+  }
 }
+

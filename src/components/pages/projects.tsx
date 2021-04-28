@@ -4,33 +4,62 @@ import p5 from 'p5'
 import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
-const Project = (props: any) => {
+import {
+  ProjectEnv,
+  LinkButton,
+  SketchFunctions,
+  LoadedImageData,
+  ProjectData
+} from '../types'
+
+
+type OwnProps = {
+  projectData: ProjectData
+}
+
+type StoreProps = {
+  currentPage: {
+    env: ProjectEnv,
+    sketch: SketchFunctions
+  },
+  images: LoadedImageData[]
+}
+
+type Props = OwnProps & StoreProps
+
+type State = {
+  currentPage: {
+    env: ProjectEnv,
+    sketch: SketchFunctions
+  },
+  loadedImages: LoadedImageData[]
+}
+
+const Project = (props: Props) => {
   const ref = React.useRef<HTMLDivElement>(null!)
-  const { currentPage } = props
+  const { currentPage, projectData, images } = props
   
   useEffect(() => {
     const { env, sketch } = currentPage
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
-  
+    const { world, engine, width, height, buttons } = env
+    const modifiers = { projectData, images}
+
     const projectHandleClick = () => {
-      // env.buttons.forEach((button: Button) => {
-      //   if (button.mouseInBounds && button.textSettings.address) {
-      //     document.location.assign(button.textSettings.address)
-      //   }
-      // })
+      buttons.forEach((button: LinkButton) => {
+        if (button.mouseInBounds && button.address) {
+          document.location.assign(button.address)
+        }
+      })
     }
   
     const Sketch = (sketch: p5) => {
-      sketch.preload = () => {
-        env.images.rainbow = sketch.loadImage('images/rainbowonme.png')
-        env.images.ekopique = sketch.loadImage('images/ekopique.png')
-      }
       sketch.setup = () => {
-        Matter.World.clear(env.world, false)
-        Matter.Engine.clear(env.engine)
-        const canvas = sketch.createCanvas(env.w, env.h)
+        Matter.World.clear(world, false)
+        Matter.Engine.clear(engine)
+        const canvas = sketch.createCanvas(width, height)
         canvas.mouseClicked(projectHandleClick)
-        sketchSetup(sketch, env)
+        sketchSetup(sketch, env, modifiers)
       }
       sketch.draw = () => {
         sketchDraw(sketch, env)
@@ -44,14 +73,15 @@ const Project = (props: any) => {
     return function cleanup() {
       p5canvas.remove()
     }
-  }, [currentPage])
+  }, [currentPage, images, projectData])
 
   return <div ref={ref} />
 }
 
-const mapState = (state: any) => {
+const mapState = (state: State) => {
   return {
-    currentPage: state.currentPage
+    currentPage: state.currentPage,
+    images: state.loadedImages
   }
 }
 

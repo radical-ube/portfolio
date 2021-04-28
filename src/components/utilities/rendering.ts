@@ -3,12 +3,21 @@ import {
   TextSettings,
   RectBodySettings,
   CircleBodySettings,
-  RenderedObject
+  RenderedObject,
+  ImageSettings
 } from '../types'
 import {
   defaultColor,
   defaultAlignment
-} from '.'
+} from '../setups'
+
+export const transformBody = (sketch: p5, body: Matter.Body) => {
+  const position = body.position
+  const angle = body.angle
+
+  sketch.translate(position.x, position.y)
+  sketch.rotate(angle)
+}
 
 export const renderText = (sketch: p5, textSettings: TextSettings) => {
   const { textSize, text, color = defaultColor, alignment = defaultAlignment, boxWidth, boxHeight } = textSettings
@@ -55,7 +64,7 @@ export const renderHighlight = (sketch: p5, bodySettings: RectBodySettings | Cir
     case 'rect':
       const { w, h } = bodySettings as RectBodySettings
       sketch.rectMode('center')
-      sketch.rect(0, 0, w + (padding || 0), h + (padding || 0))
+      sketch.rect(0, 0, w + padding, h + padding)
       break
     case 'circle':
       const { r } = bodySettings as CircleBodySettings
@@ -70,40 +79,11 @@ export const renderGroup = (array: RenderedObject[]): void => {
   })
 }
 
-export const renderImage = (sketch: p5, imageSettings: any) => {
-  const { image, dimensions } = imageSettings
+export const renderImage = (sketch: p5, imageSettings: ImageSettings) => {
+  const { image, bodySettings } = imageSettings
+  const { w, h } = bodySettings
 
   sketch.imageMode('center')
-  sketch.image(image, 0, 0, dimensions.w, dimensions.h)
+  sketch.image(image, 0, 0, w, h)
 }
-
-export const renderProjectDescription = (projects: any[]) => {
-  projects.forEach(project => {
-    if (project.mouseInBounds) {
-      project.description.show()
-      project.webButton.show()
-      project.githubButton.show()
-    }
-  })
-}
-
-export const renderLowlight = (sketch: p5, bodySettings: RectBodySettings | CircleBodySettings) => {
-  const { padding = 0, shape } = bodySettings
-  sketch.colorMode('hsl')
-  sketch.noStroke()
-  sketch.fill(0, 0, 0, 0.8)
-  switch (shape) {
-    case 'rect':
-      const { w, h } = bodySettings as RectBodySettings
-      sketch.rectMode('center')
-      sketch.rect(0, 0, w + padding, h + padding)
-      break
-    case 'circle':
-      const { r } = bodySettings as CircleBodySettings
-      sketch.ellipse(0, 0, r + padding)
-      break
-  }
-}
-
-
 

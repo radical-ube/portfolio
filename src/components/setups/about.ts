@@ -4,13 +4,13 @@ import Matter from 'matter-js'
 import {
   AboutEnv,
   RectBodySettings,
-  TextBox
+  TextBox,
+  TextSettings
 } from '../types'
 
 import {
   setTextDimensions,
   addToWorld,
-  defaultColor,
   clearGroup,
   createColorParticles,
   renderGroup,
@@ -19,22 +19,28 @@ import {
 
 import {
   setupFrame,
-  sketchWindowResized
-} from './general'
+  sketchWindowResized,
+  engine,
+  world,
+  bgColor,
+  width,
+  height,
+  defaultColor
+} from './defaults'
 
 
 const setupAbout = (sketch: p5, environment: AboutEnv) => {
   const { world, width, height, bodies } = environment
 
-  const texts = [
-    'i am a colorful, non-binary, queer performing artist turned software engineer. i dance, i write, i do drag, and i code.',
+  const aboutTexts = [
+    'i am a colorful, queer non-binary performing artist turned software engineer. i dance, i write, i do drag, and i code.',
     'i think about illusion and reality and how to confuse the two. i believe in making fantasy come to life.',
     'as an engineer, coding feels like magic and i want to always remember the joy that technology can bring.',
     'as an artist, i think stories can be told with stillness as much as movement, and with color as much as grayscale.',
     'have you tried moving around the words on the home page?'
   ]
 
-  texts.forEach((text, index) => {
+  aboutTexts.forEach((text, index) => {
     let textSize = width * 0.015
     let x = width * 0.35
     let y = (height * 0.15) + (index * 110)
@@ -47,12 +53,19 @@ const setupAbout = (sketch: p5, environment: AboutEnv) => {
       angle *= -1
     }
 
-    const dimensions = setTextDimensions(sketch, {
+    const textSettings: TextSettings = {
       textSize,
       text,
       boxWidth,
-      boxHeight
-    })
+      boxHeight,
+      color: defaultColor,
+      alignment: {
+        horizontal: 'left',
+        vertical: 'top'
+      }
+    }
+
+    const dimensions = setTextDimensions(sketch, textSettings)
 
     const options = {
       friction: 0,
@@ -73,31 +86,18 @@ const setupAbout = (sketch: p5, environment: AboutEnv) => {
 
     const para = new TextBox(sketch, {
       bodySettings,
-      textSettings: {
-        textSize,
-        text,
-        boxWidth,
-        boxHeight,
-        color: defaultColor,
-        alignment: {
-          horizontal: 'left',
-          vertical: 'top'
-        }
-      }
+      textSettings
     })
     addToWorld(world, para, bodies)
   })
 }
 
-const engine = Matter.Engine.create()
-const world = engine.world
-
 export const aboutEnv = {
   engine,
   world,
-  bgColor: '#282c34',
-  width: window.innerWidth,
-  height: window.innerHeight * 0.85,
+  bgColor,
+  width,
+  height,
   bodies: [],
   boundaries: [],
   particles: []
@@ -113,14 +113,15 @@ const aboutSetup = (sketch: p5, environment: AboutEnv) => {
 }
 
 const aboutDraw = (sketch: p5, environment: AboutEnv) => {
-  sketch.background(environment.bgColor)
+  const { bgColor, engine, bodies, particles } = environment
+  sketch.background(bgColor)
   Matter.Engine.update(engine)
   if (sketch.frameCount % 4 === 0) {
     createColorParticles(sketch, environment)
   }
-  renderGroup(environment.bodies)
-  renderGroup(environment.particles)
-  checkGroupForRemoval(world, environment.particles)
+  renderGroup(bodies)
+  renderGroup(particles)
+  checkGroupForRemoval(world, particles)
 }
 
 export const aboutFns = {

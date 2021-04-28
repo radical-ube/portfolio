@@ -7,35 +7,54 @@ import {
   Contact, 
   Projects, 
   Experience, 
-  Page 
+  Home 
 } from './pages'
 
-const Routes = (props: any) => {
+import {
+  rainbowData,
+  ekopiqueData,
+  portfolioData
+} from '../components/setups/'
+
+type Props = {
+  currentPage: {
+    tab: string
+  }
+}
+
+type State = {
+  currentPage: {
+    tab: string
+  }
+}
+
+const Routes = (props: Props) => {
   const { currentPage } = props
   const { tab } = currentPage
   return (
     <div>
       {tab === 'home' ? (
-        <Page />
+        <Home />
       ) : tab === 'about' ? (
         <About />
       ) : tab === 'projects' ? (
-        <Projects />
-        // <Page />
+        <div>
+          <Projects projectData = {portfolioData}/>
+          <Projects projectData = {ekopiqueData}/>
+          <Projects projectData = {rainbowData}/>
+        </div>
       ) : tab === 'experience' ? (
         <Experience />
-        // <Page />
       ) : tab === 'contact' ? (
         <Contact />
-        // <Page />
       ) : (
-        <Page />
+        <Home />
       )}
     </div>
   )
 }
 
-const mapState = (state: any) => {
+const mapState = (state: State) => {
   return {
     currentPage: state.currentPage
   }

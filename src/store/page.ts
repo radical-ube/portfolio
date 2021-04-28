@@ -11,6 +11,10 @@ import {
   contactFns
 } from '../components/setups'
 
+// import {
+//   CurrentPage
+// } from '../components/types'
+
 const initialState = {
   tab: 'home',
   env: homeEnv,

@@ -5,10 +5,25 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import {
-  State
+  AboutEnv,
+  SketchFunctions
 } from '../types'
 
-const About = (props: State) => {
+type Props = {
+  currentPage: {
+    env: AboutEnv,
+    sketch: SketchFunctions
+  }
+}
+
+type State = {
+  currentPage: {
+    env: AboutEnv,
+    sketch: SketchFunctions
+  }
+}
+
+const About = (props: Props) => {
   const ref = React.useRef<HTMLDivElement>(null!)
   const { currentPage } = props
 

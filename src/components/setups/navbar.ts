@@ -1,20 +1,52 @@
 import p5 from 'p5'
+import Matter from 'matter-js'
 
 import {
   NavEnv,
   Boundary,
-  ButtonSettings,
+  TextBoxSettings,
   Button,
   Spring,
-  FramedEnv
+  FramedEnv,
+  RectBodySettings
 } from '../types'
 
 import {
   addToWorld,
   setTextDimensions,
-  defaultAlignment,
   randomColor
 } from '../utilities'
+
+import {
+  defaultAlignment
+} from '../setups'
+
+import {
+  bgColor,
+  width
+} from './'
+
+const engine = Matter.Engine.create()
+const world = engine.world
+
+export const navEnv: NavEnv = {
+  engine,
+  world,
+  bgColor,
+  width,
+  height: window.innerHeight * 0.15,
+  bodies: [],
+  boundaries: [],
+  constraints: [],
+  tabs: [
+    'home', 
+    'about', 
+    'projects', 
+    'experience', 
+    'contact'
+  ],
+  buttons: []
+}
 
 export const setupNav = (sketch: p5, environment: NavEnv) => {
   const { width, height, tabs, buttons, world, constraints, boundaries } = environment
@@ -39,33 +71,31 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
 
   for (let i = 0; i < tabs.length; i++) {
     const word = tabs[i]
-    const dimensions = setTextDimensions(sketch, {
+    const color = randomColor()
+    const textSettings = {
       textSize,
       text: word,
+      color,
       alignment: defaultAlignment
-    })
-    const color = randomColor()
-    const buttonSettings: ButtonSettings = {
-      bodySettings: {
-        x: x + (40 * i),
-        y,
-        w: dimensions.w,
-        h: dimensions.h,
-        options: {
-          friction: 0.4,
-          restitution: 0.8,
-          isStatic: false
-        },
-        padding: dimensions.padding,
-        shape: 'rect',
-        color
+    }
+    const dimensions = setTextDimensions(sketch, textSettings)
+    const bodySettings: RectBodySettings = {
+      x: x + (40 * i),
+      y,
+      w: dimensions.w,
+      h: dimensions.h,
+      options: {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
       },
-      textSettings: {
-        textSize,
-        text: word,
-        color,
-        alignment: defaultAlignment
-      },
+      padding: dimensions.padding,
+      shape: 'rect',
+      color
+    }
+    const buttonSettings: TextBoxSettings = {
+      bodySettings,
+      textSettings,
     }
     const button = new Button(sketch, buttonSettings)
     addToWorld(world, button, buttons)

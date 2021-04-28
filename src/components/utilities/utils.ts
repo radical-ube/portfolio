@@ -4,20 +4,16 @@ import Matter from 'matter-js'
 import { 
   TextSettings,
   Button,
-  Alignment,
   CircleBodySettings,
   Bubble
 } from '../types'
 
 import {
   distanceBetweenTwoPoints,
-  rectAreaFromVertices
-} from '.'
+  rectAreaFromVertices,
+} from './'
 
-export const defaultAlignment: Alignment = {
-  horizontal: 'center',
-  vertical: 'center'
-}
+
 
 export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
   const { text, textSize, boxWidth, boxHeight, padding = 10 } = textSettings
@@ -28,7 +24,6 @@ export const setTextDimensions = (sketch: p5, textSettings: TextSettings) => {
     padding: padding
   }
 }
-
 
 export const checkMouseInBounds = (obj: Button | Bubble) => {
   const { bodySettings, body, sketch } = obj
@@ -75,3 +70,9 @@ export const clearGroup = (group: any[]) => {
   while (group.length) group.shift()
 }
 
+export const preloadImages = (sketch: p5, images: any[]) => {
+  return images.map(image => {
+    image.object = sketch.loadImage(image.object)
+    return image
+  })
+}

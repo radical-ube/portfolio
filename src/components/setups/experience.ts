@@ -17,8 +17,13 @@ import {
 
 import {
   setupFrame,
-  sketchWindowResized
-} from './general'
+  sketchWindowResized,
+  engine,
+  world,
+  bgColor,
+  width,
+  height
+} from './defaults'
 
 const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
   const { width, height, world, buttons, bodies } = environment
@@ -58,10 +63,11 @@ const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
   let bubbleSize = width * 0.015
 
   credentials.forEach((credential, index) => {
-    const dimensions = setTextDimensions(sketch, {
+    const textSettings = {
+      text: credential.type,
       textSize: bubbleSize,
-      text: credential.type
-    })
+    }
+    const dimensions = setTextDimensions(sketch, textSettings)
     const button = new BubbleButton(sketch, {
       bodySettings: {
         x: xCreds + (xCreds * index),
@@ -74,10 +80,7 @@ const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
         },
         shape: 'rect'
       },
-      textSettings: {
-        text: credential.type,
-        textSize: bubbleSize,
-      },
+      textSettings,
       bubbleText: credential.text
     })
     addToWorld(world, button, buttons)
@@ -110,15 +113,12 @@ const setupExperience = (sketch: p5, environment: ExperienceEnv) => {
 
 }
 
-const engine = Matter.Engine.create()
-const world = engine.world
-
 export const experienceEnv = {
   engine,
   world,
-  bgColor: '#282c34',
-  width: window.innerWidth,
-  height: window.innerHeight * 0.85,
+  bgColor,
+  width,
+  height,
   bodies: [],
   boundaries: [],
   buttons: [],
@@ -127,7 +127,7 @@ export const experienceEnv = {
 
 const experienceSetup = (sketch: p5, environment: ExperienceEnv) => {
   const { world } = environment
-  world.gravity.y *= -1
+  world.gravity.y = -1
   setupFrame(environment)
   setupExperience(sketch, environment)
 }

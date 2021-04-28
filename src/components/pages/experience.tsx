@@ -10,18 +10,31 @@ import {
 
 import {
   BubbleButton,
-  State,
-  ExperienceEnv
+  ExperienceEnv,
+  SketchFunctions
 } from '../types'
 
-const Experience = (props: State) => {
+type Props = {
+  currentPage: {
+    env: ExperienceEnv,
+    sketch: SketchFunctions
+  }
+}
+
+type State = {
+  currentPage: {
+    env: ExperienceEnv,
+    sketch: SketchFunctions
+  }
+}
+
+const Experience = (props: Props) => {
   const ref = React.useRef<HTMLDivElement>(null!)
   const { currentPage } = props
 
   useEffect(() => {
-    const { sketch } = currentPage
-    const env = currentPage.env as ExperienceEnv
-    const { buttons, bubbles } = env
+    const { env, sketch } = currentPage
+    const { world, engine, width, height, buttons, bubbles } = env
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
   
     const Sketch = (sketch: p5) => {
@@ -35,7 +48,7 @@ const Experience = (props: State) => {
         for (let i = 0; i < env.bubbles.length; i++) {
           let bubble = bubbles[i]
           if (bubble.mouseInBounds) {
-            Matter.World.remove(env.world, bubble.body)
+            Matter.World.remove(world, bubble.body)
             bubbles.splice(i, 1)
             i--
           }
@@ -43,9 +56,9 @@ const Experience = (props: State) => {
       }
   
       sketch.setup = () => {
-        Matter.World.clear(env.world, false)
-        Matter.Engine.clear(env.engine)
-        const canvas = sketch.createCanvas(env.width, env.height)
+        Matter.World.clear(world, false)
+        Matter.Engine.clear(engine)
+        const canvas = sketch.createCanvas(width, height)
         canvas.mouseClicked(handleClick)
         sketchSetup(sketch, env)
       }
