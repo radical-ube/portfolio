@@ -7,7 +7,8 @@ import {
   TextBoxSettings,
   Button,
   Spring,
-  FramedEnv
+  FramedEnv,
+  RectBodySettings
 } from '../types'
 
 import {
@@ -70,33 +71,31 @@ export const setupNav = (sketch: p5, environment: NavEnv) => {
 
   for (let i = 0; i < tabs.length; i++) {
     const word = tabs[i]
-    const dimensions = setTextDimensions(sketch, {
+    const color = randomColor()
+    const textSettings = {
       textSize,
       text: word,
+      color,
       alignment: defaultAlignment
-    })
-    const color = randomColor()
+    }
+    const dimensions = setTextDimensions(sketch, textSettings)
+    const bodySettings: RectBodySettings = {
+      x: x + (40 * i),
+      y,
+      w: dimensions.w,
+      h: dimensions.h,
+      options: {
+        friction: 0.4,
+        restitution: 0.8,
+        isStatic: false
+      },
+      padding: dimensions.padding,
+      shape: 'rect',
+      color
+    }
     const buttonSettings: TextBoxSettings = {
-      bodySettings: {
-        x: x + (40 * i),
-        y,
-        w: dimensions.w,
-        h: dimensions.h,
-        options: {
-          friction: 0.4,
-          restitution: 0.8,
-          isStatic: false
-        },
-        padding: dimensions.padding,
-        shape: 'rect',
-        color
-      },
-      textSettings: {
-        textSize,
-        text: word,
-        color,
-        alignment: defaultAlignment
-      },
+      bodySettings,
+      textSettings,
     }
     const button = new Button(sketch, buttonSettings)
     addToWorld(world, button, buttons)

@@ -32,15 +32,15 @@ import {
 const setupAbout = (sketch: p5, environment: AboutEnv) => {
   const { world, width, height, bodies } = environment
 
-  const texts = [
-    'i am a colorful, non-binary, queer performing artist turned software engineer. i dance, i write, i do drag, and i code.',
+  const aboutTexts = [
+    'i am a colorful, queer non-binary performing artist turned software engineer. i dance, i write, i do drag, and i code.',
     'i think about illusion and reality and how to confuse the two. i believe in making fantasy come to life.',
     'as an engineer, coding feels like magic and i want to always remember the joy that technology can bring.',
     'as an artist, i think stories can be told with stillness as much as movement, and with color as much as grayscale.',
     'have you tried moving around the words on the home page?'
   ]
 
-  texts.forEach((text, index) => {
+  aboutTexts.forEach((text, index) => {
     let textSize = width * 0.015
     let x = width * 0.35
     let y = (height * 0.15) + (index * 110)
