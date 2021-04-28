@@ -3,8 +3,7 @@ import Matter from 'matter-js'
 
 import {
   ProjectEnv, 
-  ProjectData,
-  LoadedImageData
+  SetupModifiers
 } from '../types'
 
 import {
@@ -42,8 +41,8 @@ export const portfolioData = {
   githubAddress: 'https://github.com/radical-ube/portfolio'
 }
 
-const setupProjects = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: any[]) => {
-  createProjectGroup(sketch, environment, data, images)
+const setupProjects = (sketch: p5, environment: ProjectEnv, modifiers: SetupModifiers) => {
+  createProjectGroup(sketch, environment, modifiers)
 }
 
 const engine = Matter.Engine.create()
@@ -60,11 +59,11 @@ export const projectEnv: ProjectEnv = {
   buttons: [],
 }
 
-const projectSetup = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: LoadedImageData[]) => {
+const projectSetup = (sketch: p5, environment: ProjectEnv, modifiers: SetupModifiers) => {
   const { world } = environment
   world.gravity.y = 1
   setupFrame(environment)
-  setupProjects(sketch, environment, data, images)
+  setupProjects(sketch, environment, modifiers)
 }
 
 const projectDraw = (sketch: p5, environment: ProjectEnv) => {

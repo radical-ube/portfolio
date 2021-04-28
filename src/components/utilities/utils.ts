@@ -13,8 +13,7 @@ import {
   RectBodySettings,
   TextBox,
   LinkButton,
-  ProjectData,
-  LoadedImageData
+  SetupModifiers
 } from '../types'
 
 import {
@@ -85,9 +84,10 @@ export const clearGroup = (group: any[]) => {
   while (group.length) group.shift()
 }
 
-export const createProjectGroup = (sketch: p5, environment: ProjectEnv, data: ProjectData, images: LoadedImageData[]) => {
+export const createProjectGroup = (sketch: p5, environment: ProjectEnv, modifiers: SetupModifiers) => {
   const { width, height, world, bodies, buttons } = environment
-  const { imageKey, titleText, descriptionText, websiteAddress, githubAddress } = data
+  const { projectData, images } = modifiers
+  const { imageKey, titleText, descriptionText, websiteAddress, githubAddress } = projectData
 
   const imageWidth = width * 0.45
   const imageHeight = imageWidth * (9 / 16)

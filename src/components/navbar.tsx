@@ -24,6 +24,11 @@ import {
 import { setCurrentPage } from '../store/page'
 import { setLoadedImages } from '../store/images'
 
+// type Dispatch = {
+//   setCurrentPage: (page: string) => void,
+//   setLoadedImages: (images: LoadedImageData[]) => void
+// }
+
 const imageData = [
   {
     key: 'rainbow',

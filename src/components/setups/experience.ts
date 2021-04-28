@@ -127,7 +127,7 @@ export const experienceEnv = {
 
 const experienceSetup = (sketch: p5, environment: ExperienceEnv) => {
   const { world } = environment
-  world.gravity.y *= -1
+  world.gravity.y = -1
   setupFrame(environment)
   setupExperience(sketch, environment)
 }

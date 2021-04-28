@@ -5,20 +5,46 @@ import Matter from 'matter-js'
 import { connect } from 'react-redux'
 
 import {
-  State, 
   ProjectEnv,
-  LinkButton
+  LinkButton,
+  SketchFunctions,
+  LoadedImageData,
+  ProjectData
 } from '../types'
 
-const Project = (props: any) => {
+
+type OwnProps = {
+  projectData: ProjectData
+}
+
+type StoreProps = {
+  currentPage: {
+    env: ProjectEnv,
+    sketch: SketchFunctions
+  },
+  images: LoadedImageData[]
+}
+
+type Props = OwnProps & StoreProps
+
+type State = {
+  currentPage: {
+    env: ProjectEnv,
+    sketch: SketchFunctions
+  },
+  loadedImages: LoadedImageData[]
+}
+
+const Project = (props: Props) => {
   const ref = React.useRef<HTMLDivElement>(null!)
   const { currentPage, projectData, images } = props
   
   useEffect(() => {
     const { env, sketch } = currentPage
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
-    const { buttons } = env as ProjectEnv
-  
+    const { world, engine, width, height, buttons } = env
+    const modifiers = { projectData, images}
+
     const projectHandleClick = () => {
       buttons.forEach((button: LinkButton) => {
         if (button.mouseInBounds && button.address) {
@@ -29,11 +55,11 @@ const Project = (props: any) => {
   
     const Sketch = (sketch: p5) => {
       sketch.setup = () => {
-        Matter.World.clear(env.world, false)
-        Matter.Engine.clear(env.engine)
-        const canvas = sketch.createCanvas(env.width, env.height)
+        Matter.World.clear(world, false)
+        Matter.Engine.clear(engine)
+        const canvas = sketch.createCanvas(width, height)
         canvas.mouseClicked(projectHandleClick)
-        sketchSetup(sketch, env, projectData, images)
+        sketchSetup(sketch, env, modifiers)
       }
       sketch.draw = () => {
         sketchDraw(sketch, env)

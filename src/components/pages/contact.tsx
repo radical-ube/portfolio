@@ -10,18 +10,32 @@ import {
 
 import {
   LinkButton,
-  State,
-  ContactEnv
+  ContactEnv,
+  SketchFunctions
 } from '../types'
 
+type Props = {
+  currentPage: {
+    env: ContactEnv,
+    sketch: SketchFunctions
+  }
+}
 
-const Contact = (props: State) => {
+type State = {
+  currentPage: {
+    env: ContactEnv,
+    sketch: SketchFunctions
+  }
+}
+
+
+const Contact = (props: Props) => {
   const ref = React.useRef<HTMLDivElement>(null!)
   const { currentPage } = props
   
   useEffect(() => {
-    const { sketch } = currentPage
-    const env = currentPage.env as ContactEnv
+    const { env, sketch } = currentPage
+    const { world, engine, width, height } = env
     
     const { sketchDraw, sketchSetup, sketchWindowResized } = sketch
   
@@ -35,10 +49,10 @@ const Contact = (props: State) => {
       }
   
       sketch.setup = () => {
-        Matter.World.clear(env.world, false)
-        Matter.Engine.clear(env.engine)
-        const canvas = sketch.createCanvas(env.width, env.height)
-        createMouseConstraint(canvas.elt, env.engine, env.world, sketch)
+        Matter.World.clear(world, false)
+        Matter.Engine.clear(engine)
+        const canvas = sketch.createCanvas(width, height)
+        createMouseConstraint(canvas.elt, engine, world, sketch)
         canvas.mouseClicked(handleClick)
         sketchSetup(sketch, env)
       }

@@ -16,7 +16,19 @@ import {
   portfolioData
 } from '../components/setups/'
 
-const Routes = (props: any) => {
+type Props = {
+  currentPage: {
+    tab: string
+  }
+}
+
+type State = {
+  currentPage: {
+    tab: string
+  }
+}
+
+const Routes = (props: Props) => {
   const { currentPage } = props
   const { tab } = currentPage
   return (
@@ -42,7 +54,7 @@ const Routes = (props: any) => {
   )
 }
 
-const mapState = (state: any) => {
+const mapState = (state: State) => {
   return {
     currentPage: state.currentPage
   }
